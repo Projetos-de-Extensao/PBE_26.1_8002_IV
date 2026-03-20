@@ -10,6 +10,7 @@ title: Pesquisa
 Pesquisa realizada para compreensão das principais características do Aplicativo de **Streaming**.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 1 - Legislação Trabalhista
 As leis trabalhistas garantem diversos direitos ao trabalhador, tais como:
@@ -41,5 +42,4 @@ As leis trabalhistas garantem diversos direitos ao trabalhador, tais como:
 - Formação de Professores: Recentemente, resoluções CNE/CP de 2021 definiram novas DCNs para a Formação Continuada e Profissional.
 
 - Aplicação: As DCNs definem o perfil do formando e as competências essenciais, obrigando as instituições de ensino a ajustarem seus Projetos Políticos Pedagógicos (PPP)
-
 
