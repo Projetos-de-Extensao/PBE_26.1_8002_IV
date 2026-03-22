@@ -43,3 +43,33 @@ As leis trabalhistas garantem diversos direitos ao trabalhador, tais como:
 
 - Aplicação: As DCNs definem o perfil do formando e as competências essenciais, obrigando as instituições de ensino a ajustarem seus Projetos Políticos Pedagógicos (PPP)
 
+3 - Documentação e Validação do Estágio
+
+Para que o estágio seja legalmente válido e não configure vínculo empregatício, é fundamental seguir regras rigorosas de documentação e acompanhamento. Abaixo estão os documentos exigidos e os critérios para mantê-los regulares.
+
+O **Documento Principal: Termo de Compromisso de Estágio (TCE)** É o contrato que oficializa a relação de estágio. Ele **deve ser obrigatoriamente celebrado e assinado por três partes: a empresa concedente, a instituição de ensino e o estudante (ou seu responsável legal).**
+
+_Atenção: Agentes de integração são proibidos de assinar este termo como representantes de qualquer uma das partes._
+
+O TCE deve detalhar de forma clara:
+
+- Identificação: Dados completos do aluno, da empresa e da instituição de ensino.
+- Jornada: O horário das atividades, respeitando o limite máximo de 6 horas diárias e 30 horas semanais (para ensino superior e médio).
+- Duração: Datas de início e fim. O limite máximo de permanência na mesma empresa é de 2 anos (exceto para estagiários com deficiência, que não possuem limite).
+- Remuneração e Transporte: Valor da bolsa-estágio e do auxílio-transporte (ambos obrigatórios para estágios não obrigatórios, e facultativos para os obrigatórios).
+- Seguro: Número da apólice e nome da seguradora responsável pelo seguro de acidentes pessoais do estagiário, que é obrigatório.
+- Supervisão: Dados do professor orientador da instituição e do supervisor da empresa (este deve ter formação na área e orientar, no máximo, 10 estagiários simultaneamente).
+- Plano de Atividades: Um anexo construído em conjunto que detalha as tarefas diárias, garantindo que estejam alinhadas ao projeto pedagógico do curso.
+- Natureza: Especificar se o estágio é obrigatório ou não obrigatório.
+
+A manutenção de estagiários sem a observância contínua das regras abaixo descaracteriza o estágio e gera vínculo de emprego com a empresa:
+
+- Situação Escolar: A validação principal depende da comprovação de que o aluno possui matrícula e frequência regular na instituição de ensino.
+- Compatibilidade Prática: As atividades que o aluno realiza no dia a dia devem corresponder fielmente àquelas descritas e aprovadas no Plano de Atividades.
+- Comprovações Financeiras e de Segurança: É necessário manter o certificado do seguro contra acidentes vigente e, quando aplicável, apresentar comprovantes de pagamento da bolsa e do auxílio-transporte.
+
+Acompanhamento e Desligamento Durante e ao final do estágio, a documentação complementar garante a continuidade e a conclusão do processo:
+
+- Relatórios Semestrais: Em um prazo máximo de 6 meses, a empresa deve enviar à instituição de ensino um relatório das atividades desenvolvidas, que precisa contar com o visto (assinatura) obrigatório do estagiário, do orientador e do supervisor.
+- Termo de Realização (Desligamento): Ao sair do estágio, a empresa deve fornecer um termo resumindo as atividades realizadas, o período estagiado e a avaliação de desempenho do estudante
+
