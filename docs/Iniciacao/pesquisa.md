@@ -72,4 +72,52 @@ Acompanhamento e Desligamento Durante e ao final do estágio, a documentação c
 
 - Relatórios Semestrais: Em um prazo máximo de 6 meses, a empresa deve enviar à instituição de ensino um relatório das atividades desenvolvidas, que precisa contar com o visto (assinatura) obrigatório do estagiário, do orientador e do supervisor.
 - Termo de Realização (Desligamento): Ao sair do estágio, a empresa deve fornecer um termo resumindo as atividades realizadas, o período estagiado e a avaliação de desempenho do estudante
+- 
 
+4- Pesquisa de Aplicações para Estágio
+
+
+  -A etapa de pesquisa de aplicações para estágio consiste na identificação de oportunidades disponíveis no mercado, bem como na compreensão dos processos necessários para candidatura. Essa fase é essencial para direcionar o estudante às vagas mais compatíveis com seu perfil acadêmico e profissional.
+
+*Plataformas de Busca de Estágio
+
+As principais plataformas utilizadas para a busca de oportunidades de estágio incluem:
+
+  -LinkedIn: Rede profissional que permite buscar vagas, conectar-se com recrutadores e acompanhar empresas.
+
+  -Gupy: Sistema amplamente utilizado por empresas brasileiras para processos seletivos.
+    
+  -CIEE: Organização que intermedia vagas de estágio entre estudantes e empresas.
+
+  -Indeed: Plataforma de busca de empregos e estágios com diversas oportunidades.
+
+*Métodos de Aplicação
+
+A candidatura a vagas de estágio pode ocorrer por diferentes meios:
+
+  
+  -Cadastro direto em plataformas digitais
+  -Envio de currículo por e-mail
+  -Inscrição em programas de estágio em sites oficiais de empresas
+  -Indicação por networking
+
+*Requisitos Comuns
+
+Os requisitos mais frequentemente exigidos nos processos seletivos incluem:
+
+-Estar regularmente matriculado em curso superior
+-Conhecimento básico ou intermediário em ferramentas da área
+-Habilidades interpessoais (comunicação, trabalho em equipe)
+-Conhecimento em língua estrangeira (diferencial)
+
+*Etapas do Processo Seletivo
+
+O processo seletivo para estágios geralmente envolve:
+
+-Inscrição online
+-Triagem de currículos
+-Testes (lógicos, técnicos ou comportamentais)
+-Entrevistas (RH e técnica)
+-Resultado final
+
+  A pesquisa de aplicações é uma etapa fundamental na obtenção de um estágio, pois permite ao estudante conhecer o mercado, identificar oportunidades relevantes e preparar-se adequadamente para os processos seletivos. A utilização de plataformas especializadas e o preparo adequado aumentam significativamente as chances de sucesso.
