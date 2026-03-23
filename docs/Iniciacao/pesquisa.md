@@ -121,3 +121,27 @@ O processo seletivo para estágios geralmente envolve:
 -Resultado final
 
   A pesquisa de aplicações é uma etapa fundamental na obtenção de um estágio, pois permite ao estudante conhecer o mercado, identificar oportunidades relevantes e preparar-se adequadamente para os processos seletivos. A utilização de plataformas especializadas e o preparo adequado aumentam significativamente as chances de sucesso.
+
+5 - Normas Acadêmicas do Ibmec 
+
+Além das regras gerais da Lei do Estágio (como limite de 6h diárias, recesso e seguro), o contrato padrão do Ibmec adiciona cláusulas específicas sobre as responsabilidades do estagiário na empresa:
+
+- Propriedade Intelectual: O estagiário concorda que toda contribuição prática ou intelectual desenvolvida durante suas tarefas pertence à empresa concedente. É proibido subtrair programas, documentos ou arquivos, no todo ou em parte.￼
+
+- Sigilo e Confidencialidade: O aluno se compromete a respeitar os regulamentos internos da empresa e a manter sigilo sobre quaisquer informações a que tiver acesso durante o estágio.
+
+- Zelo por Equipamentos: O estagiário se compromete a cuidar dos instrumentos, equipamentos e instalações da empresa. A empresa tem o direito de responsabilizar o estagiário por danos causados por "dolo, negligência, imprudência ou imperícia".
+
+- Causas de Rescisão Automática: O termo deixa claro que o estágio será encerrado automaticamente se a instituição de ensino comunicar à empresa que o aluno terminou o curso, trancou a matrícula, abandonou o curso ou se transferiu para outra faculdade
+
+Ademais o passo a passo para a validação pela Ibmec são:
+
+- Trazer da empresa as 3 vias do Termo de Compromisso já assinadas pela empresa e pelo aluno.
+
+- Acessar o Campus Virtual e abrir um requerimento chamado "Assinar Termo de Estágio" (selecionando se é obrigatório ou não obrigatório).
+
+- Agendar um atendimento presencial através do Campus Virtual (na opção "Atendimento Agendado").
+
+- Levar as 3 vias impressas na Secretaria da unidade para colher a assinatura da instituição.
+
+- Após a assinatura, guardar uma via para si e entregar a outra na empresa.
