@@ -1,0 +1,11 @@
+@startuml
+salt
+{
+  Dashboard do Aluno
+  =================
+  Status do último chamado: | Em análise
+  [ Abrir chamado ] | [ Ver chamado ]
+  Notificações:
+  * Seu chamado foi atualizado
+}
+@enduml
