@@ -1,0 +1,27 @@
+@startuml
+
+' Classes
+class Usuario
+class Aluno
+class Secretaria
+class Chamado
+class Documento
+class Estagio
+class Relatorio
+class Empresa
+
+' Herança
+Usuario <|-- Aluno
+Usuario <|-- Secretaria
+
+' Relacionamentos
+Aluno "1" --> "0..*" Chamado : Abre
+Chamado "1" --> "0..*" Documento : Possui
+Aluno "1" --> "1" Estagio : Possui
+Estagio "1" --> "0..*" Relatorio : Possui
+Secretaria "1" --> "0..*" Chamado : Gerencia
+Secretaria "1" --> "0..*" Estagio : Avalia
+Secretaria --> Relatorio : Analisa
+Empresa "1" --> "0..*" Estagio : Oferece
+
+@enduml

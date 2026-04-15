@@ -1,0 +1,11 @@
+@startuml
+salt
+{
+  Login
+  =====
+  Usuário: | " "
+  Senha:   | " "
+  [Entrar ]
+  [ Esqueci a senha ]
+}
+@enduml

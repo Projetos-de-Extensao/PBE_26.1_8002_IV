@@ -1,0 +1,9 @@
+@startsalt
+{^"Ver Chamado"
+    Matricula: | "20240786234"
+    Curso:  | "Engenharia de Software"
+    TCE:    | [visualizar]
+    Histórico de Chamados: | [visualizar]
+    [X] Validado
+}
+@endsalt
