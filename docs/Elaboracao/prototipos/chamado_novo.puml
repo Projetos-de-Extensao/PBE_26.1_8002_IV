@@ -1,0 +1,18 @@
+@startuml
+salt
+{
+  Abrir Chamado
+  =============
+  
+  [ Documentos (PDF, imagem):  + Adicionar arquivo ]
+  - Nome Completo:________________________
+  - Matricula:________________________
+  - Curso:________________________
+  
+  
+  [Cancelar]
+  [Enviar para Análise]
+  
+  . Campos com "*" são obrigatórios
+}
+@enduml

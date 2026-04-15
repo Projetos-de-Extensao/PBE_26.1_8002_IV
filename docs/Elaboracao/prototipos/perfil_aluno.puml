@@ -1,0 +1,14 @@
+@startsalt
+{^"Meu Perfil"
+    E-mail: | "Jo@universidade.edu.br"
+    Senha:  | "****"
+    Curso:  | "Engenharia de Software"
+    TCE:    | [visualizar]
+    Histórico de Chamados: | [visualizar]
+    --
+    [ Alterar Senha ] | [ Salvar Alterações ]
+    --
+    [ <color:red>Excluir Minha Conta </color> ]
+
+}
+@endsalt

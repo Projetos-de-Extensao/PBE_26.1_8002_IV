@@ -1,0 +1,14 @@
+@startsalt
+{^"Avaliação de Chamado #001"
+    {^"Documentação Enviada"
+        Documento: | "contrato_estagio.pdf" | [ Visualizar ]
+        Relatório: | "relatorio_mensal.pdf" | [ Visualizar ]
+        [! Marcar Documento como Inválido !]
+    }
+    {^"Parecer da Secretaria"
+        Observações: | "Digite aqui o motivo da aprovação ou reprovação"
+        ~~
+        [ Reprovar Estágio ] | [ Aprovar Estágio ]
+    }
+}
+@endsalt
