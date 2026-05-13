@@ -50,13 +50,13 @@ FA2 .> UC01_3 : <<extend>>
 
 ' Notas (igual seu exemplo)
 note right of UC01
-  **Pré-condição**: Aluno autenticado.
-  **Pós-condição**: Estágio enviado para análise.
+  Pré-condição: Aluno autenticado.
+  Pós-condição: Estágio enviado para análise.
 end note
 
 note right of UC02
-  **Pré-condição**: Estágio submetido.
-  **Pós-condição**: Estágio aprovado ou reprovado.
+  Pré-condição: Estágio submetido.
+  Pós-condição: Estágio aprovado ou reprovado.
 end note
 
 @enduml
