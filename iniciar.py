@@ -15,14 +15,21 @@ print("=" * 50)
 print("  Validação de Estágios — Iniciando...")
 print("=" * 50)
 
-print("\n[1/3] Instalando dependências Python...")
+print("\n[1/4] Instalando dependências Python...")
 subprocess.run(
     [sys.executable, "-m", "pip", "install", "-r", requirements],
     check=True
 )
 
 # ─── 2. Roda as migrations ─────────────────────────────────────────────────────
-print("\n[2/3] Aplicando migrations do banco de dados...")
+print("\n[2/4] Verificando alterações nos models...")
+subprocess.run(
+    [sys.executable, "manage.py", "makemigrations"],
+    cwd=pasta_backend,
+    check=True
+)
+
+print("\n[3/4] Aplicando migrations no banco de dados...")
 subprocess.run(
     [sys.executable, "manage.py", "migrate"],
     cwd=pasta_backend,
@@ -30,8 +37,8 @@ subprocess.run(
 )
 
 # ─── 3. Sobe o servidor Django ─────────────────────────────────────────────────
-print("\n[3/3] Iniciando o servidor Django...")
-servidor = subprocess.Popen(
+print("\n[4/4] Iniciando o servidor Django...")
+servidor = subprocess.Popen(\
     [sys.executable, "manage.py", "runserver"],
     cwd=pasta_backend
 )
