@@ -11,5 +11,9 @@ class Usuario(models.Model):
     senha = models.CharField(max_length=10)
     unidade = models.CharField(max_length=20, choices=UNIDADE_CHOICES)
 
+    class Meta:
+        verbose_name = "Usuário"
+        verbose_name_plural = "Usuários"    
+
     def __str__(self):
         return self.nome
