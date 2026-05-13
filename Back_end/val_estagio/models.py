@@ -14,6 +14,10 @@ class Usuario(models.Model):
     class Meta:
         abstract = True
 
+    class Meta:
+        verbose_name = "Usuário"
+        verbose_name_plural = "Usuários"    
+
     def __str__(self):
         return self.nome
 
