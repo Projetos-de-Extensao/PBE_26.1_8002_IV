@@ -2,3 +2,40 @@
     color:red;
     font-weight:bold;
 }
+.md-header {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.md-main__inner {
+  margin-top: 1.5rem;
+}
+
+h1 {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.grid.cards > ul > li {
+  border-radius: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.grid.cards > ul > li:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 14px;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.85;
+  max-width: 850px;
+}
+
+.section-soft {
+  padding: 1rem 0;
+}

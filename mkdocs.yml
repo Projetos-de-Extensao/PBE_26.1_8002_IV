@@ -1,23 +1,16 @@
----
 repo_url: https://github.com/jonh-carvalho/PBE_25.2_8002
 site_author: Jonh Carvalho
-site_name: PBE_25.2_8002
-copyright: Copyright ©️ 2025, Jonh Carvalho
+site_name: Validação de Estágios - PBE_26.1_8002_IV
+site_description: Documentação do projeto de validação de estágios
+copyright: Copyright © 2026, Jonh Carvalho, Rafael Correa, Heitor Lima, Bernardo Fontes, Caio Salomão, Carlos Vinícius
 
-nav: 
+
+nav:
   - Home: index.md
-  - Disciplina:
-      - Aulas: Disciplina/aulas.md
-      - Ambiente: Disciplina/ambiente.md
-      - Github: Disciplina/github.md
-      - Mkdocs: Disciplina/mkdocs.md
-      - CodeSpace: Disciplina/codespace.md
-      - Avaliações: Disciplina/avaliacoes.md
-  - Iniciação: 
+  - Iniciação:
       - Index: Iniciacao/index.md
       - Pesquisa: Iniciacao/pesquisa.md
-      - 5w2h: Iniciacao/5w2h.md
-      - Design Thinking: Iniciacao/design_thinking.md
+      - 5W2H: Iniciacao/5w2h.md
       - Brainstorming: Iniciacao/brainstorm.md
       - Mapa Mental: Iniciacao/mapa_mental.md
       - Prototipagem Baixa Fidelidade: Iniciacao/prototipo_baixa_fidelidade.md
@@ -26,7 +19,6 @@ nav:
       - Requisitos: Elaboracao/requisitos.md
       - Casos de Uso: Elaboracao/casos_de_uso.md
       - Diagrama de Classes: Elaboracao/diagrama_de_classes.md
-      - Diagrama de Sequência: Elaboracao/diagrama_de_sequencia.md
       - Protótipo de Alta Fidelidade: Elaboracao/prototipo_alta_fidelidade.md
   - Construção:
       - Index: Construcao/index.md
@@ -35,96 +27,31 @@ nav:
       - CodeSpace: Construcao/codespace.md
   - Transição:
       - Index: Transicao/index.md
-
   - Bibliografia: Disciplina/bibliografia.md
-
-extra_css:
-  - css/extra.css
-
-markdown_extensions:
-  # Tooltips
-  - abbr
-  # Admonitions
-  - admonition
-  # Annotations, Buttons, Grids, Icons & Emojis, Images, Tooltips
-  - attr_list
-  # Footnotes
-  - footnotes
-  # Annotations, Grids, Images
-  - md_in_html
-  # Images
-  - pymdownx.blocks.caption
-  # Formatting
-  - pymdownx.caret
-  # Formatting
-  - pymdownx.critic
-  # Admonitions
-  - pymdownx.details
-  # Icons & Emojis
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji ''
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg ''
-  # Code Blocks
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-  # Code Blocks
-  - pymdownx.inlinehilite
-  # Formatting
-  - pymdownx.keys
-  # Formatting
-  - pymdownx.mark
-  # Code Blocks, Tooltips
-  - pymdownx.snippets
-  # Admonitions, Annotations, Code Blocks, Content Tabs
-  - pymdownx.superfences
-  # Content Tabs
-  - pymdownx.tabbed:
-      alternate_style: true
-  # Lists
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  # Formatting
-  - pymdownx.tilde
-  # Data Tables
-
-  - toc:
-      permalink: true
-
-plugins:
-  - minify:
-      minify_html: true
-  - search
 
 theme:
   name: material
+  language: pt-BR
   logo: assets/ibmec_logo.png
+  favicon: assets/ibmec_logo.png
+
   palette:
-    
-    - media: "(prefers-color-scheme)"
-      toggle:
-        icon: material/toggle-switch
-        name: Switch to light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
       primary: indigo
-      accent: black
+      accent: blue
       toggle:
-        icon: material/toggle-switch-off
-        name: Switch to dark mode
+        icon: material/weather-night
+        name: Alternar para modo escuro
+
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: deep orange
+      primary: indigo
       accent: amber
       toggle:
-        icon: material/toggle-switch-off
-        name: Switch to system preference
-      color_mode: dark
-      language: pt-BR
-      favicon: images/favicon.png
-      user_color_mode_toggle: true
-  
+        icon: material/weather-sunny
+        name: Alternar para modo claro
+
   features:
     - content.code.copy
     - navigation.indexes
@@ -139,10 +66,48 @@ theme:
     - search.suggest
     - toc.follow
     - toc.integrate
+
   font:
     text: Roboto
     code: Roboto Mono
+
   icon:
     repo: fontawesome/brands/github
-    logo: simple/react
-    favicon: simple/react
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - footnotes
+  - md_in_html
+  - pymdownx.blocks.caption
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji ''
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg ''
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - toc:
+      permalink: true
+
+extra_css:
+  - css/extra.css
