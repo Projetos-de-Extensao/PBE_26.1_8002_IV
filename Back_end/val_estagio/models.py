@@ -1,28 +1,21 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class Usuario(models.Model):
+class Usuario(AbstractUser):
     
     UNIDADE_CHOICES = [
     ('barra', 'Barra'),
     ('botafogo', 'Botafogo'),
     ]
-    nome = models.CharField(max_length=50) 
-    email = models.EmailField(unique=True)
-    senha = models.CharField(max_length=10)
+
     unidade = models.CharField(max_length=20, choices=UNIDADE_CHOICES)
     
     class Meta:
-        abstract = True
         verbose_name = "Usuário"
         verbose_name_plural = "Usuários"
 
-
-    def logar(self, email, senha):
-        # lógica para autenticar o usuário
-        pass
-
     def __str__(self):
-        return self.nome
+       return self.username 
 
 class Aluno(Usuario):
     
@@ -32,47 +25,48 @@ class Aluno(Usuario):
     em_estagio = models.BooleanField(default=False)
     procurando_estagio = models.BooleanField(default=True)
     horas_estagio = models.IntegerField(default=0)
-    periodo = models.IntegerField(max_length=1)
+    periodo = models.IntegerField()
+    
     #TCE
     #trabalho
     #curso
     
-    def esta_disponivel(self):
-        return not self.em_estagio and self.procurando_estagio
+    #def esta_disponivel(self):#
+        #return not self.em_estagio and self.procurando_estagio#
     
-    def ganhar_horas_estagio(self, horas):
-        if horas.isnumeric() and int(horas) > 0:
-             self.horas_estagio += int(horas)
+   # def ganhar_horas_estagio(self, horas):
+        #if type(horas) == int and int(horas) > 0:#
+         #    self.horas_estagio += int(horas) #
+         # self.save()#
+    #def enviar_relatorio(self, relatorio):#
+        # lógica para enviar o relatório#
+        #pass#
     
-    def enviar_relatorio(self, relatorio):
-        # lógica para enviar o relatório
-        pass
-    
-    def abrir_chamado(self, documentos):
+    #def abrir_chamado(self, documentos):#
         # lógica para abrir um chamado
-        pass
+        #pass#
         
     
 class Secretaria(Usuario):
     matricula_funcionario = models.CharField(max_length=12, unique=True)
     
-    def assinar_tce(self, tce):
+    #def assinar_tce(self, tce):#
         # lógica para assinar o TCE
-        pass
+        #pass#
     
     
-class Coordenador(Usuario):
+#class Coordenador(Usuario): #
     # area
     # cursos que coordena
-    pass
+    #pass#
 
-    def receber_relatorios(self):
-        # lógica para receber os relatórios
-        pass
+    #def receber_relatorios(self):#
+        # lógica para receber os relatórios#
+        #pass#
 
-    def validar_relatorio(self, relatorio, aluno):
-        # lógica para validar os relatórios
-        pass
+    #def validar_relatorio(self, relatorio, aluno):#
+        # lógica para validar os relatórios#
+       # pass#
 
 
 """

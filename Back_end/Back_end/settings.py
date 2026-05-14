@@ -79,6 +79,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+AUTH_USER_MODEL = 'val_estagio.Usuario'
 
 
 # Password validation
