@@ -1,11 +1,13 @@
-from django.urls import path
-from . import views
-from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import UsuarioViewSet
+
+router = DefaultRouter()
+router.register(r'usuarios', UsuarioViewSet, basename='usuario')
+
 
 urlpatterns = [
     
-path('admin/', admin.site.urls),
-    
-path('', include('val_estagio.urls')),
+path('', include(router.urls)),
+
 ]
