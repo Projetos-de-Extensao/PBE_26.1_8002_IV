@@ -17,8 +17,9 @@ class Usuario(AbstractUser):
     def __str__(self):
        return self.username 
 
-class Aluno(Usuario):
-    
+class Aluno(models.Model):
+
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     matricula = models.CharField(max_length=12, unique=True)
     cpf = models.CharField(max_length=11, unique=True)
     dt_nascimento = models.DateField()
@@ -48,6 +49,7 @@ class Aluno(Usuario):
         
     
 class Secretaria(Usuario):
+    
     matricula_funcionario = models.CharField(max_length=12, unique=True)
     
     #def assinar_tce(self, tce):#
