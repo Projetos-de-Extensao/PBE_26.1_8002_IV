@@ -27,6 +27,9 @@ class Aluno(models.Model):
     procurando_estagio = models.BooleanField(default=True)
     horas_estagio = models.IntegerField(default=0)
     periodo = models.IntegerField()
+
+    def __str__(self):
+        return self.matricula
     
     #TCE
     #trabalho
@@ -48,8 +51,8 @@ class Aluno(models.Model):
         #pass#
         
     
-class Secretaria(Usuario):
-    
+class Secretaria(models.Model):
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     matricula_funcionario = models.CharField(max_length=12, unique=True)
     
     #def assinar_tce(self, tce):#
@@ -57,7 +60,11 @@ class Secretaria(Usuario):
         #pass#
     
     
-#class Coordenador(Usuario): #
+class Coordenador(models.Model): 
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+
+
+
     # area
     # cursos que coordena
     #pass#
