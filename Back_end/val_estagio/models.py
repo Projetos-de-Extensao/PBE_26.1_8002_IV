@@ -10,9 +10,7 @@ class Usuario(AbstractUser):
 
     unidade = models.CharField(max_length=20, choices=UNIDADE_CHOICES)
     
-    class Meta:
-        verbose_name = "Usuário"
-        verbose_name_plural = "Usuários"
+    
 
     def __str__(self):
        return self.username 
@@ -26,7 +24,8 @@ class Aluno(models.Model):
     em_estagio = models.BooleanField(default=False)
     procurando_estagio = models.BooleanField(default=True)
     horas_estagio = models.IntegerField(default=0)
-    periodo = models.IntegerField()
+    periodo = models.PositiveIntegerField()
+    curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.matricula
@@ -54,14 +53,58 @@ class Aluno(models.Model):
 class Secretaria(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     matricula_funcionario = models.CharField(max_length=12, unique=True)
+
+    def __str__(self):
+        return self.matricula_funcionario
+
     
     #def assinar_tce(self, tce):#
         # lógica para assinar o TCE
         #pass#
     
     
-class Coordenador(models.Model): 
+class Coordenador(models.Model):
+
+    AREA_CHOICES = [
+        ('negocios', 'Negócios'),
+        ('tecnologia', 'Tecnologia'),
+        ('financas', 'Finanças'),
+        ('direito', 'Direito'),
+        ('engenharia', 'Engenharia'),
+    ]
+
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    area = models.CharField(max_length=20, choices=AREA_CHOICES)
+    cursos = models.ManyToManyField('Curso', blank=True)
+    class Meta:
+        verbose_name = "Coordenador"
+        verbose_name_plural = "Coordenadores"
+
+    def __str__(self):
+        return self.usuario.username
+
+class Curso(models.Model):
+    CURSOS_CHOICES = [
+        ('administração', 'Administração'),
+        ('análise e Desenvolvimento de Sistemas', 'Análise e desenvolvimento de sistemas'),
+        ('Arquitetura e Urbanismo', 'Arquitetura e urbanismo'),
+        ('ciência de dados e inteligência artificial', 'Ciência de Dados e Inteligência Artificial'),
+        ('ciências Contábeis', 'Ciências contábeis'),
+        ('direito', 'Direito'),
+        ('ciências Econômicas', 'Ciências econômicas'),
+        ('comunicação social - publicidade e propaganda', 'Comunicação Social - Publicidade e Propaganda'),
+        ('engenharia civil', 'Engenharia Civil'),
+        ('engenharia de produção', 'Engenharia de Produção'),
+        ('engenharia da computação', 'Engenharia da Computação'),
+        ('engenharia de software', 'Engenharia de Software'),
+        ('relações internacionais', 'Relações Internacionais'),
+    ]
+    nome = models.CharField(max_length=100, choices=CURSOS_CHOICES, unique=True)
+
+    def __str__(self):
+        return self.nome
+
+
 
 
 
@@ -78,20 +121,3 @@ class Coordenador(models.Model):
        # pass#
 
 
-"""
-Cursos da Ibmec para a futura classe Curso
-CURSOS_CHOICES = [
-        ('Administração', 'administração'),
-        ('Análise e Desenvolvimento de Sistemas', 'análise e desenvolvimento de sistemas'),
-        ('Arquitetura e Urbanismo', 'arquitetura e urbanismo'),
-        ('Ciência de Dados e Inteligência Artificial', 'ciência de dados e inteligência artificial'),
-        ('Ciências Contábeis', 'ciências contábeis'),
-        ('Direito', 'direito'),
-        ('Ciências Econômicas', 'ciências econômicas'),
-        ('Comunicação Social - Publicidade e Propaganda', 'comunicação social - publicidade e propagando'),
-        ('Engenharia Civil', 'engenharia civil'),
-        ('Engenharia de Produção', 'engenharia de produção'),
-        ('Engenharia da Computação', 'engenharia da computação'),
-        ('Engenharia de Software', 'engenharia de software'),
-        ('Relações Internacionais', 'relações internacionais'),
-    ]"""

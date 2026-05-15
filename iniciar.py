@@ -47,9 +47,9 @@ servidor = subprocess.Popen(\
 time.sleep(2)
 
 # Abre o painel admin no navegador
-webbrowser.open("http://127.0.0.1:8000/api/")
+webbrowser.open("http://127.0.0.1:8000/admin/")
 print("\nServidor rodando em: http://127.0.0.1:8000")
-print("API em:   http://127.0.0.1:8000/api/")
+print("Painel admin em:     http://127.0.0.1:8000/admin/")
 print("\nAperte Ctrl+C para encerrar.")
 
 # ─── Aguarda o servidor e lida com encerramento ────────────────────────────────
