@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
+from .validators import validar_cpf, validar_cnpj
 
 class Usuario(AbstractUser):
     
@@ -11,8 +12,6 @@ class Usuario(AbstractUser):
 
     unidade = models.CharField(max_length=20, choices=UNIDADE_CHOICES)
     
-    
-
     def __str__(self):
        return self.username 
 
@@ -20,7 +19,7 @@ class Aluno(models.Model):
 
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     matricula = models.CharField(max_length=12, unique=True)
-    cpf = models.CharField(max_length=14, unique=True)
+    cpf = models.CharField(max_length=14, unique=True, validators=[validar_cpf])
     dt_nascimento = models.DateField()
     em_estagio = models.BooleanField(default=False)
     procurando_estagio = models.BooleanField(default=True)
@@ -109,7 +108,7 @@ class Empresa(models.Model):
 
     nome_empresa = models.CharField(max_length=100, verbose_name="Nome da Empresa")
     endereco_empresa = models.CharField(max_length=180, verbose_name= "Endereço da Empresa")
-    cnpj = models.CharField(max_length=14, unique=True)
+    cnpj = models.CharField(max_length=18, unique=True, validators=[validar_cnpj])
 
     def __str__(self):
         return self.nome_empresa
