@@ -104,6 +104,44 @@ class Curso(models.Model):
     def __str__(self):
         return self.nome
 
+class Empresa(models.Model):
+
+    nome_empresa = models.CharField(max_length=100, verbose_name="Nome da Empresa")
+    endereco_empresa = models.CharField(max_length=180, verbose_name= "Endereço da Empresa")
+    cnpj = models.CharField(max_length=14, unique=True)
+
+    def __str__(self):
+        return self.nome_empresa
+    
+class Seguradora(models.Model):
+    apolice_seguro = models.PositiveIntegerField(verbose_name="Apolice de Seguro", unique=True)
+    nome_seguradora = models.CharField(max_length=100, verbose_name="Nome da Seguradora")
+
+    def _str__(self):
+        return self.nome_seguradora
+
+class StatusRelatorio(models.TextChoices):
+    PENDENTE = 'pendente', 'Pendente'
+    APROVADO = 'aprovado', 'Aprovado'
+    REPROVADO = 'reprovado', 'Reprovado'
+
+class RelatorioSemestral(models.Model):
+    aluno = models.OneToOneField('Aluno', on_delete=models.CASCADE)
+    estagio = models.OneToOneField('Estagio', on_delete=models.CASCADE)
+    horas_estagiadas = models.PositiveIntegerField()
+    em_aberto = models.BooleanField(default=True)
+    semestre = models.CharField(max_length=10)
+    data_envio = models.DateField(verbose_name="Data de envio")
+    status = models.CharField(max_length=20, choices=StatusRelatorio.choices, default=StatusRelatorio.PENDENTE)
+
+    def __str__(self):
+        return self.status
+    
+
+
+
+
+
 
 
 
