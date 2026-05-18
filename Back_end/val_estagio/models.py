@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
 
 class Usuario(AbstractUser):
     
@@ -19,7 +20,7 @@ class Aluno(models.Model):
 
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     matricula = models.CharField(max_length=12, unique=True)
-    cpf = models.CharField(max_length=11, unique=True)
+    cpf = models.CharField(max_length=14, unique=True)
     dt_nascimento = models.DateField()
     em_estagio = models.BooleanField(default=False)
     procurando_estagio = models.BooleanField(default=True)
@@ -117,7 +118,7 @@ class Seguradora(models.Model):
     apolice_seguro = models.PositiveIntegerField(verbose_name="Apolice de Seguro", unique=True)
     nome_seguradora = models.CharField(max_length=100, verbose_name="Nome da Seguradora")
 
-    def _str__(self):
+    def __str__(self):
         return self.nome_seguradora
 
 class StatusRelatorio(models.TextChoices):
@@ -126,20 +127,38 @@ class StatusRelatorio(models.TextChoices):
     REPROVADO = 'reprovado', 'Reprovado'
 
 class RelatorioSemestral(models.Model):
-    aluno = models.OneToOneField('Aluno', on_delete=models.CASCADE)
-    estagio = models.OneToOneField('Estagio', on_delete=models.CASCADE)
+    aluno = models.ForeignKey('Aluno', on_delete=models.CASCADE)
+    estagio = models.ForeignKey('Estagio', on_delete=models.CASCADE)
     horas_estagiadas = models.PositiveIntegerField()
     em_aberto = models.BooleanField(default=True)
-    semestre = models.CharField(max_length=10)
+    semestre = models.CharField(max_length=4, validators=[RegexValidator(regex=r'^\d{2}\.[12]$', message='O semestre deve estar no formato 26.1 ou 26.2')])
     data_envio = models.DateField(verbose_name="Data de envio")
     status = models.CharField(max_length=20, choices=StatusRelatorio.choices, default=StatusRelatorio.PENDENTE)
 
     def __str__(self):
         return self.status
     
+class Tce(models.Model):
+    auxilio_bolsa = models.DecimalField(max_digits=8, decimal_places=2)
+    seguradora = models.ForeignKey('Seguradora', on_delete=models.CASCADE)
+    aluno = models.ForeignKey('Aluno', on_delete=models.CASCADE)
+    empresa_contratante = models.ForeignKey('Empresa', on_delete=models.CASCADE, verbose_name="Empresa Contratante")
+    status = models.CharField(max_length=20, choices=StatusRelatorio.choices)
 
+    def __str__(self):
+        return self.empresa_contratante.nome_empresa
+    
+class Estagio(models.Model):
+    tce = models.OneToOneField('Tce', on_delete=models.CASCADE)
+    empresa = models.ForeignKey('Empresa', on_delete=models.CASCADE)
+    aluno = models.ForeignKey('Aluno', on_delete=models.CASCADE)
+    data_inicio = models.DateField(verbose_name="Data de inicio")
+    data_fim = models.DateField(verbose_name="Data de fim")
+    carga_horaria = models.PositiveIntegerField()
 
-
+    def __str__(self):
+        return self.empresa.nome_empresa
+    
 
 
 
