@@ -17,8 +17,8 @@ tce(**anpoliceseguro**, bolsa)
 
 assina(***matricula***, ***anpoliceseguro***)
 
-estagio(**idestagio**, dtinicio, dtfim, cargahorariasemanal, *napoliceseguro*, *idrelatorio*)
+estagio(**idestagio**, dtinicio, dtfim, cargahorariasemanal, *napoliceseguro* *cnpj*)
 
-empresa(**cnpj**, nome, cep, uf, cidade, log, comp, num, bairro, *idestagio*)
+empresa(**cnpj**, nome, cep, uf, cidade, log, comp, num, bairro)
 
-relatoriosemestral(**idrelatorio**, dataenvio, semestre, horasestagio, *matricula*)
+relatoriosemestral(**idrelatorio**, dataenvio, semestre, horasestagio, *matricula*, *idestagio*)
