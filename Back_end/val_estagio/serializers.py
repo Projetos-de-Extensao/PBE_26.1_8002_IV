@@ -17,7 +17,7 @@ class AlunoSerializer(serializers.ModelSerializer):
     curso = CursoSerializer(read_only=True)
     class Meta:
         model = Aluno
-        fields = 'id', 'usuario', 'matricula', 'cpf', 'dt_nascimento', 'em_estagio', 'procurando_estagio', 'horas_estagio', 'periodo', 'curso'
+        fields = 'id', 'usuario', 'matricula', 'cpf', 'dt_nascimento', 'procurando_estagio', 'horas_estagio', 'periodo', 'curso'
         read_only_fields = ['id']
 class SecretariaSerializer(serializers.ModelSerializer):
     class Meta:

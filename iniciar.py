@@ -2,8 +2,9 @@ import subprocess
 import os
 import sys
 import webbrowser
+import time
 
-# ─── Caminhos do projeto ───────────────────────────────────────────────────────
+# ─── Caminhos ────────────────────────────────────────────────────────────────
 pasta_raiz = os.path.dirname(os.path.abspath(__file__))
 
 pasta_backend = os.path.join(
@@ -16,12 +17,12 @@ requirements = os.path.join(
     "requirements.txt"
 )
 
-# ─── Início ────────────────────────────────────────────────────────────────────
+# ─── Início ──────────────────────────────────────────────────────────────────
 print("=" * 50)
 print("  Validação de Estágios — Iniciando...")
 print("=" * 50)
 
-# ─── 1. Instalar dependências ──────────────────────────────────────────────────
+# ─── Instala dependências ────────────────────────────────────────────────────
 print("\n[1/4] Instalando dependências Python...")
 
 subprocess.run(
@@ -36,7 +37,7 @@ subprocess.run(
     check=True
 )
 
-# ─── 2. Criar migrations ───────────────────────────────────────────────────────
+# ─── Migrations ──────────────────────────────────────────────────────────────
 print("\n[2/4] Verificando alterações nos models...")
 
 subprocess.run(
@@ -49,8 +50,7 @@ subprocess.run(
     check=True
 )
 
-# ─── 3. Aplicar migrations ─────────────────────────────────────────────────────
-print("\n[3/4] Aplicando migrations no banco de dados...")
+print("\n[3/4] Aplicando migrations...")
 
 subprocess.run(
     [
@@ -62,14 +62,10 @@ subprocess.run(
     check=True
 )
 
-# ─── 4. Iniciar servidor Django ────────────────────────────────────────────────
-print("\n[4/4] Iniciando o servidor Django...")
+# ─── Inicia servidor ─────────────────────────────────────────────────────────
+print("\n[4/4] Iniciando servidor Django...")
 
-webbrowser.open(
-    "http://127.0.0.1:8000/admin/"
-)
-
-subprocess.run(
+servidor = subprocess.Popen(
     [
         sys.executable,
         "manage.py",
@@ -77,3 +73,20 @@ subprocess.run(
     ],
     cwd=pasta_backend
 )
+
+# Espera servidor subir
+time.sleep(2)
+
+# ─── Abre navegador ──────────────────────────────────────────────────────────
+webbrowser.open(
+    "http://127.0.0.1:8000/admin/"
+)
+
+print("\nServidor rodando:")
+print("http://127.0.0.1:8000")
+
+print("\nAPI:")
+print("http://127.0.0.1:8000/api/")
+
+print("\nAdmin:")
+print("http://127.0.0.1:8000/admin/")
