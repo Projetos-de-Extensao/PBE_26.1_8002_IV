@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario, Aluno, Secretaria, Coordenador, Curso
+from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Seguradora, Tce, RelatorioSemestral, Estagio
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,4 +27,36 @@ class CursoSerializer(serializers.ModelSerializer):
         fields = 'id', 'nome', 'descricao'
         read_only_fields = ['id']
 
+class EmpresaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Empresa
+        fields = 'id', 'nome', 'cnpj', 'endereco', 'telefone'
+        read_only_fields = ['id']
 
+class SeguradoraSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seguradora
+        fields = 'id', 'apolice_seguro', 'nome_seguradora'
+        read_only_fields = ['id']
+
+class TceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tce
+        fields = 'id', 'aluno', 'seguradora', 'empresa_contratante', 'status'
+        read_only_fields = ['id']
+
+class RelatorioSemestralSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RelatorioSemestral
+        fields = 'id', 'aluno', 'estagio', 'horas_estagiadas', 'em_aberto', 'semestre', 'data_envio', 'status'
+        read_only_fields = ['id']
+
+class EstagioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Estagio
+        fields = 'id', 'tce', 'empresa', 'aluno', 'data_inicio', 'data_fim', 'carga_horaria'
+        read_only_fields = ['id']
+        
+
+
+        

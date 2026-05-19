@@ -21,7 +21,6 @@ class Aluno(models.Model):
     matricula = models.CharField(max_length=12, unique=True)
     cpf = models.CharField(max_length=14, unique=True, validators=[validar_cpf])
     dt_nascimento = models.DateField()
-    em_estagio = models.BooleanField(default=False)
     procurando_estagio = models.BooleanField(default=True)
     horas_estagio = models.IntegerField(default=0)
     periodo = models.PositiveIntegerField()
@@ -142,6 +141,8 @@ class Tce(models.Model):
     seguradora = models.ForeignKey('Seguradora', on_delete=models.CASCADE)
     aluno = models.ForeignKey('Aluno', on_delete=models.CASCADE)
     empresa_contratante = models.ForeignKey('Empresa', on_delete=models.CASCADE, verbose_name="Empresa Contratante")
+    data_inicio = models.DateField(verbose_name="Data de inicio")
+    data_fim = models.DateField(verbose_name="Data de fim")
     status = models.CharField(max_length=20, choices=StatusRelatorio.choices)
 
     def __str__(self):
