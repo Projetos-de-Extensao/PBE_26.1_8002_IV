@@ -7,15 +7,13 @@ usuario(**matricula**, senha, nome, email)
 
 secretaria(***matricula***)
 
-aluno(***matricula***, cpf, dtnascimento, emestagio, procurandoestagio, horaestagio, periodo, *napoliceseguro*)
+aluno(***matricula***, cpf, dtnascimento, emestagio, procurandoestagio, horaestagio, periodo)
 
 coordenador(***matricula***, area)
 
 curso(**idcurso**, nomecurso, *matricula*)
 
-tce(**anpoliceseguro**, bolsa)
-
-assina(***matricula***, ***anpoliceseguro***)
+tce(**anpoliceseguro**, bolsa, *matriculasecretaria*, *matriculaaluno*)
 
 estagio(**idestagio**, dtinicio, dtfim, cargahorariasemanal, *napoliceseguro* *cnpj*)
 
