@@ -1,0 +1,5 @@
+asgiref==3.9.1
+Django==6.0
+djangorestframework==3.16.0
+validate-docbr==1.11.1
+sqlparse==0.5.3
