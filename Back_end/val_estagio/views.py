@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Usuario, Aluno, Secretaria, Coordenador, Curso
-from .serializers import UsuarioSerializer, AlunoSerializer, SecretariaSerializer, CoordenadorSerializer, CursoSerializer
+from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Seguradora, Tce, RelatorioSemestral, Estagio
+from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, SeguradoraSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
 
 
 class UsuarioViewSet(viewsets.ModelViewSet):
@@ -27,3 +27,22 @@ class CursoViewSet(viewsets.ModelViewSet):
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
 
+class EmpresaViewSet(viewsets.ModelViewSet):
+    queryset = Empresa.objects.all()
+    serializer_class = EmpresaSerializer
+
+class SeguradoraViewSet(viewsets.ModelViewSet):
+    queryset = Seguradora.objects.all()
+    serializer_class = SeguradoraSerializer
+
+class TceViewSet(viewsets.ModelViewSet):
+    queryset = Tce.objects.all()
+    serializer_class = TceSerializer
+
+class RelatorioSemestralViewSet(viewsets.ModelViewSet):
+    queryset = RelatorioSemestral.objects.all()
+    serializer_class = RelatorioSemestralSerializer
+
+class EstagioViewSet(viewsets.ModelViewSet):
+    queryset = Estagio.objects.all()
+    serializer_class = EstagioSerializer
