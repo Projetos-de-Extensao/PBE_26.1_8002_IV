@@ -1,3 +1,5 @@
+' Diagrama de Classes desatualizado, seguir modelo conceitual do banco de dados, faz mais sentido para a aplicação em Django
+
 @startuml diagrama_estagio
 
 skinparam classAttributeIconSize 0
