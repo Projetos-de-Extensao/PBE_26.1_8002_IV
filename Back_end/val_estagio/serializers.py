@@ -37,12 +37,6 @@ class EmpresaSerializer(serializers.ModelSerializer):
         fields = 'id', 'nome_empresa', 'cnpj', 'endereco_empresa'
         read_only_fields = ['id']
 
-class SeguradoraSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Seguradora
-        fields = 'id', 'apolice_seguro', 'nome_seguradora'
-        read_only_fields = ['id']
-
 class TceSerializer(serializers.ModelSerializer):
     empresa_nome = serializers.CharField(source='empresa_contratante.nome_empresa', read_only=True)
     aluno_nome = serializers.CharField(source='aluno.usuario.username', read_only=True)
