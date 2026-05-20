@@ -3,6 +3,28 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from .validators import validar_cpf, validar_cnpj
 
+def cpf_valido(cpf):
+    cpf = cpf.strip().replace('.','').replace('-','')
+    multiplos = list(range(10, 1,-1))
+    multiplos2 = list(range(11,1,-1))
+        
+    if not cpf.isnumeric() or len(cpf) != 11 or len(set(cpf)) == 1:
+        raise ValidationError('CPF inválido. Verifique os números digitados.')
+        
+    soma_mult = sum(i * int(d) for i, d in zip(multiplos,cpf[0:9]))
+        
+    if soma_mult % 11 < 2 and int(cpf[9]) != 0:
+        raise ValidationError('CPF inválido. Verifique os números digitados.')
+    elif soma_mult % 11 > 1 and 11 - (soma_mult % 11) != int(cpf[9]):
+        raise ValidationError('CPF inválido. Verifique os números digitados.')
+        
+    soma_mult2 = sum(i * int(d) for i, d in zip(multiplos2,cpf[0:10]))
+        
+    if soma_mult2 % 11 < 2 and int(cpf[10]) != 0:
+        raise ValidationError('CPF inválido. Verifique os números digitados.')
+    elif soma_mult2 % 11 > 1 and 11 - (soma_mult2 % 11) != int(cpf[10]):
+        raise ValidationError('CPF inválido. Verifique os números digitados.')
+
 class Usuario(AbstractUser):
     
     UNIDADE_CHOICES = [
@@ -15,7 +37,7 @@ class Usuario(AbstractUser):
        return self.username 
 
 class Aluno(models.Model):
-
+    
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     matricula = models.CharField(max_length=12, unique=True)
     cpf = models.CharField(max_length=14, unique=True, validators=[cpf_valido])
@@ -27,30 +49,6 @@ class Aluno(models.Model):
 
     def __str__(self):
         return self.matricula
-        
-    def cpf_valido(self, cpf):
-        cpf = cpf.strip().replace('.','').replace('-','')
-        multiplos = list(range(10, 1,-1))
-        multiplos2 = list(range(11,1,-1))
-        
-        if not cpf.isnumeric() or len(cpf) != 11 or len(set(cpf)) == 1:
-            return False
-        
-        soma_mult = sum(i * int(d) for i, d in zip(multiplos,cpf[0:9]))
-        
-        if soma_mult % 11 < 2 and int(cpf[9]) != 0:
-            return False
-        elif soma_mult % 11 > 1 and 11 - (soma_mult % 11) != int(cpf[9]):
-            return False
-        
-        soma_mult2 = sum(i * int(d) for i, d in zip(multiplos2,cpf[0:10]))
-        
-        if soma_mult2 % 11 < 2 and int(cpf[10]) != 0:
-            return False
-        elif soma_mult2 % 11 > 1 and 11 - (soma_mult2 % 11) != int(cpf[10]):
-            return False
-        else:
-            return True
     
 class Secretaria(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
