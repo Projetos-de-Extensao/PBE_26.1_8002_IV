@@ -22,7 +22,6 @@ class Secretaria {
 class Aluno {
   + cpf : String
   + dtnascimento : Date
-  + emestagio : Boolean
   + procurandoestagio : Boolean
   + horaestagio : Integer
   + periodo : Integer
