@@ -14,22 +14,32 @@ class CursoSerializer(serializers.ModelSerializer):
 
 class AlunoSerializer(serializers.ModelSerializer):
     curso = CursoSerializer(read_only=True)
+    matricula = serializers.CharField(
+        source='usuario.matricula',
+        read_only=True
+    )
+
     class Meta:
         model = Aluno
         fields = 'usuario', 'matricula', 'cpf', 'dt_nascimento', 'procurando_estagio', 'horas_estagio', 'periodo', 'curso'
 
 class SecretariaSerializer(serializers.ModelSerializer):
+    matricula_funcionario = serializers.CharField(
+        source='usuario.matricula',
+        read_only=True
+    )
+    
     class Meta:
         model = Secretaria
-        fields ='usuario', 'matricula_funcionario'
+        fields ='usuario','matricula_funcionario'
 
 class CoordenadorSerializer(serializers.ModelSerializer):
-    cursos = CursoSerializer(read_only=True, many=True)
     class Meta:
         model = Coordenador
         fields ='usuario', 'area'
 
 class EmpresaSerializer(serializers.ModelSerializer):
+    nome_empresa = serializers.CharField(source='nome', read_only=True)
     class Meta:
         model = Empresa
         fields ='nome_empresa', 'cnpj', 'cep', 'uf', 'cidade', 'log', 'num', 'comp', 'bairro' 
@@ -41,7 +51,7 @@ class TceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tce
-        fields ='bolsa', 'apoliceseguro', 'secretaria', 'aluno'
+        fields ='bolsa', 'apoliceseguro', 'secretaria', 'aluno_nome'
 
 class RelatorioSemestralSerializer(serializers.ModelSerializer):
     
@@ -49,7 +59,7 @@ class RelatorioSemestralSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RelatorioSemestral
-        fields = 'idrelatorio', 'semestre', 'data_envio', 'estagio', 'horas_estagiadas', 'coordenador', 'status'
+        fields = 'idrelatorio', 'semestre', 'data_envio', 'estagio', 'horas_estagiadas', 'coordenador_nome', 'status'
         read_only_fields = ['idrelatorio']
 
 class EstagioSerializer(serializers.ModelSerializer):
@@ -57,5 +67,5 @@ class EstagioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Estagio
-        fields = 'idestagio', 'tce', 'empresa', 'empresa_nome', 'data_inicio', 'data_fim', 'cargahorariasemanal'
+        fields = 'idestagio', 'tce', 'empresa', 'empresa_nome', 'dtinicio', 'dtfim', 'cargahorariasemanal'
         read_only_fields = ['idestagio']
