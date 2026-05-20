@@ -62,7 +62,7 @@ class Curso(models.Model):
         ('ciência de dados e inteligência artificial', 'Ciência de Dados e Inteligência Artificial'),
         ('ciências Contábeis', 'Ciências contábeis'),
         ('direito', 'Direito'),
-        ('ciências Econômicas', 'Ciências econômicas'),
+        ('ciências econômicas', 'Ciências Econômicas'),
         ('comunicação social - publicidade e propaganda', 'Comunicação Social - Publicidade e Propaganda'),
         ('engenharia civil', 'Engenharia Civil'),
         ('engenharia de produção', 'Engenharia de Produção'),
