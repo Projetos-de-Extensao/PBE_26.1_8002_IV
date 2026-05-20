@@ -31,10 +31,6 @@ class EmpresaViewSet(viewsets.ModelViewSet):
     queryset = Empresa.objects.all()
     serializer_class = EmpresaSerializer
 
-class SeguradoraViewSet(viewsets.ModelViewSet):
-    queryset = Seguradora.objects.all()
-    serializer_class = SeguradoraSerializer
-
 class TceViewSet(viewsets.ModelViewSet):
     queryset = Tce.objects.all()
     serializer_class = TceSerializer
