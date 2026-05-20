@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
 from django.core.validators import RegexValidator
 from .validators import validar_cpf, validar_cnpj
 
