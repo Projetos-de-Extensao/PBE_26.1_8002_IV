@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Seguradora, Tce, RelatorioSemestral, Estagio
+from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
