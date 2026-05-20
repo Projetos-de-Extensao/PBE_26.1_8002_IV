@@ -28,25 +28,6 @@ class Aluno(models.Model):
 
     def __str__(self):
         return self.matricula
-    
-    #TCE
-    #trabalho
-    #curso
-    
-    #def esta_disponivel(self):#
-        #return not self.em_estagio and self.procurando_estagio#
-    
-   # def ganhar_horas_estagio(self, horas):
-        #if type(horas) == int and int(horas) > 0:#
-         #    self.horas_estagio += int(horas) #
-         # self.save()#
-    #def enviar_relatorio(self, relatorio):#
-        # lógica para enviar o relatório#
-        #pass#
-    
-    #def abrir_chamado(self, documentos):#
-        # lógica para abrir um chamado
-        #pass#
         
     
 class Secretaria(models.Model):
@@ -55,11 +36,6 @@ class Secretaria(models.Model):
 
     def __str__(self):
         return self.matricula_funcionario
-
-    
-    #def assinar_tce(self, tce):#
-        # lógica para assinar o TCE
-        #pass#
     
     
 class Coordenador(models.Model):
