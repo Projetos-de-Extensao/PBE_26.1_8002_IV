@@ -3,44 +3,26 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from .validators import validar_cpf, validar_cnpj
 
-def cpf_valido(cpf):
-    cpf = cpf.strip().replace('.','').replace('-','')
-    multiplos = list(range(10, 1,-1))
-    multiplos2 = list(range(11,1,-1))
-        
-    if not cpf.isnumeric() or len(cpf) != 11 or len(set(cpf)) == 1:
-        raise ValidationError('CPF inválido. Verifique os números digitados.')
-        
-    soma_mult = sum(i * int(d) for i, d in zip(multiplos,cpf[0:9]))
-        
-    if soma_mult % 11 < 2 and int(cpf[9]) != 0:
-        raise ValidationError('CPF inválido. Verifique os números digitados.')
-    elif soma_mult % 11 > 1 and 11 - (soma_mult % 11) != int(cpf[9]):
-        raise ValidationError('CPF inválido. Verifique os números digitados.')
-        
-    soma_mult2 = sum(i * int(d) for i, d in zip(multiplos2,cpf[0:10]))
-        
-    if soma_mult2 % 11 < 2 and int(cpf[10]) != 0:
-        raise ValidationError('CPF inválido. Verifique os números digitados.')
-    elif soma_mult2 % 11 > 1 and 11 - (soma_mult2 % 11) != int(cpf[10]):
-        raise ValidationError('CPF inválido. Verifique os números digitados.')
-
-class Usuario(AbstractUser):
+class Usuario(models.Model):
     
     UNIDADE_CHOICES = [
     ('barra', 'Barra'),
     ('botafogo', 'Botafogo'),
     ]
     unidade = models.CharField(max_length=20, choices=UNIDADE_CHOICES)
+    matricula = models.CharField(max_length=12, primary_key=True)
+    senha = models.CharField(max_length=128)
+    nome = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
     
     def __str__(self):
-       return self.username 
+       return self.matricula
 
 class Aluno(models.Model):
     
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     matricula = models.CharField(max_length=12, unique=True)
-    cpf = models.CharField(max_length=14, unique=True, validators=[cpf_valido])
+    cpf = models.CharField(max_length=14, unique=True, validators=[validar_cpf])
     dt_nascimento = models.DateField()
     procurando_estagio = models.BooleanField(default=True)
     horas_estagio = models.IntegerField(default=0)
