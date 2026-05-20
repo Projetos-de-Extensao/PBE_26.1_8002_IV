@@ -11,9 +11,6 @@ class Usuario(AbstractUser):
     ]
     unidade = models.CharField(max_length=20, choices=UNIDADE_CHOICES)
     matricula = models.CharField(max_length=12, primary_key=True)
-    senha = models.CharField(max_length=128)
-    nome = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
     
     def __str__(self):
        return self.matricula
@@ -23,19 +20,19 @@ class Aluno(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula')
     cpf = models.CharField(max_length=14, unique=True, validators=[validar_cpf])
     dt_nascimento = models.DateField()
-    em_estagio = models.BooleanField(default=False)
     procurando_estagio = models.BooleanField(default=False)
     horas_estagio = models.IntegerField(default=0)
     periodo = models.PositiveIntegerField()
-
+    curso = models.ForeignKey('Curso', on_delete=models.PROTECT, db_column='id_curso')
+    
     def __str__(self):
-        return self.usuario.nome
+        return self.usuario.username
     
 class Secretaria(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula')
 
     def __str__(self):
-        return self.usuario.nome
+        return self.usuario.username
 
 class Coordenador(models.Model):
 
@@ -55,7 +52,7 @@ class Coordenador(models.Model):
         verbose_name_plural = "Coordenadores"
 
     def __str__(self):
-        return self.usuario.nome
+        return self.usuario.username
 
 class Curso(models.Model):
     CURSOS_CHOICES = [
@@ -94,20 +91,20 @@ class Empresa(models.Model):
         return self.nome
     
 class Tce(models.Model):
-    anpoliceseguro = models.CharField(max_length=50, primary_key=True)
+    apoliceseguro = models.CharField(max_length=50, primary_key=True)
     bolsa = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     secretaria = models.ForeignKey(Secretaria, on_delete=models.PROTECT, db_column='matricula_secretaria')
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_aluno')
 
     def __str__(self):
-        return self.anpoliceseguro
+        return self.apoliceseguro
     
 class Estagio(models.Model):
     idestagio = models.AutoField(primary_key=True)
     dtinicio = models.DateField()
     dtfim = models.DateField(null=True, blank=True)
     cargahorariasemanal = models.IntegerField()
-    tce = models.ForeignKey(Tce, on_delete=models.PROTECT, db_column='n_apolice_seguro')
+    tce = models.ForeignKey(Tce, on_delete=models.PROTECT, db_column='apolice_seguro')
     empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, db_column='cnpj')
 
     def __str__(self):
@@ -121,10 +118,10 @@ class StatusRelatorio(models.TextChoices):
 class RelatorioSemestral(models.Model):
     status = models.CharField(max_length=20, choices=StatusRelatorio.choices, default=StatusRelatorio.PENDENTE)
     idrelatorio = models.AutoField(primary_key=True)
-    dataenvio = models.DateField()
+    data_envio = models.DateField()
     semestre = models.CharField(max_length=4, validators=[RegexValidator(regex=r'^\d{2}\.[12]$', message='O semestre deve estar no formato 26.1 ou 26.2')])
-    horasestagio = models.PositiveIntegerField()
-    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula')
+    horas_estagiadas = models.PositiveIntegerField()
+    coordenador = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_coordenador')
     estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio')
 
     def __str__(self):
