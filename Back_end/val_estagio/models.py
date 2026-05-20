@@ -92,23 +92,6 @@ class Empresa(models.Model):
 
     def __str__(self):
         return self.nome
-
-class StatusRelatorio(models.TextChoices):
-    PENDENTE = 'pendente', 'Pendente'
-    APROVADO = 'aprovado', 'Aprovado'
-    REPROVADO = 'reprovado', 'Reprovado'
-
-class RelatorioSemestral(models.Model):
-    status = models.CharField(max_length=20, choices=StatusRelatorio.choices, default=StatusRelatorio.PENDENTE)
-    idrelatorio = models.AutoField(primary_key=True)
-    dataenvio = models.DateField()
-    semestre = models.CharField(max_length=4, validators=[RegexValidator(regex=r'^\d{2}\.[12]$', message='O semestre deve estar no formato 26.1 ou 26.2')])
-    horasestagio = models.PositiveIntegerField()
-    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula')
-    estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio')
-
-    def __str__(self):
-        return self.status
     
 class Tce(models.Model):
     anpoliceseguro = models.CharField(max_length=50, primary_key=True)
@@ -129,3 +112,20 @@ class Estagio(models.Model):
 
     def __str__(self):
         return self.empresa.nome
+
+class StatusRelatorio(models.TextChoices):
+    PENDENTE = 'pendente', 'Pendente'
+    APROVADO = 'aprovado', 'Aprovado'
+    REPROVADO = 'reprovado', 'Reprovado'
+
+class RelatorioSemestral(models.Model):
+    status = models.CharField(max_length=20, choices=StatusRelatorio.choices, default=StatusRelatorio.PENDENTE)
+    idrelatorio = models.AutoField(primary_key=True)
+    dataenvio = models.DateField()
+    semestre = models.CharField(max_length=4, validators=[RegexValidator(regex=r'^\d{2}\.[12]$', message='O semestre deve estar no formato 26.1 ou 26.2')])
+    horasestagio = models.PositiveIntegerField()
+    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula')
+    estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio')
+
+    def __str__(self):
+        return self.status
