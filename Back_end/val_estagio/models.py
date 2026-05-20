@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from .validators import validar_cpf, validar_cnpj
 
-class Usuario(models.Model):
+class Usuario(AbstractBaseUser):
     
     UNIDADE_CHOICES = [
     ('barra', 'Barra'),
