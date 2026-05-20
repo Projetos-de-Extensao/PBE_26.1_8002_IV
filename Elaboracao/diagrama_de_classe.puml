@@ -1,0 +1,151 @@
+' Diagrama de Classes desatualizado, seguir modelo conceitual do banco de dados, faz mais sentido para a aplicação em Django
+
+@startuml diagrama_estagio
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam ArrowColor #555555
+skinparam ClassBorderColor #555555
+
+' ─────────────────────────────
+'  ENUM
+' ─────────────────────────────
+
+enum StatusRelatorio {
+  PENDENTE
+  APROVADO
+  REPROVADO
+}
+
+' ─────────────────────────────
+'  ENTIDADES EXTERNAS
+' ─────────────────────────────
+
+class Seguradora {
+  + int nApoliceSeguro
+  + String nome
+}
+
+class Empresa {
+  + String nome
+  + String endereco
+  + String CNPJ
+}
+
+class Curso {
+  + String nome
+  + String area
+}
+
+' ─────────────────────────────
+'  USUARIO E SUBCLASSES
+' ─────────────────────────────
+
+class Usuario {
+  + String nome
+  + String email
+  + String senha
+  + String unidade
+  --
+  + logar()
+}
+
+class Aluno {
+  + String cpf
+  + String matricula
+  + Date dtNascimento
+  + Bool emEstagio
+  + Bool procurandoEstagio
+  + Curso curso
+  + Estagio trabalho
+  + TCE tce
+  + int horasEstagio
+  + int periodo
+  --
+  + estaDisponivel() : bool
+  + ganharHorasEstagio(int horas)
+  + enviarRelatorio(RelatorioSemestral rel)
+  + abrirChamado()
+}
+
+class Secretaria {
+  + String matriculaFunc
+  --
+  + assinarTCE(TCE tce)
+}
+
+class Coordenador {
+  + Area area
+  + Curso[] cursos
+  --
+  + getRelatoriosPendentes()
+  + validarRelatorio(RelatorioSemestral rel, Aluno aluno)
+}
+
+' ─────────────────────────────
+'  DOCUMENTOS
+' ─────────────────────────────
+
+class TCE {
+  + double auxilioBolsa
+  + Seguradora seguradora
+  + Aluno aluno
+  + Empresa contratante
+  + StatusRelatorio status
+  --
+  + seAprovar()
+  + seReprovar()
+}
+
+class Estagio {
+  + TCE tce
+  + Empresa empresa
+  + Aluno aluno
+  + Date dataInicio
+  + Date dataFim
+  + int cargaHorariaSemanal
+}
+
+class RelatorioSemestral {
+  + Aluno aluno
+  + Estagio estagio
+  + int horasEstagiadas
+  + Bool emAberto
+  + String semestre
+  + Date dataEnvio
+  + StatusRelatorio status
+  --
+  + seAprovar()
+  + seReprovar()
+}
+
+' ─────────────────────────────
+'  HERANÇA
+' ─────────────────────────────
+
+Usuario <|-- Aluno
+Usuario <|-- Secretaria
+Usuario <|-- Coordenador
+
+' ─────────────────────────────
+'  ASSOCIAÇÕES
+' ─────────────────────────────
+
+Aluno --> Curso
+Aluno --> TCE
+Aluno --> Estagio
+
+TCE --> Seguradora
+TCE --> Empresa
+TCE --> StatusRelatorio
+
+Estagio --> TCE
+Estagio --> Empresa
+
+Coordenador --> Curso
+Coordenador ..> RelatorioSemestral : consulta
+
+RelatorioSemestral --> Estagio
+RelatorioSemestral --> StatusRelatorio
+
+@enduml
