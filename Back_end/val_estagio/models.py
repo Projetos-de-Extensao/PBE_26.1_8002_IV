@@ -57,18 +57,18 @@ class Coordenador(models.Model):
 class Curso(models.Model):
     CURSOS_CHOICES = [
         ('administração', 'Administração'),
-        ('análise e Desenvolvimento de Sistemas', 'Análise e desenvolvimento de sistemas'),
-        ('Arquitetura e Urbanismo', 'Arquitetura e urbanismo'),
-        ('ciência de dados e inteligência artificial', 'Ciência de Dados e Inteligência Artificial'),
-        ('ciências Contábeis', 'Ciências contábeis'),
+        ('analise e desenvolvimento de sistemas', 'Análise e Desenvolvimento de Sistemas'),
+        ('arquitetura e urbanismo', 'Arquitetura e Urbanismo'),
+        ('ciencia de dados e inteligencia artificial', 'Ciência de Dados e Inteligência Artificial'),
+        ('ciencias contabeis', 'Ciências Contábeis'),
         ('direito', 'Direito'),
-        ('ciências econômicas', 'Ciências Econômicas'),
-        ('comunicação social - publicidade e propaganda', 'Comunicação Social - Publicidade e Propaganda'),
+        ('ciencias economicas', 'Ciências Econômicas'),
+        ('comunicacao social - publicidade e propaganda', 'Comunicação Social - Publicidade e Propaganda'),
         ('engenharia civil', 'Engenharia Civil'),
-        ('engenharia de produção', 'Engenharia de Produção'),
-        ('engenharia da computação', 'Engenharia da Computação'),
+        ('engenharia de producao', 'Engenharia de Produção'),
+        ('engenharia da computacao', 'Engenharia da Computação'),
         ('engenharia de software', 'Engenharia de Software'),
-        ('relações internacionais', 'Relações Internacionais'),
+        ('relacoes internacionais', 'Relações Internacionais'),
     ]
     nome = models.CharField(max_length=100, choices=CURSOS_CHOICES, unique=True)
 
