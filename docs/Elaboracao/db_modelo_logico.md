@@ -7,7 +7,7 @@ usuario(**matricula**, senha, nome, email)
 
 secretaria(***matricula***)
 
-aluno(***matricula***, cpf, dtnascimento, emestagio, procurandoestagio, horaestagio, periodo)
+aluno(***matricula***, cpf, dtnascimento, emestagio, procurandoestagio, horaestagio, periodo, *idcurso*)
 
 coordenador(***matricula***, area)
 
