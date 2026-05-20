@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
+from phonenumber_field.modelfields import PhoneNumberField
 from .validators import validar_cpf, validar_cnpj
 
 class Usuario(AbstractUser):
@@ -18,6 +19,7 @@ class Usuario(AbstractUser):
 class Aluno(models.Model):
     
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula')
+    telefone = PhoneNumberField(region='BR')
     cpf = models.CharField(max_length=14, unique=True, validators=[validar_cpf])
     dt_nascimento = models.DateField()
     procurando_estagio = models.BooleanField(default=False)
@@ -78,6 +80,7 @@ class Curso(models.Model):
 class Empresa(models.Model):
 
     nome = models.CharField(max_length=255)
+    telefone = PhoneNumberField(region='BR')
     cep = models.CharField(max_length=9)
     uf = models.CharField(max_length=2)
     cidade = models.CharField(max_length=100)

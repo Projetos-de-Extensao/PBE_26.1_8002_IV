@@ -3,3 +3,5 @@ Django==6.0
 djangorestframework==3.16.0
 validate-docbr==1.11.1
 sqlparse==0.5.3
+django-phonenumber-field==8.1.0
+phonenumbers==9.0.12

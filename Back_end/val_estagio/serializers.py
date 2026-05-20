@@ -21,7 +21,7 @@ class AlunoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Aluno
-        fields = 'usuario', 'matricula', 'cpf', 'dt_nascimento', 'procurando_estagio', 'horas_estagio', 'periodo', 'curso'
+        fields = 'usuario', 'matricula', 'telefone', 'cpf', 'dt_nascimento', 'procurando_estagio', 'horas_estagio', 'periodo', 'curso'
 
 class SecretariaSerializer(serializers.ModelSerializer):
     matricula_funcionario = serializers.CharField(
@@ -42,7 +42,7 @@ class EmpresaSerializer(serializers.ModelSerializer):
     nome_empresa = serializers.CharField(source='nome', read_only=True)
     class Meta:
         model = Empresa
-        fields ='nome_empresa', 'cnpj', 'cep', 'uf', 'cidade', 'log', 'num', 'comp', 'bairro' 
+        fields ='nome_empresa', 'telefone', 'cnpj', 'cep', 'uf', 'cidade', 'log', 'num', 'comp', 'bairro' 
 
 
 class TceSerializer(serializers.ModelSerializer):
