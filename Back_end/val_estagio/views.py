@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Seguradora, Tce, RelatorioSemestral, Estagio
+from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
 from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
 
 
