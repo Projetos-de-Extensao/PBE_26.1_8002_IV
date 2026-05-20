@@ -32,15 +32,20 @@ class Aluno(models.Model):
         cpf = cpf.strip().replace('.','').replace('-','')
         multiplos = list(range(10, 1,-1))
         multiplos2 = list(range(11,1,-1))
-        soma_mult = sum(i * int(d) for i, d in zip(multiplos,cpf[0:9]))
-        soma_mult2 = sum(i * int(d) for i, d in zip(multiplos2,cpf[0:10]))
+        
         if not cpf.isnumeric() or len(cpf) != 11 or len(set(cpf)) == 1:
             return False
-        elif soma_mult % 11 < 2 and int(cpf[9]) != 0:
+        
+        soma_mult = sum(i * int(d) for i, d in zip(multiplos,cpf[0:9]))
+        
+        if soma_mult % 11 < 2 and int(cpf[9]) != 0:
             return False
         elif soma_mult % 11 > 1 and 11 - (soma_mult % 11) != int(cpf[9]):
             return False
-        elif soma_mult2 % 11 < 2 and int(cpf[10]) != 0:
+        
+        soma_mult2 = sum(i * int(d) for i, d in zip(multiplos2,cpf[0:10]))
+        
+        if soma_mult2 % 11 < 2 and int(cpf[10]) != 0:
             return False
         elif soma_mult2 % 11 > 1 and 11 - (soma_mult2 % 11) != int(cpf[10]):
             return False
