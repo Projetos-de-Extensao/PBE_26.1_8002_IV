@@ -27,7 +27,6 @@ nav:
       - CodeSpace: Construcao/codespace.md
   - Transição:
       - Index: Transicao/index.md
-  - Bibliografia: Disciplina/bibliografia.md
 
 theme:
   name: material

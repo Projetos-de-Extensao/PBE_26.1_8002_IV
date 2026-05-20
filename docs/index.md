@@ -73,7 +73,6 @@ Maior controle do fluxo, mais transparência para os envolvidos e melhor organiz
 
 ## Links rápidos
 
-- [Disciplina](Disciplina/aulas.md)
 - [Pesquisa](Iniciacao/pesquisa.md)
 - [Requisitos](Elaboracao/requisitos.md)
 - [Casos de Uso](Elaboracao/casos_de_uso.md)
