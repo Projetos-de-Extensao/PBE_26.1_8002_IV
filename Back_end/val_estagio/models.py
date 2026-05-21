@@ -4,6 +4,13 @@ from django.core.validators import RegexValidator
 from phonenumber_field.modelfields import PhoneNumberField
 from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo
 
+
+class StatusDocumento(models.TextChoices):
+    PENDENTE = 'pendente', 'Pendente'
+    APROVADO = 'aprovado', 'Aprovado'
+    REPROVADO = 'reprovado', 'Reprovado'
+
+
 class Usuario(AbstractUser):
     
     UNIDADE_CHOICES = [
@@ -27,11 +34,22 @@ class Aluno(models.Model):
     periodo = models.PositiveIntegerField(verbose_name="Período", validators=[validar_periodo])
     curso = models.ForeignKey('Curso', on_delete=models.PROTECT, db_column='id_curso', verbose_name="Curso")
     
+    def ganhar_horas_estagio(self, horas_estagiadas):
+        if(horas_estagiadas > 0 and self.horas_estagio < 350):
+            self.horas_estagio = min(self.horas_estagio + horas_estagiadas, 350)
+        self.save()
+
     def __str__(self):
         return self.usuario.username
     
 class Secretaria(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula')
+
+    def aprovar_tce(self, tce):
+        tce.se_aprovar()
+
+    def reprovar_tce(self, tce):
+        tce.se_reprovar()
 
     def __str__(self):
         return self.usuario.username
@@ -52,6 +70,12 @@ class Coordenador(models.Model):
     class Meta:
         verbose_name = "Coordenador"
         verbose_name_plural = "Coordenadores"
+
+    def aprovar_relatorio(self, relatorioSemestral):
+        relatorioSemestral.se_aprovar()
+
+    def reprovar_relatorio(self, relatorioSemestral):
+        relatorioSemestral.se_reprovar()
 
     def __str__(self):
         return self.usuario.username
@@ -94,10 +118,20 @@ class Empresa(models.Model):
         return self.nome
     
 class Tce(models.Model):
+    status = models.CharField(max_length=20, choices=StatusDocumento.choices, default=StatusDocumento.PENDENTE, verbose_name="Status do TCE")
     apoliceseguro = models.CharField(max_length=50, primary_key=True, verbose_name="Apólice de Seguro",)
     bolsa = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Bolsa", validators=[validar_positivo])
     secretaria = models.ForeignKey(Secretaria, on_delete=models.PROTECT, db_column='matricula_secretaria', verbose_name="Secretaria")
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_aluno', verbose_name="Aluno")
+
+    def se_aprovar(self):
+        self.status = StatusDocumento.APROVADO
+        self.save()
+
+    def se_reprovar(self):
+        self.status = StatusDocumento.REPROVADO
+        self.save()
+    
 
     def __str__(self):
         return self.apoliceseguro
@@ -110,22 +144,45 @@ class Estagio(models.Model):
     tce = models.ForeignKey(Tce, on_delete=models.PROTECT, db_column='apolice_seguro', verbose_name="TCE")
     empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, db_column='cnpj', verbose_name="Empresa")
 
+    def adicionar_relatorio(self, coordenador, semestre, horas_estagiadas, data_envio):
+
+        from .models import RelatorioSemestral 
+
+        novo_relatorio = RelatorioSemestral.objects.create(
+            estagio=self,
+            coordenador=coordenador,
+            semestre=semestre,
+            horas_estagiadas=horas_estagiadas,
+            data_envio=data_envio
+        )
+        return novo_relatorio
+
+
     def __str__(self):
         return self.empresa.nome
 
-class StatusRelatorio(models.TextChoices):
-    PENDENTE = 'pendente', 'Pendente'
-    APROVADO = 'aprovado', 'Aprovado'
-    REPROVADO = 'reprovado', 'Reprovado'
 
 class RelatorioSemestral(models.Model):
-    status = models.CharField(max_length=20, choices=StatusRelatorio.choices, default=StatusRelatorio.PENDENTE, verbose_name="Status do Relatório")
+    status = models.CharField(max_length=20, choices=StatusDocumento.choices, default=StatusDocumento.PENDENTE, verbose_name="Status do Relatório")
     idrelatorio = models.AutoField(primary_key=True)
     data_envio = models.DateField(verbose_name="Data de Envio")
     semestre = models.CharField(max_length=4, validators=[RegexValidator(regex=r'^\d{2}\.[12]$', message='O semestre deve estar no formato 26.1 ou 26.2')], verbose_name="Semestre")
     horas_estagiadas = models.PositiveIntegerField(verbose_name="Horas Estagiadas", validators=[validar_positivo])
     coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE, db_column='matricula_coordenador', verbose_name="Coordenador")
     estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio', verbose_name="Estágio")
+
+    def se_aprovar(self):
+        if(self.status != StatusDocumento.APROVADO):
+            self.status = StatusDocumento.APROVADO
+
+            aluno_deste_relatorio = self.estagio.tce.aluno
+            aluno_deste_relatorio.ganhar_horas_estagio(self.horas_estagiadas)
+            
+            self.save()
+
+    def se_reprovar(self):
+        self.status = StatusDocumento.REPROVADO
+        self.save()
 
     class Meta:
         verbose_name = "Relatório Semestral"
