@@ -46,3 +46,7 @@ node_modules/
 .env
 >>>>>>> 6148d2736ee27ea59fd700ecad7ea667e0694708
 .env.local
+
+# SQLite
+
+db.sqlite3
