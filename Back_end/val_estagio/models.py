@@ -112,7 +112,7 @@ class Empresa(models.Model):
         return self.nome
     
 class Tce(models.Model):
-    status = models.CharField(max_length=20, choices=StatusDocumento, default=StatusDocumento.PENDENTE, verbose_name="Status do TCE")
+    status = models.CharField(max_length=20, choices=StatusDocumento.choices, default=StatusDocumento.PENDENTE, verbose_name="Status do TCE")
     apoliceseguro = models.CharField(max_length=50, primary_key=True, verbose_name="Apólice de Seguro",)
     bolsa = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Bolsa", validators=[validar_positivo])
     secretaria = models.ForeignKey(Secretaria, on_delete=models.PROTECT, db_column='matricula_secretaria', verbose_name="Secretaria")
@@ -141,7 +141,7 @@ class Estagio(models.Model):
 
 
 class RelatorioSemestral(models.Model):
-    status = models.CharField(max_length=20, choices=StatusDocumento, default=StatusDocumento.PENDENTE, verbose_name="Status do Relatório")
+    status = models.CharField(max_length=20, choices=StatusDocumento.choices, default=StatusDocumento.PENDENTE, verbose_name="Status do Relatório")
     idrelatorio = models.AutoField(primary_key=True)
     data_envio = models.DateField(verbose_name="Data de Envio")
     semestre = models.CharField(max_length=4, validators=[RegexValidator(regex=r'^\d{2}\.[12]$', message='O semestre deve estar no formato 26.1 ou 26.2')], verbose_name="Semestre")
