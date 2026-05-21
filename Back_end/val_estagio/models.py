@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from phonenumber_field.modelfields import PhoneNumberField
-from .validators import validar_cpf, validar_cnpj, validar_matricula
+from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep
 
 class Usuario(AbstractUser):
     
@@ -81,7 +81,7 @@ class Empresa(models.Model):
 
     nome = models.CharField(max_length=255, verbose_name="Nome da Empresa")
     telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
-    cep = models.CharField(max_length=9, verbose_name="CEP")
+    cep = models.CharField(max_length=9, verbose_name="CEP", validators=[validar_cep])
     uf = models.CharField(max_length=2, verbose_name="UF")
     cidade = models.CharField(max_length=100, verbose_name="Cidade")
     log = models.CharField(max_length=255, verbose_name="Logradouro")

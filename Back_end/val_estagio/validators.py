@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from validate_docbr import CPF, CNPJ
+from pycep_correios import get_address_from_cep
 
 def validar_cpf(value):
     cpf = CPF()
@@ -46,4 +47,13 @@ def validar_matricula(x):
         raise ValidationError('A Matrícula so pode ter números.') 
     if not x.startswith('20'):
         raise ValidationError('A Matrícula deve começar com 20')   
+    
+def validar_cep(x):
+    cep = x.replace('-','')
+
+    try:
+        get_address_from_cep(cep)
+
+    except Exception:
+        raise ValidationError('CEP inválido')   
    
