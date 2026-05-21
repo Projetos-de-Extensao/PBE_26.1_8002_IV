@@ -10,22 +10,22 @@ class Usuario(AbstractUser):
     ('barra', 'Barra'),
     ('botafogo', 'Botafogo'),
     ]
-    unidade = models.CharField(max_length=20, choices=UNIDADE_CHOICES)
-    matricula = models.CharField(max_length=12, primary_key=True)
+    unidade = models.CharField(max_length=20, choices=UNIDADE_CHOICES, verbose_name="Unidade")
+    matricula = models.CharField(max_length=12, primary_key=True, verbose_name="Matrícula")
     
     def __str__(self):
        return self.matricula
 
 class Aluno(models.Model):
     
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula')
-    telefone = PhoneNumberField(region='BR')
-    cpf = models.CharField(max_length=14, unique=True, validators=[validar_cpf])
-    dt_nascimento = models.DateField()
-    procurando_estagio = models.BooleanField(default=False)
-    horas_estagio = models.IntegerField(default=0)
-    periodo = models.PositiveIntegerField()
-    curso = models.ForeignKey('Curso', on_delete=models.PROTECT, db_column='id_curso')
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula', verbose_name="Matrícula")
+    telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
+    cpf = models.CharField(max_length=14, unique=True, validators=[validar_cpf], verbose_name="CPF")
+    dt_nascimento = models.DateField(verbose_name="Data de Nascimento")
+    procurando_estagio = models.BooleanField(default=False, verbose_name="Procurando Estágio")
+    horas_estagio = models.IntegerField(default=0, verbose_name="Horas de Estágio")
+    periodo = models.PositiveIntegerField(verbose_name="Período")
+    curso = models.ForeignKey('Curso', on_delete=models.PROTECT, db_column='id_curso', verbose_name="Curso")
     
     def __str__(self):
         return self.usuario.username
@@ -46,9 +46,9 @@ class Coordenador(models.Model):
         ('engenharia', 'Engenharia'),
     ]
 
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
-    area = models.CharField(max_length=100, choices=AREA_CHOICES)
-    
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, verbose_name="Usuário")
+    area = models.CharField(max_length=100, choices=AREA_CHOICES, verbose_name="Área")
+
     class Meta:
         verbose_name = "Coordenador"
         verbose_name_plural = "Coordenadores"
@@ -72,43 +72,43 @@ class Curso(models.Model):
         ('engenharia de software', 'Engenharia de Software'),
         ('relacoes internacionais', 'Relações Internacionais'),
     ]
-    nome = models.CharField(max_length=100, choices=CURSOS_CHOICES, unique=True)
+    nome = models.CharField(max_length=100, choices=CURSOS_CHOICES, unique=True, verbose_name="Nome do Curso")
 
     def __str__(self):
         return self.nome
 
 class Empresa(models.Model):
 
-    nome = models.CharField(max_length=255)
-    telefone = PhoneNumberField(region='BR')
-    cep = models.CharField(max_length=9)
-    uf = models.CharField(max_length=2)
-    cidade = models.CharField(max_length=100)
+    nome = models.CharField(max_length=255, verbose_name="Nome da Empresa")
+    telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
+    cep = models.CharField(max_length=9, verbose_name="CEP")
+    uf = models.CharField(max_length=2, verbose_name="UF")
+    cidade = models.CharField(max_length=100, verbose_name="Cidade")
     log = models.CharField(max_length=255, verbose_name="Logradouro")
     comp = models.CharField(max_length=100, null=True, blank=True, verbose_name="Complemento")
     num = models.CharField(max_length=20, verbose_name="Número")
-    bairro = models.CharField(max_length=100)
-    cnpj = models.CharField(max_length=18, primary_key=True, validators=[validar_cnpj])
+    bairro = models.CharField(max_length=100, verbose_name="Bairro")
+    cnpj = models.CharField(max_length=18, primary_key=True, validators=[validar_cnpj], verbose_name="CNPJ")
 
     def __str__(self):
         return self.nome
     
 class Tce(models.Model):
-    apoliceseguro = models.CharField(max_length=50, primary_key=True)
-    bolsa = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    secretaria = models.ForeignKey(Secretaria, on_delete=models.PROTECT, db_column='matricula_secretaria')
-    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_aluno')
+    apoliceseguro = models.CharField(max_length=50, primary_key=True, verbose_name="Apólice de Seguro")
+    bolsa = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Bolsa")
+    secretaria = models.ForeignKey(Secretaria, on_delete=models.PROTECT, db_column='matricula_secretaria', verbose_name="Secretaria")
+    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_aluno', verbose_name="Aluno")
 
     def __str__(self):
         return self.apoliceseguro
     
 class Estagio(models.Model):
     idestagio = models.AutoField(primary_key=True)
-    dtinicio = models.DateField()
-    dtfim = models.DateField(null=True, blank=True)
-    cargahorariasemanal = models.IntegerField()
-    tce = models.ForeignKey(Tce, on_delete=models.PROTECT, db_column='apolice_seguro')
-    empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, db_column='cnpj')
+    dtinicio = models.DateField(verbose_name="Data de Início")
+    dtfim = models.DateField(null=True, blank=True, verbose_name="Data de Término")
+    cargahorariasemanal = models.IntegerField(verbose_name="Carga Horária Semanal")
+    tce = models.ForeignKey(Tce, on_delete=models.PROTECT, db_column='apolice_seguro', verbose_name="TCE")
+    empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, db_column='cnpj', verbose_name="Empresa")
 
     def __str__(self):
         return self.empresa.nome
@@ -119,13 +119,17 @@ class StatusRelatorio(models.TextChoices):
     REPROVADO = 'reprovado', 'Reprovado'
 
 class RelatorioSemestral(models.Model):
-    status = models.CharField(max_length=20, choices=StatusRelatorio.choices, default=StatusRelatorio.PENDENTE)
+    status = models.CharField(max_length=20, choices=StatusRelatorio.choices, default=StatusRelatorio.PENDENTE, verbose_name="Status do Relatório")
     idrelatorio = models.AutoField(primary_key=True)
-    data_envio = models.DateField()
-    semestre = models.CharField(max_length=4, validators=[RegexValidator(regex=r'^\d{2}\.[12]$', message='O semestre deve estar no formato 26.1 ou 26.2')])
-    horas_estagiadas = models.PositiveIntegerField()
-    coordenador = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_coordenador')
-    estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio')
+    data_envio = models.DateField(verbose_name="Data de Envio")
+    semestre = models.CharField(max_length=4, validators=[RegexValidator(regex=r'^\d{2}\.[12]$', message='O semestre deve estar no formato 26.1 ou 26.2')], verbose_name="Semestre")
+    horas_estagiadas = models.PositiveIntegerField(verbose_name="Horas Estagiadas")
+    coordenador = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_coordenador', verbose_name="Coordenador")
+    estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio', verbose_name="Estágio")
+
+    class Meta:
+        verbose_name = "Relatório Semestral"
+        verbose_name_plural = "Relatórios Semestrais"
 
     def __str__(self):
         return self.status
