@@ -45,6 +45,12 @@ class Aluno(models.Model):
 class Secretaria(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula')
 
+    def aprovar_tce(self, tce):
+        tce.se_aprovar()
+
+    def reprovar_tce(self, tce):
+        tce.se_reprovar()
+
     def __str__(self):
         return self.usuario.username
 
