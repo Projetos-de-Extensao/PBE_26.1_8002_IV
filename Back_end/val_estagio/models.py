@@ -71,10 +71,10 @@ class Coordenador(models.Model):
         verbose_name = "Coordenador"
         verbose_name_plural = "Coordenadores"
 
-    def aprovar_relatorio(self, RelatorioSemestral):
+    def aprovar_relatorio(self, relatorioSemestral):
         RelatorioSemestral.se_aprovar()
 
-    def reprovar_relatorio(self, RelatorioSemestral):
+    def reprovar_relatorio(self, relatorioSemestral):
         RelatorioSemestral.se_reprovar()
 
     def __str__(self):
@@ -145,6 +145,7 @@ class Estagio(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, db_column='cnpj', verbose_name="Empresa")
 
     def adicionar_relatorio(self, coordenador, semestre, horas_estagiadas, data_envio):
+
         from .models import RelatorioSemestral 
 
         novo_relatorio = RelatorioSemestral.objects.create(
@@ -170,7 +171,7 @@ class RelatorioSemestral(models.Model):
     coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE, db_column='matricula_coordenador', verbose_name="Coordenador")
     estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio', verbose_name="Estágio")
 
-    def se_aprovar(self, Aluno):
+    def se_aprovar(self, aluno):
         self.status = StatusDocumento.APROVADO
         Aluno.ganhar_horas_estagio(self.horas_estagiadas)
         self.save()
