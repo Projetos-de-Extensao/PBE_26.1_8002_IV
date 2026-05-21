@@ -171,10 +171,14 @@ class RelatorioSemestral(models.Model):
     coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE, db_column='matricula_coordenador', verbose_name="Coordenador")
     estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio', verbose_name="Estágio")
 
-    def se_aprovar(self, aluno):
-        self.status = StatusDocumento.APROVADO
-        aluno.ganhar_horas_estagio(self.horas_estagiadas)
-        self.save()
+    def se_aprovar(self):
+        if(self.status != StatusDocumento.APROVADO):
+            self.status = StatusDocumento.APROVADO
+
+            aluno_deste_relatorio = self.estagio.tce.aluno
+            aluno_deste_relatorio.ganhar_horas_estagio(self.horas_estagiadas)
+            
+            self.save()
 
     def se_reprovar(self):
         self.status = StatusDocumento.REPROVADO
