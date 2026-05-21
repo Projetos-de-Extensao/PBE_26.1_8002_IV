@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from phonenumber_field.modelfields import PhoneNumberField
-from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep
+from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo
 
 class Usuario(AbstractUser):
     
@@ -24,7 +24,7 @@ class Aluno(models.Model):
     dt_nascimento = models.DateField(verbose_name="Data de Nascimento")
     procurando_estagio = models.BooleanField(default=False, verbose_name="Procurando Estágio")
     horas_estagio = models.IntegerField(default=0, verbose_name="Horas de Estágio")
-    periodo = models.PositiveIntegerField(verbose_name="Período")
+    periodo = models.PositiveIntegerField(verbose_name="Período", validators=[validar_periodo])
     curso = models.ForeignKey('Curso', on_delete=models.PROTECT, db_column='id_curso', verbose_name="Curso")
     
     def __str__(self):

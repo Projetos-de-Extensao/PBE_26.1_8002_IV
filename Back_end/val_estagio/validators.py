@@ -55,5 +55,13 @@ def validar_cep(x):
         get_address_from_cep(cep)
 
     except Exception:
-        raise ValidationError('CEP inválido')   
+        raise ValidationError('CEP inválido')
+
+    
+def validar_periodo(x):
+    if x < 1 or x > 12:
+        raise ValidationError('O Período tem que estar entre 1 e 12')
+        
+
+
    
