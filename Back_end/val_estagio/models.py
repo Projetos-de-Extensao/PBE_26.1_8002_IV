@@ -4,6 +4,13 @@ from django.core.validators import RegexValidator
 from phonenumber_field.modelfields import PhoneNumberField
 from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo
 
+
+class StatusDocumento(models.TextChoices):
+    PENDENTE = 'pendente', 'Pendente'
+    APROVADO = 'aprovado', 'Aprovado'
+    REPROVADO = 'reprovado', 'Reprovado'
+
+
 class Usuario(AbstractUser):
     
     UNIDADE_CHOICES = [
@@ -118,13 +125,9 @@ class Estagio(models.Model):
     def __str__(self):
         return self.empresa.nome
 
-class StatusRelatorio(models.TextChoices):
-    PENDENTE = 'pendente', 'Pendente'
-    APROVADO = 'aprovado', 'Aprovado'
-    REPROVADO = 'reprovado', 'Reprovado'
 
 class RelatorioSemestral(models.Model):
-    status = models.CharField(max_length=20, choices=StatusRelatorio.choices, default=StatusRelatorio.PENDENTE, verbose_name="Status do Relatório")
+    status = models.CharField(max_length=20, choices=StatusDocumento, default=StatusDocumento.PENDENTE, verbose_name="Status do Relatório")
     idrelatorio = models.AutoField(primary_key=True)
     data_envio = models.DateField(verbose_name="Data de Envio")
     semestre = models.CharField(max_length=4, validators=[RegexValidator(regex=r'^\d{2}\.[12]$', message='O semestre deve estar no formato 26.1 ou 26.2')], verbose_name="Semestre")
