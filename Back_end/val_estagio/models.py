@@ -94,7 +94,7 @@ class Empresa(models.Model):
         return self.nome
     
 class Tce(models.Model):
-    apoliceseguro = models.CharField(max_length=50, primary_key=True, verbose_name="Apólice de Seguro", validators=[validar_positivo])
+    apoliceseguro = models.CharField(max_length=50, primary_key=True, verbose_name="Apólice de Seguro",)
     bolsa = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Bolsa", validators=[validar_positivo])
     secretaria = models.ForeignKey(Secretaria, on_delete=models.PROTECT, db_column='matricula_secretaria', verbose_name="Secretaria")
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_aluno', verbose_name="Aluno")
