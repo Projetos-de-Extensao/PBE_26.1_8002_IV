@@ -71,8 +71,8 @@ class Coordenador(models.Model):
         verbose_name = "Coordenador"
         verbose_name_plural = "Coordenadores"
 
-    def aprovar_relatorio(self, relatorioSemestral, aluno):
-        RelatorioSemestral.se_aprovar(aluno)
+    def aprovar_relatorio(self, relatorioSemestral):
+        RelatorioSemestral.se_aprovar()
 
     def reprovar_relatorio(self, relatorioSemestral):
         RelatorioSemestral.se_reprovar()
