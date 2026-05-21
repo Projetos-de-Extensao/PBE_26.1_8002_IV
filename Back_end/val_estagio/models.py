@@ -27,6 +27,14 @@ class Aluno(models.Model):
     periodo = models.PositiveIntegerField(verbose_name="Período", validators=[validar_periodo])
     curso = models.ForeignKey('Curso', on_delete=models.PROTECT, db_column='id_curso', verbose_name="Curso")
     
+    def ganhar_horas_estagio(self, horas_estagiadas):
+        if(horas_estagiadas > 0 and not self.horas_estagio == 350):
+            if(self.horas_estagio + horas_estagio > 350):
+                self.horas_estagio = 350
+            else:
+                self.horas_estagio += horas_estagiadas
+
+
     def __str__(self):
         return self.usuario.username
     
