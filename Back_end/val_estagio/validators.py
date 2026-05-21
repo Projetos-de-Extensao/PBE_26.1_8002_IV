@@ -61,6 +61,10 @@ def validar_cep(x):
 def validar_periodo(x):
     if x < 1 or x > 10:
         raise ValidationError('O Período tem que estar entre 1 e 10')
+    
+def validar_positivo(x):
+    if x < 0:
+        raise ValidationError('O Valor não pode ser negativo')    
         
 
 

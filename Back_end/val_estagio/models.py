@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from phonenumber_field.modelfields import PhoneNumberField
-from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo
+from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo
 
 class Usuario(AbstractUser):
     
@@ -94,8 +94,8 @@ class Empresa(models.Model):
         return self.nome
     
 class Tce(models.Model):
-    apoliceseguro = models.CharField(max_length=50, primary_key=True, verbose_name="Apólice de Seguro")
-    bolsa = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Bolsa")
+    apoliceseguro = models.CharField(max_length=50, primary_key=True, verbose_name="Apólice de Seguro", validators=[validar_positivo])
+    bolsa = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Bolsa", validators=[validar_positivo])
     secretaria = models.ForeignKey(Secretaria, on_delete=models.PROTECT, db_column='matricula_secretaria', verbose_name="Secretaria")
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_aluno', verbose_name="Aluno")
 
