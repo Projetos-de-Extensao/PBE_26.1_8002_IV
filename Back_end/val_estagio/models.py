@@ -126,9 +126,11 @@ class Tce(models.Model):
 
     def se_aprovar(self):
         self.status = StatusDocumento.APROVADO
+        self.save()
 
     def se_reprovar(self):
         self.status = StatusDocumento.REPROVADO
+        self.save()
     
 
     def __str__(self):
@@ -155,11 +157,14 @@ class RelatorioSemestral(models.Model):
     coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE, db_column='matricula_coordenador', verbose_name="Coordenador")
     estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio', verbose_name="Estágio")
 
-    def se_aprovar(self):
+    def se_aprovar(self, Aluno):
         self.status = StatusDocumento.APROVADO
+        Aluno.ganhar_horas_estagio(self.horas_estagiadas)
+        self.save()
 
     def se_reprovar(self):
         self.status = StatusDocumento.REPROVADO
+        self.save()
 
     class Meta:
         verbose_name = "Relatório Semestral"
