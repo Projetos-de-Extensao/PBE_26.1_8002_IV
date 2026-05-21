@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from phonenumber_field.modelfields import PhoneNumberField
 from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo
-
+from . choices import StatusDocumento, UNIDADE_CHOICES, AREA_CHOICES, CURSOS_CHOICES
 
 class StatusDocumento(models.TextChoices):
     PENDENTE = 'pendente', 'Pendente'
@@ -13,10 +13,6 @@ class StatusDocumento(models.TextChoices):
 
 class Usuario(AbstractUser):
     
-    UNIDADE_CHOICES = [
-    ('barra', 'Barra'),
-    ('botafogo', 'Botafogo'),
-    ]
     unidade = models.CharField(max_length=20, choices=UNIDADE_CHOICES, verbose_name="Unidade")
     matricula = models.CharField(max_length=12, primary_key=True, verbose_name="Matrícula", validators=[validar_matricula])
     
@@ -56,14 +52,6 @@ class Secretaria(models.Model):
 
 class Coordenador(models.Model):
 
-    AREA_CHOICES = [
-        ('negocios', 'Negócios'),
-        ('tecnologia', 'Tecnologia'),
-        ('financas', 'Finanças'),
-        ('direito', 'Direito'),
-        ('engenharia', 'Engenharia'),
-    ]
-
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, verbose_name="Usuário")
     area = models.CharField(max_length=100, choices=AREA_CHOICES, verbose_name="Área")
 
@@ -81,21 +69,7 @@ class Coordenador(models.Model):
         return self.usuario.username
 
 class Curso(models.Model):
-    CURSOS_CHOICES = [
-        ('administração', 'Administração'),
-        ('analise e desenvolvimento de sistemas', 'Análise e Desenvolvimento de Sistemas'),
-        ('arquitetura e urbanismo', 'Arquitetura e Urbanismo'),
-        ('ciencia de dados e inteligencia artificial', 'Ciência de Dados e Inteligência Artificial'),
-        ('ciencias contabeis', 'Ciências Contábeis'),
-        ('direito', 'Direito'),
-        ('ciencias economicas', 'Ciências Econômicas'),
-        ('comunicacao social - publicidade e propaganda', 'Comunicação Social - Publicidade e Propaganda'),
-        ('engenharia civil', 'Engenharia Civil'),
-        ('engenharia de producao', 'Engenharia de Produção'),
-        ('engenharia da computacao', 'Engenharia da Computação'),
-        ('engenharia de software', 'Engenharia de Software'),
-        ('relacoes internacionais', 'Relações Internacionais'),
-    ]
+    
     nome = models.CharField(max_length=100, choices=CURSOS_CHOICES, unique=True, verbose_name="Nome do Curso")
 
     def __str__(self):
