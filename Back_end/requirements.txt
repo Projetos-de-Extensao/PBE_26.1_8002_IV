@@ -5,3 +5,7 @@ validate-docbr==1.11.1
 sqlparse==0.5.3
 django-phonenumber-field==8.1.0
 phonenumbers==9.0.12
+mkdocs==1.6.1
+mkdocs-material
+mkdocs-minify-plugin
+pymdown-extensions

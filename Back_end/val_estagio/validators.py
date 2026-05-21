@@ -38,3 +38,10 @@ def validar_cnpj(value):
 
     if not cnpj.validate(value):
         raise ValidationError('CNPJ inválido')
+    
+def validar_matricula(x):
+    if len(x) != 12:
+        raise ValidationError('A Matrícula tem que ter 12 números.')   
+    if not x.isdigit():
+        raise ValidationError('A Matrícula so pode ter números.')    
+   
