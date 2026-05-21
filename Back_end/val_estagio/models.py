@@ -35,7 +35,7 @@ class Aluno(models.Model):
     curso = models.ForeignKey('Curso', on_delete=models.PROTECT, db_column='id_curso', verbose_name="Curso")
     
     def ganhar_horas_estagio(self, horas_estagiadas):
-        if(horas_estagiadas > 0 and not self.horas_estagio < 350):
+        if(horas_estagiadas > 0 and self.horas_estagio < 350):
             self.horas_estagio = min(self.horas_estagio + horas_estagiadas, 350)
         self.save()
 
