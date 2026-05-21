@@ -123,13 +123,14 @@ class RelatorioSemestral(models.Model):
     idrelatorio = models.AutoField(primary_key=True)
     data_envio = models.DateField(verbose_name="Data de Envio")
     semestre = models.CharField(max_length=4, validators=[RegexValidator(regex=r'^\d{2}\.[12]$', message='O semestre deve estar no formato 26.1 ou 26.2')], verbose_name="Semestre")
-    horas_estagiadas = models.PositiveIntegerField(verbose_name="Horas Estagiadas")
-    coordenador = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_coordenador', verbose_name="Coordenador")
+    horas_estagiadas = models.PositiveIntegerField(verbose_name="Horas Estagiadas", validators=[validar_positivo])
+    coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE, db_column='matricula_coordenador', verbose_name="Coordenador")
     estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio', verbose_name="Estágio")
 
     class Meta:
         verbose_name = "Relatório Semestral"
         verbose_name_plural = "Relatórios Semestrais"
+        unique_together = ['estagio', 'semestre']
 
     def __str__(self):
         return self.status
