@@ -1,151 +1,98 @@
-' Diagrama de Classes desatualizado, seguir modelo conceitual do banco de dados, faz mais sentido para a aplicação em Django
-
-@startuml diagrama_estagio
+@startuml diagrama_estagio_django
 
 skinparam classAttributeIconSize 0
-skinparam classFontStyle bold
-skinparam ArrowColor #555555
-skinparam ClassBorderColor #555555
+skinparam monochrome true
+hide circle
 
 ' ─────────────────────────────
-'  ENUM
-' ─────────────────────────────
-
-enum StatusRelatorio {
-  PENDENTE
-  APROVADO
-  REPROVADO
-}
-
-' ─────────────────────────────
-'  ENTIDADES EXTERNAS
-' ─────────────────────────────
-
-class Seguradora {
-  + int nApoliceSeguro
-  + String nome
-}
-
-class Empresa {
-  + String nome
-  + String endereco
-  + String CNPJ
-}
-
-class Curso {
-  + String nome
-  + String area
-}
-
-' ─────────────────────────────
-'  USUARIO E SUBCLASSES
+'  USUÁRIO E HERANÇA
 ' ─────────────────────────────
 
 class Usuario {
-  + String nome
-  + String email
-  + String senha
-  + String unidade
-  --
-  + logar()
-}
-
-class Aluno {
-  + String cpf
-  + String matricula
-  + Date dtNascimento
-  + Bool emEstagio
-  + Bool procurandoEstagio
-  + Curso curso
-  + Estagio trabalho
-  + TCE tce
-  + int horasEstagio
-  + int periodo
-  --
-  + estaDisponivel() : bool
-  + ganharHorasEstagio(int horas)
-  + enviarRelatorio(RelatorioSemestral rel)
-  + abrirChamado()
+  + matricula : String
+  + senha : String
+  + nome : String
+  + email : String
 }
 
 class Secretaria {
-  + String matriculaFunc
-  --
-  + assinarTCE(TCE tce)
+  ' Herda os atributos de Usuario
+}
+
+class Aluno {
+  + cpf : String
+  + dtnascimento : Date
+  + procurandoestagio : Boolean
+  + horaestagio : Integer
+  + periodo : Integer
 }
 
 class Coordenador {
-  + Area area
-  + Curso[] cursos
-  --
-  + getRelatoriosPendentes()
-  + validarRelatorio(RelatorioSemestral rel, Aluno aluno)
+  + area : String
 }
 
 ' ─────────────────────────────
-'  DOCUMENTOS
+'  ENTIDADES PRINCIPAIS
 ' ─────────────────────────────
 
+class Curso {
+  + idcurso : Integer
+  + nomecurso : String
+}
+
+class Empresa {
+  + cnpj : String
+  + nome : String
+  + cep : String
+  + uf : String
+  + cidade : String
+  + log : String
+  + comp : String
+  + num : String
+  + bairro : String
+}
+
 class TCE {
-  + double auxilioBolsa
-  + Seguradora seguradora
-  + Aluno aluno
-  + Empresa contratante
-  + StatusRelatorio status
-  --
-  + seAprovar()
-  + seReprovar()
+  + anpoliceseguro : String
+  + bolsa : Float
 }
 
 class Estagio {
-  + TCE tce
-  + Empresa empresa
-  + Aluno aluno
-  + Date dataInicio
-  + Date dataFim
-  + int cargaHorariaSemanal
+  + idestagio : Integer
+  + dtinicio : Date
+  + dtfim : Date
+  + cargahorariasemanal : Integer
 }
 
 class RelatorioSemestral {
-  + Aluno aluno
-  + Estagio estagio
-  + int horasEstagiadas
-  + Bool emAberto
-  + String semestre
-  + Date dataEnvio
-  + StatusRelatorio status
-  --
-  + seAprovar()
-  + seReprovar()
+  + idrelatorio : Integer
+  + dataenvio : Date
+  + semestre : String
+  + horasestagio : Integer
 }
 
 ' ─────────────────────────────
 '  HERANÇA
 ' ─────────────────────────────
 
-Usuario <|-- Aluno
 Usuario <|-- Secretaria
+Usuario <|-- Aluno
 Usuario <|-- Coordenador
 
 ' ─────────────────────────────
-'  ASSOCIAÇÕES
+'  ASSOCIAÇÕES (Foreign Keys)
 ' ─────────────────────────────
 
-Aluno --> Curso
-Aluno --> TCE
-Aluno --> Estagio
+Aluno "*" -- "1" Curso : pertence a >
+Curso "*" -- "1" Coordenador : gerenciado por >
 
-TCE --> Seguradora
-TCE --> Empresa
-TCE --> StatusRelatorio
+TCE "*" -- "1" Secretaria : assinado por >
+TCE "*" -- "1" Aluno : pertence a >
 
-Estagio --> TCE
-Estagio --> Empresa
+Estagio "*" -- "1" TCE : vinculado a >
+Estagio "*" -- "1" Empresa : realizado em >
 
-Coordenador --> Curso
-Coordenador ..> RelatorioSemestral : consulta
-
-RelatorioSemestral --> Estagio
-RelatorioSemestral --> StatusRelatorio
+RelatorioSemestral "*" -- "1" Aluno : enviado por >
+RelatorioSemestral "*" -- "1" Estagio : referente a >
 
 @enduml
