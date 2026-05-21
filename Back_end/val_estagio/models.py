@@ -144,6 +144,19 @@ class Estagio(models.Model):
     tce = models.ForeignKey(Tce, on_delete=models.PROTECT, db_column='apolice_seguro', verbose_name="TCE")
     empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, db_column='cnpj', verbose_name="Empresa")
 
+    def adicionar_relatorio(self, coordenador, semestre, horas_estagiadas, data_envio):
+        from .models import RelatorioSemestral 
+
+        novo_relatorio = RelatorioSemestral.objects.create(
+            estagio=self,
+            coordenador=coordenador,
+            semestre=semestre,
+            horas_estagiadas=horas_estagiadas,
+            data_envio=data_envio
+        )
+        return novo_relatorio
+
+
     def __str__(self):
         return self.empresa.nome
 
