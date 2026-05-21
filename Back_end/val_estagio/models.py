@@ -112,6 +112,13 @@ class Tce(models.Model):
     secretaria = models.ForeignKey(Secretaria, on_delete=models.PROTECT, db_column='matricula_secretaria', verbose_name="Secretaria")
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, db_column='matricula_aluno', verbose_name="Aluno")
 
+    def se_aprovar(self):
+        self.status = StatusDocumento.APROVADO
+
+    def se_reprovar(self):
+        self.status = StatusDocumento.REPROVADO
+    
+
     def __str__(self):
         return self.apoliceseguro
     
