@@ -43,5 +43,7 @@ def validar_matricula(x):
     if len(x) != 12:
         raise ValidationError('A Matrícula tem que ter 12 números.')   
     if not x.isdigit():
-        raise ValidationError('A Matrícula so pode ter números.')    
+        raise ValidationError('A Matrícula so pode ter números.') 
+    if not x.startswith('20'):
+        raise ValidationError('A Matrícula deve começar com 20')   
    
