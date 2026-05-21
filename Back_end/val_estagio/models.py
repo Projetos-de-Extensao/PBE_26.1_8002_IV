@@ -71,6 +71,12 @@ class Coordenador(models.Model):
         verbose_name = "Coordenador"
         verbose_name_plural = "Coordenadores"
 
+    def aprovar_relatorio(self, RelatorioSemestral):
+        RelatorioSemestral.se_aprovar()
+
+    def reprovar_relatorio(self, RelatorioSemestral):
+        RelatorioSemestral.se_reprovar()
+
     def __str__(self):
         return self.usuario.username
 
@@ -148,6 +154,12 @@ class RelatorioSemestral(models.Model):
     horas_estagiadas = models.PositiveIntegerField(verbose_name="Horas Estagiadas", validators=[validar_positivo])
     coordenador = models.ForeignKey(Coordenador, on_delete=models.CASCADE, db_column='matricula_coordenador', verbose_name="Coordenador")
     estagio = models.ForeignKey(Estagio, on_delete=models.CASCADE, db_column='id_estagio', verbose_name="Estágio")
+
+    def se_aprovar(self):
+        self.status = StatusDocumento.APROVADO
+
+    def se_reprovar(self):
+        self.status = StatusDocumento.REPROVADO
 
     class Meta:
         verbose_name = "Relatório Semestral"
