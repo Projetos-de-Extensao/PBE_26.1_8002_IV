@@ -3,12 +3,9 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from phonenumber_field.modelfields import PhoneNumberField
 from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo
-from . choices import StatusDocumento, UNIDADE_CHOICES, AREA_CHOICES, CURSOS_CHOICES
+from . choices import StatusDocumento, UNIDADE_CHOICES, AREA_CHOICES, CURSOS_CHOICES, StatusDocumento
 
-class StatusDocumento(models.TextChoices):
-    PENDENTE = 'pendente', 'Pendente'
-    APROVADO = 'aprovado', 'Aprovado'
-    REPROVADO = 'reprovado', 'Reprovado'
+
 
 
 class Usuario(AbstractUser):
