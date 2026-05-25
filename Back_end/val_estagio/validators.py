@@ -1,6 +1,15 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from validate_docbr import CPF, CNPJ
 from pycep_correios import get_address_from_cep
+from requests.exceptions import ConnectionError, Timeout
+
+def validar_semestre(value):
+    if not RegexValidator(
+        regex=r'^\d{2}\.[12]$',
+        message='O semestre deve estar no formato 26.1 ou 26.2'
+    ).validate(value):
+        raise ValidationError('Semestre inválido')
 
 def validar_cpf(value):
     cpf = CPF()
@@ -54,8 +63,11 @@ def validar_cep(x):
     try:
         get_address_from_cep(cep)
 
-    except Exception:
-        raise ValidationError('CEP inválido')
+    except (ConnectionError, Timeout):
+        raise ValidationError('Serviço de validação de CEP indisponível. Tente novamente mais tarde.')
+    
+    except Exception as erro:
+        raise ValidationError('CEP inválido') from erro
 
     
 def validar_periodo(x):
