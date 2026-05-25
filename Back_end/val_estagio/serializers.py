@@ -55,7 +55,7 @@ class TceSerializer(serializers.ModelSerializer):
 
 class RelatorioSemestralSerializer(serializers.ModelSerializer):
     
-    coordenador_nome = serializers.CharField(source='Coordenador.usuario.username', read_only=True)
+    coordenador_nome = serializers.CharField(source='coordenador.usuario.username', read_only=True)
 
     class Meta:
         model = RelatorioSemestral
@@ -63,7 +63,7 @@ class RelatorioSemestralSerializer(serializers.ModelSerializer):
         read_only_fields = ['idrelatorio']
 
 class EstagioSerializer(serializers.ModelSerializer):
-    empresa_nome = serializers.CharField(source='empresa.nome_empresa', read_only=True)
+    empresa_nome = serializers.CharField(source='empresa.nome', read_only=True)
 
     class Meta:
         model = Estagio
