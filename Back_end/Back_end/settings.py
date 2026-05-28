@@ -83,6 +83,12 @@ DATABASES = {
 }
 AUTH_USER_MODEL = 'val_estagio.Usuario'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+} #paginação
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
