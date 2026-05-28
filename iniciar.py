@@ -13,7 +13,7 @@ pasta_backend = os.path.join(
 )
 
 requirements = os.path.join(
-    pasta_raiz,
+    pasta_backend,
     "requirements.txt"
 )
 
