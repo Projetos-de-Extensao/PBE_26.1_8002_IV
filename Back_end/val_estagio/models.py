@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
-from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo, validar_semestre
+from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo, validar_semestre, validar_telefone
 from . choices import StatusDocumento, UNIDADE_CHOICES, AREA_CHOICES, CURSOS_CHOICES, StatusDocumento
 
 
@@ -18,7 +18,7 @@ class Usuario(AbstractUser):
 class Aluno(models.Model):
     
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula', verbose_name="Matrícula")
-    telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
+    telefone = PhoneNumberField(region='BR', validators=[validar_telefone], verbose_name="Telefone")
     cpf = models.CharField(max_length=14, unique=True, validators=[validar_cpf], verbose_name="CPF")
     dt_nascimento = models.DateField(verbose_name="Data de Nascimento")
     procurando_estagio = models.BooleanField(default=False, verbose_name="Procurando Estágio")
@@ -74,7 +74,7 @@ class Curso(models.Model):
 class Empresa(models.Model):
 
     nome = models.CharField(max_length=255, verbose_name="Nome da Empresa")
-    telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
+    telefone = PhoneNumberField(region='BR', validators=[validar_telefone], verbose_name="Telefone")
     cep = models.CharField(max_length=9, verbose_name="CEP", validators=[validar_cep])
     uf = models.CharField(max_length=2, verbose_name="UF")
     cidade = models.CharField(max_length=100, verbose_name="Cidade")
