@@ -12,15 +12,22 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
 
 class AlunoViewSet(viewsets.ModelViewSet):
-    queryset = Aluno.objects.all()
+    queryset = Aluno.objects.select_related(
+        'usuario',
+        'curso'
+    )
     serializer_class = AlunoSerializer
 
 class SecretariaViewSet(viewsets.ModelViewSet):
-    queryset = Secretaria.objects.all()
+    queryset = Secretaria.objects.select_related(
+        'usuario'
+    )
     serializer_class = SecretariaSerializer
 
 class CoordenadorViewSet(viewsets.ModelViewSet):
-    queryset = Coordenador.objects.all()
+    queryset = Coordenador.objects.select_related(
+        'usuario'
+    )
     serializer_class = CoordenadorSerializer
 
 class CursoViewSet(viewsets.ModelViewSet):
@@ -32,13 +39,21 @@ class EmpresaViewSet(viewsets.ModelViewSet):
     serializer_class = EmpresaSerializer
 
 class TceViewSet(viewsets.ModelViewSet):
-    queryset = Tce.objects.all()
+    queryset = Tce.objects.select_related(
+        'aluno__usuario',
+        'secretaria'
+    )
     serializer_class = TceSerializer
 
 class RelatorioSemestralViewSet(viewsets.ModelViewSet):
-    queryset = RelatorioSemestral.objects.all()
+    queryset = RelatorioSemestral.objects.select_related(
+        'coordenador__usuario',
+        'estagio'
+    )
     serializer_class = RelatorioSemestralSerializer
 
 class EstagioViewSet(viewsets.ModelViewSet):
-    queryset = Estagio.objects.all()
+    queryset = Estagio.objects.select_related(
+        'empresa'
+    )
     serializer_class = EstagioSerializer

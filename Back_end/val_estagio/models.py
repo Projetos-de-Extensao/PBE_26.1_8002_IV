@@ -1,4 +1,5 @@
 from django.db import models
+from encrypted_model_fields.fields import EncryptedCharField
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo, validar_semestre
@@ -19,7 +20,7 @@ class Aluno(models.Model):
     
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula', verbose_name="Matrícula")
     telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
-    cpf = models.CharField(max_length=14, unique=True, validators=[validar_cpf], verbose_name="CPF")
+    cpf =  EncryptedCharField(max_length=14, validators=[validar_cpf], verbose_name="CPF")
     dt_nascimento = models.DateField(verbose_name="Data de Nascimento")
     procurando_estagio = models.BooleanField(default=False, verbose_name="Procurando Estágio")
     horas_estagio = models.IntegerField(default=0, verbose_name="Horas de Estágio")
@@ -82,7 +83,7 @@ class Empresa(models.Model):
     comp = models.CharField(max_length=100, null=True, blank=True, verbose_name="Complemento")
     num = models.CharField(max_length=20, verbose_name="Número")
     bairro = models.CharField(max_length=100, verbose_name="Bairro")
-    cnpj = models.CharField(max_length=18, primary_key=True, validators=[validar_cnpj], verbose_name="CNPJ")
+    cnpj =  EncryptedCharField(max_length=18, primary_key=True, validators=[validar_cnpj], verbose_name="CNPJ")
 
     def __str__(self):
         return self.nome
