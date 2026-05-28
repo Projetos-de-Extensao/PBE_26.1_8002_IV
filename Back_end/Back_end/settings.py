@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-from decouple import config, Csv
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,19 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-pa97q+n8*@z_v_r-khz*-p4mmez#m7antmm&+xt=p2*a-5&9ds'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config(
-    'DEBUG',
-    default=False,
-    cast=bool
-)
+DEBUG = True
 
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    cast=Csv()
-)
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -46,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'val_estagio',
     'rest_framework',
-    'drf_spectacular',
 ]
 
 
@@ -92,16 +84,11 @@ DATABASES = {
 AUTH_USER_MODEL = 'val_estagio.Usuario'
 
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 } #paginação
 
-SPECTACULAR_SETTINGS = {
-   'TITLE': 'API de Conteúdos',
-   'DESCRIPTION': 'Documentação da API para o app de streaming de áudio e vídeo',
-   'VERSION': '1.0.0',
-}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
