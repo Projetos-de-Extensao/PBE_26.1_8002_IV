@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
-from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo, validar_semestre, validar_telefone
+from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo, validar_semestre
 from . choices import StatusDocumento, UNIDADE_CHOICES, AREA_CHOICES, CURSOS_CHOICES, StatusDocumento
 
 
@@ -13,12 +13,12 @@ class Usuario(AbstractUser):
     matricula = models.CharField(max_length=12, primary_key=True, verbose_name="Matrícula", validators=[validar_matricula])
     
     def __str__(self):
-       return self.matricula
+       return self.usuario.username
 
 class Aluno(models.Model):
     
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula', verbose_name="Matrícula")
-    telefone = PhoneNumberField(region='BR', validators=[validar_telefone], verbose_name="Telefone")
+    telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
     cpf = models.CharField(max_length=14, unique=True, validators=[validar_cpf], verbose_name="CPF")
     dt_nascimento = models.DateField(verbose_name="Data de Nascimento")
     procurando_estagio = models.BooleanField(default=False, verbose_name="Procurando Estágio")
@@ -32,7 +32,7 @@ class Aluno(models.Model):
         self.save()
 
     def __str__(self):
-        return self.usuario.username
+        return f"{self.usuario.matricula} - {self.usuario.username}"
     
 class Secretaria(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula')
@@ -62,7 +62,7 @@ class Coordenador(models.Model):
         relatorioSemestral.se_reprovar()
 
     def __str__(self):
-        return self.usuario.username
+        return f"{self.usuario.username} ({self.area})"
 
 class Curso(models.Model):
     
@@ -74,7 +74,7 @@ class Curso(models.Model):
 class Empresa(models.Model):
 
     nome = models.CharField(max_length=255, verbose_name="Nome da Empresa")
-    telefone = PhoneNumberField(region='BR', validators=[validar_telefone], verbose_name="Telefone")
+    telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
     cep = models.CharField(max_length=9, verbose_name="CEP", validators=[validar_cep])
     uf = models.CharField(max_length=2, verbose_name="UF")
     cidade = models.CharField(max_length=100, verbose_name="Cidade")
@@ -104,7 +104,7 @@ class Tce(models.Model):
     
 
     def __str__(self):
-        return self.apoliceseguro
+        return f"{self.apoliceseguro} - {self.aluno.usuario.username}"
     
 class Estagio(models.Model):
     idestagio = models.AutoField(primary_key=True)
@@ -129,7 +129,7 @@ class Estagio(models.Model):
 
 
     def __str__(self):
-        return self.empresa.nome
+        return f"{self.empresa.nome} - {self.tce.aluno.usuario.username}"
 
 
 class RelatorioSemestral(models.Model):
@@ -160,4 +160,4 @@ class RelatorioSemestral(models.Model):
         unique_together = ['estagio', 'semestre']
 
     def __str__(self):
-        return self.status
+        return f"status - {self.status}"

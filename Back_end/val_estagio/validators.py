@@ -78,6 +78,7 @@ def validar_positivo(x):
     if x < 0:
         raise ValidationError('O Valor não pode ser negativo')
 
+"""
 def validar_telefone(value):
     if len(value) != 15:
         raise ValidationError('Telefone deve estar no formato "(21) 99999-9999"')   
@@ -98,7 +99,7 @@ def validar_telefone(value):
 
     if not numeros.isdigit():
         raise ValidationError('Telefone deve conter apenas números')
-
+"""
         
 
 
