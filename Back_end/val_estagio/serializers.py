@@ -13,6 +13,7 @@ class CursoSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 class AlunoSerializer(serializers.ModelSerializer):
+    curso_id = serializers.PrimaryKeyRelatedField(queryset=Curso.objects.all(),source='curso')
     curso = CursoSerializer(read_only=True)
     matricula = serializers.CharField(
         source='usuario.matricula',
@@ -21,7 +22,7 @@ class AlunoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Aluno
-        fields = 'usuario', 'matricula', 'telefone', 'cpf', 'dt_nascimento', 'procurando_estagio', 'horas_estagio', 'periodo', 'curso'
+        fields = 'usuario', 'matricula', 'telefone', 'cpf', 'dt_nascimento', 'procurando_estagio', 'horas_estagio', 'periodo', 'curso', 'curso_id'
 
 class SecretariaSerializer(serializers.ModelSerializer):
     matricula_funcionario = serializers.CharField(
@@ -46,12 +47,12 @@ class EmpresaSerializer(serializers.ModelSerializer):
 
 
 class TceSerializer(serializers.ModelSerializer):
-
+    aluno_id = serializers.PrimaryKeyRelatedField(queryset = Aluno.objects.all(), source='aluno')
     aluno_nome = serializers.CharField(source='aluno.usuario.username', read_only=True)
 
     class Meta:
         model = Tce
-        fields ='bolsa', 'apoliceseguro', 'secretaria', 'aluno_nome', 'status'
+        fields ='bolsa', 'apoliceseguro', 'secretaria','aluno_id', 'aluno_nome', 'status'
         read_only_fields = ['status']
 
 class RelatorioSemestralSerializer(serializers.ModelSerializer):
@@ -64,9 +65,10 @@ class RelatorioSemestralSerializer(serializers.ModelSerializer):
         read_only_fields = ['idrelatorio', 'status']
 
 class EstagioSerializer(serializers.ModelSerializer):
+    empresa_id = serializers.PrimaryKeyRelatedField(queryset=Empresa.objects.all(),source='empresa')
     empresa_nome = serializers.CharField(source='empresa.nome', read_only=True)
 
     class Meta:
         model = Estagio
-        fields = 'idestagio', 'tce', 'empresa', 'empresa_nome', 'dtinicio', 'dtfim', 'cargahorariasemanal'
+        fields = 'idestagio', 'tce', 'empresa_id', 'empresa_nome', 'dtinicio', 'dtfim', 'cargahorariasemanal'
         read_only_fields = ['idestagio']
