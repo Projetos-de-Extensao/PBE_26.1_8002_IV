@@ -17,15 +17,12 @@
 |RF02|O aluno deve ser capaz de abrir um chamado|Alto|
 |RF03|O aluno deve ser capaz de enviar a documentação|Alto|
 |RF04|O aluno deve ser capaz de acompanhar o status do seu chamado|Médio|
-|RF05|O aluno deve receber notificações sobre atualizações no chamado|Baixo|
-|RF06|O aluno deve editar seus dados cadastrais|Médio|
-|RF07|O sistema deve avisar relatórios semestrais a serem recebidos|Médio|
-|RF08|O sistema deve extrair automaticamente dados dos documentos enviados e preencher os campos correspondentes|Baixo|
-|RF09|A secretaria deve aprovar ou reprovar o estágio|Alto|
-|RF10|A secretaria deve ter acesso aos perfis dos alunos com informações|Alto|
-|RF11|A secretaria deve visualizar todos os chamados abertos|Alto|
-|RF12|A secretaria deve atualizar o status dos chamados|Alto|
-|RF13|A secretaria deve buscar alunos pelo nome ou matrícula|Alto|
+|RF05|O aluno deve editar seus dados cadastrais|Médio|
+|RF06|A secretaria deve aprovar ou reprovar o estágio|Alto|
+|RF07|A secretaria deve ter acesso aos perfis dos alunos com informações|Alto|
+|RF08|A secretaria deve visualizar todos os chamados abertos|Alto|
+|RF09|A secretaria deve atualizar o status dos chamados|Alto|
+|RF10|A secretaria deve buscar alunos pelo nome ou matrícula|Alto|
 
 ### Não-Funcionais
 

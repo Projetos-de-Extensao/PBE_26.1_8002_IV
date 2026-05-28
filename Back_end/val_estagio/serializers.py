@@ -69,3 +69,6 @@ class EstagioSerializer(serializers.ModelSerializer):
         model = Estagio
         fields = 'idestagio', 'tce', 'empresa', 'empresa_nome', 'dtinicio', 'dtfim', 'cargahorariasemanal'
         read_only_fields = ['idestagio']
+
+
+# REF08 (extração automática de documentos), foi um requisito deixado de lado. Por não ser possível com nosso conhecimento usar de maneira prática o Tesseract OCR
