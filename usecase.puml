@@ -1,6 +1,0 @@
-@startuml
-:Secretaría: --> (Use)
-"Main Admin" as Admin
-"" as (Use)
-Admin --> (Admin the application)
-@enduml
