@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'val_estagio',
     'rest_framework',
+    'drf_spectacular',
 ]
 
 
@@ -84,11 +85,16 @@ DATABASES = {
 AUTH_USER_MODEL = 'val_estagio.Usuario'
 
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 } #paginação
 
-
+SPECTACULAR_SETTINGS = {
+   'TITLE': 'API de Conteúdos',
+   'DESCRIPTION': 'Documentação da API para o app de streaming de áudio e vídeo',
+   'VERSION': '1.0.0',
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

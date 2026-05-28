@@ -13,7 +13,7 @@ class Usuario(AbstractUser):
     matricula = models.CharField(max_length=12, primary_key=True, verbose_name="Matrícula", validators=[validar_matricula])
     
     def __str__(self):
-       return self.usuario.username
+       return self.username
 
 class Aluno(models.Model):
     
