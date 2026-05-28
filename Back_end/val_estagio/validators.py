@@ -1,15 +1,15 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
 from validate_docbr import CPF, CNPJ
 from pycep_correios import get_address_from_cep
 from requests.exceptions import ConnectionError, Timeout
+import re
 
 def validar_semestre(value):
-    if not RegexValidator(
-        regex=r'^\d{2}\.[12]$',
-        message='O semestre deve estar no formato 26.1 ou 26.2'
-    ).validate(value):
-        raise ValidationError('Semestre inválido')
+
+    if not re.fullmatch(r'\d{2}\.[12]', value):
+        raise ValidationError(
+            'O semestre deve estar no formato 26.1 ou 26.2'
+        )
 
 def validar_cpf(value):
     cpf = CPF()
