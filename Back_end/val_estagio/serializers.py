@@ -51,7 +51,8 @@ class TceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tce
-        fields ='bolsa', 'apoliceseguro', 'secretaria', 'aluno_nome'
+        fields ='bolsa', 'apoliceseguro', 'secretaria', 'aluno_nome', 'status'
+        read_only_fields = ['status']
 
 class RelatorioSemestralSerializer(serializers.ModelSerializer):
     
@@ -60,7 +61,7 @@ class RelatorioSemestralSerializer(serializers.ModelSerializer):
     class Meta:
         model = RelatorioSemestral
         fields = 'idrelatorio', 'semestre', 'data_envio', 'estagio', 'horas_estagiadas', 'coordenador_nome', 'status'
-        read_only_fields = ['idrelatorio']
+        read_only_fields = ['idrelatorio', 'status']
 
 class EstagioSerializer(serializers.ModelSerializer):
     empresa_nome = serializers.CharField(source='empresa.nome', read_only=True)
