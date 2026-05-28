@@ -11,3 +11,4 @@ mkdocs-material
 mkdocs-minify-plugin
 pymdown-extensions
 drf-spectacular
+python-decouple==3.8
