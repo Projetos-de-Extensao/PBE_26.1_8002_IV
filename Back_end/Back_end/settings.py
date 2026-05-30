@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS= [
+CORS_ALLOW_ORIGINS= [
     'http://localhost:3000',
 ]
 
