@@ -14,7 +14,7 @@ class Usuario(AbstractUser):
     matricula = models.CharField(max_length=12, primary_key=True, verbose_name="Matrícula", validators=[validar_matricula])
     
     def __str__(self):
-       return self.username
+        return f"{self.username} - Matrícula: {self.matricula} ({self.unidade})"
 
 class Aluno(models.Model):
     
@@ -33,7 +33,7 @@ class Aluno(models.Model):
         self.save()
 
     def __str__(self):
-        return f"{self.usuario.matricula} - {self.usuario.username}"
+        return f"{self.usuario.username} - Matrícula: {self.usuario.matricula} | Curso: {self.curso.nome}"
     
 class Secretaria(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula')
@@ -45,7 +45,7 @@ class Secretaria(models.Model):
         tce.se_reprovar()
 
     def __str__(self):
-        return self.usuario.username
+        return f"{self.usuario.username} - Matrícula: {self.usuario.matricula} | Secretaria"
 
 class Coordenador(models.Model):
 
@@ -63,14 +63,14 @@ class Coordenador(models.Model):
         relatorioSemestral.se_reprovar()
 
     def __str__(self):
-        return f"{self.usuario.username} ({self.area})"
+        return f"{self.usuario.username} - Matrícula: {self.usuario.matricula} | Área: {self.area}"
 
 class Curso(models.Model):
     
     nome = models.CharField(max_length=100, choices=CURSOS_CHOICES, unique=True, verbose_name="Nome do Curso")
 
     def __str__(self):
-        return self.nome
+        return f"Curso: {self.nome}"
 
 class Empresa(models.Model):
 
@@ -86,7 +86,7 @@ class Empresa(models.Model):
     cnpj =  EncryptedCharField(max_length=18, primary_key=True, validators=[validar_cnpj], verbose_name="CNPJ")
 
     def __str__(self):
-        return self.nome
+        return f"{self.nome} - CNPJ: {self.cnpj} | {self.cidade}/{self.uf}"
     
 class Tce(models.Model):
     status = models.CharField(max_length=20, choices=StatusDocumento.choices, default=StatusDocumento.PENDENTE, verbose_name="Status do TCE")
@@ -105,7 +105,7 @@ class Tce(models.Model):
     
 
     def __str__(self):
-        return f"{self.apoliceseguro} - {self.aluno.usuario.username}"
+        return f"TCE: {self.apoliceseguro} | Aluno: {self.aluno.usuario.username} | Status: {self.status}"
     
 class Estagio(models.Model):
     idestagio = models.AutoField(primary_key=True)
@@ -130,7 +130,8 @@ class Estagio(models.Model):
 
 
     def __str__(self):
-        return f"{self.empresa.nome} - {self.tce.aluno.usuario.username}"
+        dtfim_str = self.dtfim.strftime('%d/%m/%Y') if self.dtfim else 'em andamento'
+        return f"Estágio: {self.tce.aluno.usuario.username} | Empresa: {self.empresa.nome} | {self.dtinicio.strftime('%d/%m/%Y')} → {dtfim_str}"
 
 
 class RelatorioSemestral(models.Model):
@@ -161,4 +162,4 @@ class RelatorioSemestral(models.Model):
         unique_together = ['estagio', 'semestre']
 
     def __str__(self):
-        return f"status - {self.status}"
+        return f"Relatório {self.semestre} | Aluno: {self.estagio.tce.aluno.usuario.username} | Status: {self.status}"
