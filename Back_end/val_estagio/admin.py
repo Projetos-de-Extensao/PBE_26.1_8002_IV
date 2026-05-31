@@ -45,12 +45,10 @@ class UsuarioAdmin(UserAdmin):
     def get_tipo(self, obj):
         if hasattr(obj, 'aluno'):
             return 'Aluno'
-        elif hasattr(obj, 'secretaria'):
-            return 'Secretaria'
         elif hasattr(obj, 'coordenador'):
             return 'Coordenador'
         else:
-            return 'Desconecido'
+            return 'Secretaria'
     
     
     filter_horizontal = ()
