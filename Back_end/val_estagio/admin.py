@@ -62,7 +62,7 @@ class UsuarioAdmin(UserAdmin):
         'email',
     )
 
-
+admin.site.register(Secretaria)
 admin.site.register(Curso)
 admin.site.register(Empresa)
 admin.site.register(Tce)
