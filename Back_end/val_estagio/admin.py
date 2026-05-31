@@ -24,18 +24,18 @@ class CoordenadorInline(admin.StackedInline):
 @admin.register(Usuario)
 class UsuarioAdmin(UserAdmin):
 
-    list_display = ['username', 'matricula', 'email', 'unidade', 'get_tipo']
+    list_display = ['username', 'first_name', 'last_name', 'matricula', 'email', 'unidade', 'get_tipo']
 
     fieldsets = UserAdmin.fieldsets + (
         ('Informações Adicionais', {
-            'fields': ('matricula', 'unidade',)
+            'fields': ('matricula', 'unidade')
         }),
     )
 
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Informações Adicionais', {
             'classes': ('wide',),
-            'fields': ('matricula', 'unidade',),
+            'fields': ('matricula', 'unidade', 'first_name', 'last_name', 'email'),
         }),
     )
 
@@ -51,35 +51,21 @@ class UsuarioAdmin(UserAdmin):
             return 'Coordenador'
         else:
             return 'Desconecido'
+    
+    
+    filter_horizontal = ()
+    
+    list_filter = ('unidade', 'aluno__curso__nome', 'coordenador__area')
+
+    ordering = ('username',)
+
+    search_fields = (
+        'matricula',
+        'email',
+    )
 
 
 
-    # add_fieldsets = (
-    #     (None, {
-    #         'classes': ('wide',),
-    #         'fields': (
-    #             'username',
-    #             'password1',
-    #             'password2',
-    #             'unidade',
-    #         ),
-    #     }),
-    # )
-
-    # search_fields = (
-    #     'username',
-    #     'email',
-    # )
-
-    # ordering = ('username',)
-
-    # filter_horizontal = ()
-    # list_filter = ()
-
-
-# admin.site.register(Aluno)
-# admin.site.register(Secretaria)
-# admin.site.register(Coordenador)
 # admin.site.register(Curso)
 # admin.site.register(Empresa)
 # admin.site.register(Tce)
