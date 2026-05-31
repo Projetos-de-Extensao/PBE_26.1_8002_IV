@@ -6,20 +6,20 @@ from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce
 class AlunoInline(admin.StackedInline):
     model = Aluno
     can_delete = False
-    Extra = 0
-    Fields = ('telefone', 'cpf', 'dt_nascimento', 'procurando_estagio', 'horas_estagio', 'periodo', 'curso')
+    extra = 0
+    fields = ('telefone', 'cpf', 'dt_nascimento', 'procurando_estagio', 'horas_estagio', 'periodo', 'curso')
 
 
 class SecretariaInline(admin.StackedInline):
     model = Secretaria
     can_delete = False
-    Extra = 0
+    extra = 0
 
 class CoordenadorInline(admin.StackedInline):
     model = Coordenador
     can_delete = False
-    Extra = 0
-    Fields = ('area')
+    extra = 0
+    fields = ('area',)
 
 @admin.register(Usuario)
 class UsuarioAdmin(UserAdmin):
