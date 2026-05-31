@@ -45,7 +45,7 @@ class TceViewSet(viewsets.ModelViewSet):
     )
     serializer_class = TceSerializer
 
-    @action(detail=True, methods=['patch'], url_path='aprovar')
+    @action(detail=True, methods=['post'], url_path='aprovar')
     def aprovar_tce(self, request, pk=None):
         tce = self.get_object()
 
@@ -59,7 +59,7 @@ class TceViewSet(viewsets.ModelViewSet):
         return Response({'detail': 'TCE aprovado com sucesso.'}, status=200)
     
 
-    @action(detail=True, methods=['patch'], url_path='reprovar')
+    @action(detail=True, methods=['post'], url_path='reprovar')
     def reprovar_tce(self, request, pk=None):
         tce = self.get_object()
 
@@ -81,7 +81,7 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
     serializer_class = RelatorioSemestralSerializer
 
     
-    @action(detail=True, methods=['patch'], url_path='aprovar')
+    @action(detail=True, methods=['post'], url_path='aprovar')
     def aprovar_relatorio(self, request, pk=None):
         relatorio = self.get_object()
 
@@ -95,7 +95,7 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
         return Response({'detail': 'Relatório aprovado com sucesso.'}, status=200)
     
 
-    @action(detail=True, methods=['patch'], url_path='reprovar')
+    @action(detail=True, methods=['post'], url_path='reprovar')
     def reprovar_relatorio(self, request, pk=None):
         relatorio = self.get_object()
 
