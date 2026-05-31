@@ -63,9 +63,8 @@ class UsuarioAdmin(UserAdmin):
     )
 
 
-
-# admin.site.register(Curso)
-# admin.site.register(Empresa)
-# admin.site.register(Tce)
-# admin.site.register(RelatorioSemestral)
-# admin.site.register(Estagio)
+admin.site.register(Curso)
+admin.site.register(Empresa)
+admin.site.register(Tce)
+admin.site.register(RelatorioSemestral)
+admin.site.register(Estagio)
