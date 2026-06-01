@@ -1,33 +1,30 @@
-"""
-URL configuration for Back_end project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
+
+# Importações do drf-spectacular para gerar documentação automática da API
 from drf_spectacular.views import (
    SpectacularAPIView,
    SpectacularSwaggerView,
    SpectacularRedocView,
 )
 
+# Lista de rotas (urlpatterns) que o Django irá processar
 urlpatterns = [
+    # Direciona todas as requisições que começam com 'api/' para o arquivo 
+    # de rotas específico dentro do app 'val_estagio'
     path('api/', include('val_estagio.urls')),
+    
+    # Rota padrão do painel administrativo do Django
     path('admin/', admin.site.urls),  
 
+    # --- Configurações da Documentação da API (Swagger/Redoc) ---
+    
+    # Gera o arquivo de esquema da API (OpenAPI/Swagger)
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
 
+    # Interface interativa (Swagger) para testar os endpoints
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    
+    # Interface alternativa de documentação (Redoc)
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
