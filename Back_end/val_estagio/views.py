@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from .permissions import IsAluno, IsSecretaria, IsCoordenador
 from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
 from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
 
@@ -45,12 +46,22 @@ class TceViewSet(viewsets.ModelViewSet):
     )
     serializer_class = TceSerializer
 
+    def get_permissions(self):
+        if self.action in ['aprovar', 'reprovar']:
+            return [IsSecretaria()] 
+        return [IsSecretaria() | IsAluno()]
+
 class RelatorioSemestralViewSet(viewsets.ModelViewSet):
     queryset = RelatorioSemestral.objects.select_related(
         'coordenador__usuario',
         'estagio'
     )
     serializer_class = RelatorioSemestralSerializer
+
+    def get_permissions(self):
+        if self.action in ['aprovar', 'reprovar']:
+            return [IsCoordenador()]
+        return [IsCoordenador() | IsAluno()]
 
 class EstagioViewSet(viewsets.ModelViewSet):
     queryset = Estagio.objects.select_related(
