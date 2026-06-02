@@ -27,7 +27,7 @@ urlpatterns = [
     path('api/', include('val_estagio.urls')),
     path('admin/', admin.site.urls),  
 
-    ath('api/auth/login/', obtain_auth_token, name='login'),
+    path('api/auth/login/', obtain_auth_token, name='login'),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
 
