@@ -6,17 +6,17 @@ from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_ce
 from . choices import StatusDocumento, UNIDADE_CHOICES, AREA_CHOICES, CURSOS_CHOICES, StatusDocumento
 
 
+# --- USUÁRIOS E PERFIS (Herança e Relacionamentos) ---
 
-
-class Usuario(AbstractUser):
-    
+class Usuario(AbstractUser): # --- Classe usuário ---
+    # Extensão do User do Django: adicionamos matrícula e unidade
     unidade = models.CharField(max_length=20, choices=UNIDADE_CHOICES, verbose_name="Unidade")
     matricula = models.CharField(max_length=12, primary_key=True, verbose_name="Matrícula", validators=[validar_matricula])
     
     def __str__(self):
         return f"{self.username} - Matrícula: {self.matricula} ({self.unidade})"
 
-class Aluno(models.Model):
+class Aluno(models.Model): # OneToOne vincula o perfil de Aluno ao Usuario
     
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula', verbose_name="Matrícula")
     telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
@@ -27,6 +27,8 @@ class Aluno(models.Model):
     periodo = models.PositiveIntegerField(verbose_name="Período", validators=[validar_periodo])
     curso = models.ForeignKey('Curso', on_delete=models.PROTECT, db_column='id_curso', verbose_name="Curso")
     
+# Lógica de negócio: atualiza horas, limitando ao teto de 350
+
     def ganhar_horas_estagio(self, horas_estagiadas):
         if(horas_estagiadas > 0 and self.horas_estagio < 350):
             self.horas_estagio = min(self.horas_estagio + horas_estagiadas, 350)
@@ -34,6 +36,8 @@ class Aluno(models.Model):
 
     def __str__(self):
         return f"{self.usuario.username} - Matrícula: {self.usuario.matricula} | Curso: {self.curso.nome}"
+    
+     # --- Classe Secretaria ---
     
 class Secretaria(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula')
@@ -46,6 +50,8 @@ class Secretaria(models.Model):
 
     def __str__(self):
         return f"{self.usuario.username} - Matrícula: {self.usuario.matricula} | Secretaria"
+    
+     # --- Classe Coordenador ---
 
 class Coordenador(models.Model):
 
@@ -64,7 +70,10 @@ class Coordenador(models.Model):
 
     def __str__(self):
         return f"{self.usuario.username} - Matrícula: {self.usuario.matricula} | Área: {self.area}"
+    
+    # --- ENTIDADES E NEGÓCIOS ---
 
+# --- Classe Curso ---
 class Curso(models.Model):
     
     nome = models.CharField(max_length=100, choices=CURSOS_CHOICES, unique=True, verbose_name="Nome do Curso")
@@ -72,6 +81,8 @@ class Curso(models.Model):
     def __str__(self):
         return f"Curso: {self.nome}"
 
+
+# --- Classe Empresa ---
 class Empresa(models.Model):
 
     nome = models.CharField(max_length=255, verbose_name="Nome da Empresa")
@@ -88,6 +99,10 @@ class Empresa(models.Model):
     def __str__(self):
         return f"{self.nome} - CNPJ: {self.cnpj} | {self.cidade}/{self.uf}"
     
+# --- DOCUMENTAÇÃO E FLUXO DE ESTÁGIO ---
+
+
+    # --- Classe TCE ---
 class Tce(models.Model):
     status = models.CharField(max_length=20, choices=StatusDocumento.choices, default=StatusDocumento.PENDENTE, verbose_name="Status do TCE")
     apoliceseguro = models.CharField(max_length=50, primary_key=True, verbose_name="Apólice de Seguro",)
@@ -107,6 +122,8 @@ class Tce(models.Model):
     def __str__(self):
         return f"TCE: {self.apoliceseguro} | Aluno: {self.aluno.usuario.username} | Status: {self.status}"
     
+
+    # --- Classe Estágio ---
 class Estagio(models.Model):
     idestagio = models.AutoField(primary_key=True)
     dtinicio = models.DateField(verbose_name="Data de Início")
@@ -133,7 +150,7 @@ class Estagio(models.Model):
         dtfim_str = self.dtfim.strftime('%d/%m/%Y') if self.dtfim else 'em andamento'
         return f"Estágio: {self.tce.aluno.usuario.username} | Empresa: {self.empresa.nome} | {self.dtinicio.strftime('%d/%m/%Y')} → {dtfim_str}"
 
-
+# --- Classe Relatório Semestral ---
 class RelatorioSemestral(models.Model):
     status = models.CharField(max_length=20, choices=StatusDocumento.choices, default=StatusDocumento.PENDENTE, verbose_name="Status do Relatório")
     idrelatorio = models.AutoField(primary_key=True)
@@ -155,6 +172,7 @@ class RelatorioSemestral(models.Model):
     def se_reprovar(self):
         self.status = StatusDocumento.REPROVADO
         self.save()
+
 
     class Meta:
         verbose_name = "Relatório Semestral"
