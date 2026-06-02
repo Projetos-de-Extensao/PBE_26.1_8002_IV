@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
+# Importa modelos (tabelas do banco de dados)
 from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
 
 class AlunoInline(admin.StackedInline):
@@ -55,6 +56,7 @@ class UsuarioAdmin(UserAdmin):
     
     list_filter = ('unidade', 'aluno__curso__nome', 'coordenador__area')
 
+    # Define a ordenação padrão dos registros
     ordering = ('username',)
 
     search_fields = (
