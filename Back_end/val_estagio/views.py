@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
 from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
-
+from .choices import StatusDocumento
 
 # --- VIEWSET DE USUÁRIOS ---
 
@@ -136,7 +136,7 @@ class TceViewSet(viewsets.ModelViewSet):
 
         tce = self.get_object()
 
-        if tce.status == status.APROVADO:
+        if tce.status == StatusDocumento.APROVADO:
             return Response({'detail': 'TCE já está aprovado.'}, status=400)
 
         tce.se_aprovar()
@@ -159,7 +159,7 @@ class TceViewSet(viewsets.ModelViewSet):
 
         tce = self.get_object()
 
-        if tce.status == status.REPROVADO:
+        if tce.status == StatusDocumento.REPROVADO:
             return Response({'detail': 'TCE já está reprovado.'}, status=400)
 
         tce.se_reprovar()
@@ -204,7 +204,7 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
 
         relatorio = self.get_object()
 
-        if relatorio.status == status.APROVADO:
+        if relatorio.status == StatusDocumento.APROVADO:
             return Response({'detail': 'Relatório já está aprovado.'}, status=400)
 
         relatorio.se_aprovar()
@@ -227,7 +227,7 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
 
         relatorio = self.get_object()
 
-        if relatorio.status == status.REPROVADO:
+        if relatorio.status == StatusDocumento.REPROVADO:
             return Response({'detail': 'Relatório já está reprovado.'}, status=400)
 
         relatorio.se_reprovar()

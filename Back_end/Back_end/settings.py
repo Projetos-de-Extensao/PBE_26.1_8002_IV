@@ -1,20 +1,26 @@
 from pathlib import Path
+from decouple import config
+
+
 
 # BASE_DIR define o diretório raiz do projeto. 
-# O Path().resolve() encontra o caminho absoluto no seu sistema de arquivos.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# O Path().resolve() encontra o caminho absoluto no seu sistema de arquivos.
+SECRET_KEY = config(
+    'SECRET_KEY',
+    default='dev-secret-key'
+)
 
-# CHAVE SECRETA: Usada para assinar cookies de sessão e de criptografia
-SECRET_KEY = 'django-insecure-pa97q+n8*@z_v_r-khz*-p4mmez#m7antmm&+xt=p2*a-5&9ds'
+FIELD_ENCRYPTION_KEY = config(
+    'FIELD_ENCRYPTION_KEY',
+    default='f5i67XFO7QwR-0t5bzeDxdTHSizHm1Utgjz3jjeI8H8='
+)
 
-# DEBUG = True mostra erros detalhados. Deve ser False em produção para evitar o vazamento de dados.
-DEBUG = True
-
-# Define quais domínios podem acessar sua aplicação.
-ALLOWED_HOSTS = []
-
-# Chave usada para criptografia de campos
-FIELD_ENCRYPTION_KEY = 'f5i67XFO7QwR-0t5bzeDxdTHSizHm1Utgjz3jjeI8H8='
+DEBUG = config(
+    'DEBUG',
+    default=True,
+    cast=bool
+)
 
 # INSTALLED_APPS: Lista de todos os apps habilitados no projeto.
 INSTALLED_APPS = [
@@ -31,6 +37,7 @@ INSTALLED_APPS = [
 
 # MIDDLEWARE: Camada de processamento que intercepta requisições e respostas.
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',     # Middleware para liberar o CORS
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -38,7 +45,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',     # Middleware para liberar o CORS
 ]
 
 # Configurações do CORS 
@@ -49,7 +55,20 @@ CORS_ALLOW_HEADERS = ['content-type', 'authorization']
 ROOT_URLCONF = 'Back_end.urls' # Aponta para o arquivo de rotas principal
 
 # Configuração de templates (HTML)
-TEMPLATES = [...] 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+] 
 
 WSGI_APPLICATION = 'Back_end.wsgi.application'
 
@@ -67,11 +86,24 @@ AUTH_USER_MODEL = 'val_estagio.Usuario'
 # Configuração do Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10 # Define 10 itens por página nas suas APIs
+    'PAGE_SIZE': 20 # Define 20 itens por página nas suas APIs
 }
 
 # Validação de senhas para garantir que o usuário vai criar senhas fortes
-AUTH_PASSWORD_VALIDATORS = [...]
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 # Internacionalização
 LANGUAGE_CODE = 'pt-br' # Idioma do sistema
