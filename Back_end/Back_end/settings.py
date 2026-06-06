@@ -1,5 +1,6 @@
 from pathlib import Path
 from decouple import config
+import drf_spectacular
 
 
 
@@ -33,6 +34,7 @@ INSTALLED_APPS = [
     'val_estagio',               # Seu app personalizado
     'rest_framework',            # Django REST Framework (API)
     'corsheaders',               # Permite requisições de outros domínios (CORS)
+    'drf_spectacular',            # Geração automática de documentação da API
 ]
 
 # MIDDLEWARE: Camada de processamento que intercepta requisições e respostas.
@@ -86,7 +88,16 @@ AUTH_USER_MODEL = 'val_estagio.Usuario'
 # Configuração do Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20 # Define 20 itens por página nas suas APIs
+    'PAGE_SIZE': 20, # Define 20 itens por página nas suas APIs
+
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema', # Para gerar documentação automática
+
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'API de Validação de Estágios',
+    'DESCRIPTION': 'Documentação da API do sistema de validação de estágios',
+    'VERSION': '1.0.0',
 }
 
 # Validação de senhas para garantir que o usuário vai criar senhas fortes

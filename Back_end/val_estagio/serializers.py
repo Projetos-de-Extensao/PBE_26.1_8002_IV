@@ -95,16 +95,10 @@ class CoordenadorSerializer(serializers.ModelSerializer):
 
 class EmpresaSerializer(serializers.ModelSerializer):
 
-    # Exibe o nome da empresa utilizando um alias mais amigável
-    nome_empresa = serializers.CharField(
-        source='nome',
-        read_only=True
-    )
-
     class Meta:
         model = Empresa
         fields = (
-            'nome_empresa',
+            'nome',
             'telefone',
             'cnpj',
             'cep',
