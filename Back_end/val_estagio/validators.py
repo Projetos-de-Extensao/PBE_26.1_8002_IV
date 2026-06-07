@@ -19,7 +19,7 @@ def validar_semestre(value):
 
     if not re.fullmatch(r'\d{2}\.[12]', value):
         raise ValidationError(
-            'O semestre deve estar no formato 26.1 ou 26.2'
+            'O semestre deve estar no formato AA.1 ou AA.2. Exemplo: 26.1'
         )
 
 
@@ -34,7 +34,7 @@ def validar_cpf(value):
     cpf = CPF()
 
     if not cpf.validate(value):
-        raise ValidationError('CPF inválido')
+        raise ValidationError('O CPF deve estar em um formato válido. Exemplo: 123.456.789-09')
 
 
 """
@@ -75,7 +75,7 @@ def validar_cnpj(value):
     cnpj = CNPJ()
 
     if not cnpj.validate(value):
-        raise ValidationError('CNPJ inválido')
+        raise ValidationError('O CNPJ deve estar em um formato válido. Exemplo: 12.345.678/0001-99')
 
 
 # --- VALIDADOR DE MATRÍCULA ---
@@ -90,13 +90,13 @@ def validar_matricula(x):
     """
 
     if len(x) != 12:
-        raise ValidationError('A Matrícula tem que ter 12 números.')
+        raise ValidationError('A matrícula deve conter exatamente 12 números')
 
     if not x.isdigit():
-        raise ValidationError('A Matrícula so pode ter números.')
+        raise ValidationError('A matrícula deve conter apenas números.')
 
     if not x.startswith('20'):
-        raise ValidationError('A Matrícula deve começar com 20')
+        raise ValidationError('A matrícula deve começar com 20.')
 
 
 # --- VALIDADOR DE CEP ---
@@ -106,10 +106,10 @@ def validar_cep(x):
     cep = x.replace('-', '')
 
     if len(cep) != 8:
-        raise ValidationError('CEP inválido')
+        raise ValidationError('O CEP deve conter 8 números. Exemplo: 22775033')
 
     if not cep.isdigit():
-        raise ValidationError('CEP inválido')
+        raise ValidationError('O CEP deve conter 8 números. Exemplo: 22775033')
 
 
 # --- VALIDADOR DE PERÍODO ---
@@ -122,7 +122,7 @@ def validar_periodo(x):
 
     if x < 1 or x > 10:
         raise ValidationError(
-            'O Período tem que estar entre 1 e 10'
+            'O período deve estar entre 1 e 10.'
         )
 
 
@@ -136,7 +136,7 @@ def validar_positivo(x):
 
     if x < 0:
         raise ValidationError(
-            'O Valor não pode ser negativo'
+            'O valor deve ser maior ou igual a zero.'
         )
 
 

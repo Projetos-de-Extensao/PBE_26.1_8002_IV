@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
-
+import django_filters.rest_framework
 
 # --- SERIALIZADOR DE USUÁRIO ---
 

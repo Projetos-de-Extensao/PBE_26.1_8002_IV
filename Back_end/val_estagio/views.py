@@ -24,8 +24,6 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
-
-
 # --- VIEWSET DE ALUNOS ---
 
 class AlunoViewSet(viewsets.ModelViewSet):
@@ -44,6 +42,11 @@ class AlunoViewSet(viewsets.ModelViewSet):
     )
     serializer_class = AlunoSerializer
 
+    filterset_fields = {
+        'procurando_estagio',
+        'curso',
+        'periodo'
+    }
 
 # --- VIEWSET DE SECRETARIAS ---
 
@@ -60,6 +63,10 @@ class SecretariaViewSet(viewsets.ModelViewSet):
     )
     serializer_class = SecretariaSerializer
 
+    filterset_fields = {
+        'matricula_funcionario'
+    }
+
 
 # --- VIEWSET DE COORDENADORES ---
 
@@ -75,6 +82,10 @@ class CoordenadorViewSet(viewsets.ModelViewSet):
         'usuario'
     )
     serializer_class = CoordenadorSerializer
+
+    filterset_fields = {
+        'area'
+    }
 
 
 # --- VIEWSET DE CURSOS ---
@@ -100,6 +111,11 @@ class EmpresaViewSet(viewsets.ModelViewSet):
     queryset = Empresa.objects.all()
     serializer_class = EmpresaSerializer
 
+    filterset_fields = {
+        'cidade',
+        'uf'
+    }
+
 
 # --- VIEWSET DE TCE ---
 
@@ -121,6 +137,12 @@ class TceViewSet(viewsets.ModelViewSet):
         'secretaria'
     )
     serializer_class = TceSerializer
+
+    filterset_fields = {
+        'status',
+        'aluno',
+        'secretaria'
+    }
 
     # --- APROVAR TCE ---
 
@@ -189,6 +211,13 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
         'estagio'
     )
     serializer_class = RelatorioSemestralSerializer
+    
+    filterset_fields = (
+        'status',
+        'semestre',
+        'estagio',
+        'coordenador'
+    )
 
     # --- APROVAR RELATÓRIO ---
 
@@ -252,6 +281,11 @@ class EstagioViewSet(viewsets.ModelViewSet):
         'tce'
     )
     serializer_class = EstagioSerializer
+
+    filterset_fields = (
+        'empresa',
+        'tce'
+    )
 
     @action(
     detail=True,

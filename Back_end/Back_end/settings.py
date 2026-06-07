@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'rest_framework',            # Django REST Framework (API)
     'corsheaders',               # Permite requisições de outros domínios (CORS)
     'drf_spectacular',            # Geração automática de documentação da API
+    'django_filters',           # Filtros para a API
 ]
 
 # MIDDLEWARE: Camada de processamento que intercepta requisições e respostas.
@@ -115,6 +116,11 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20, # Define 20 itens por página nas suas APIs
 
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema', # Para gerar documentação automática
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ]
 
 }
 
