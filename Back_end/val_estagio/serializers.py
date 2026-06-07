@@ -98,6 +98,7 @@ class EmpresaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Empresa
         fields = (
+            'id',
             'nome',
             'telefone',
             'cnpj',
@@ -146,7 +147,11 @@ class TceSerializer(serializers.ModelSerializer):
 
 class RelatorioSemestralSerializer(serializers.ModelSerializer):
 
-    # Exibe o nome do coordenador responsável pela avaliação
+    coordenador_id = serializers.PrimaryKeyRelatedField(
+        queryset=Coordenador.objects.all(),
+        source='coordenador'
+    )
+
     coordenador_nome = serializers.CharField(
         source='coordenador.usuario.username',
         read_only=True
@@ -160,11 +165,11 @@ class RelatorioSemestralSerializer(serializers.ModelSerializer):
             'data_envio',
             'estagio',
             'horas_estagiadas',
+            'coordenador_id',
             'coordenador_nome',
             'status'
         )
 
-        # Campos controlados automaticamente pelo sistema
         read_only_fields = ['idrelatorio', 'status']
 
 

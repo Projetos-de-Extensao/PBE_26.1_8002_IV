@@ -7,6 +7,25 @@ import drf_spectacular
 # BASE_DIR define o diretório raiz do projeto. 
 BASE_DIR = Path(__file__).resolve().parent.parent
 # O Path().resolve() encontra o caminho absoluto no seu sistema de arquivos.
+
+
+def config_bool(name, default=False):
+    try:
+        return config(name, default=default, cast=bool)
+    except ValueError as exc:
+        value = str(config(name, default=default)).strip().lower()
+
+        if value in {'release', 'prod', 'production'}:
+            return False
+
+        if value in {'dev', 'development'}:
+            return True
+
+        raise ValueError(
+            f"Valor inválido para {name}: {value!r}. Use True/False, dev ou release."
+        ) from exc
+
+
 SECRET_KEY = config(
     'SECRET_KEY',
     default='dev-secret-key'
@@ -17,10 +36,15 @@ FIELD_ENCRYPTION_KEY = config(
     default='f5i67XFO7QwR-0t5bzeDxdTHSizHm1Utgjz3jjeI8H8='
 )
 
-DEBUG = config(
+DEBUG = config_bool(
     'DEBUG',
-    default=True,
-    cast=bool
+    default=True
+)
+
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='127.0.0.1,localhost',
+    cast=lambda value: [host.strip() for host in value.split(',') if host.strip()]
 )
 
 # INSTALLED_APPS: Lista de todos os apps habilitados no projeto.

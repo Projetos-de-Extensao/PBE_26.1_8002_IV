@@ -17,6 +17,10 @@ requirements = os.path.join(
     "requirements.txt"
 )
 
+ambiente_local = os.environ.copy()
+ambiente_local["DEBUG"] = "True"
+ambiente_local.setdefault("ALLOWED_HOSTS", "127.0.0.1,localhost")
+
 # ─── Início ──────────────────────────────────────────────────────────────────
 print("=" * 50)
 print("  Validação de Estágios — Iniciando...")
@@ -34,6 +38,7 @@ subprocess.run(
         "-r",
         requirements
     ],
+    env=ambiente_local,
     check=True
 )
 
@@ -47,6 +52,7 @@ subprocess.run(
         "makemigrations"
     ],
     cwd=pasta_backend,
+    env=ambiente_local,
     check=True
 )
 
@@ -59,6 +65,7 @@ subprocess.run(
         "migrate"
     ],
     cwd=pasta_backend,
+    env=ambiente_local,
     check=True
 )
 
@@ -71,7 +78,8 @@ servidor = subprocess.Popen(
         "manage.py",
         "runserver"
     ],
-    cwd=pasta_backend
+    cwd=pasta_backend,
+    env=ambiente_local
 )
 
 # Espera servidor subir

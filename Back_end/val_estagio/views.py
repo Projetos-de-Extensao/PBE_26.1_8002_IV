@@ -248,6 +248,31 @@ class EstagioViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Estagio.objects.select_related(
-        'empresa'
+        'empresa',
+        'tce'
     )
     serializer_class = EstagioSerializer
+
+    @action(
+    detail=True,
+    methods=['post'],
+    url_path='adicionar_relatorio'
+)
+    def adicionar_relatorio(self, request, pk=None):
+
+        estagio = self.get_object()
+
+        coordenador = Coordenador.objects.get(
+            pk=request.data.get('coordenador')
+        )
+
+        relatorio = estagio.adicionar_relatorio(
+            coordenador=coordenador,
+            semestre=request.data.get('semestre'),
+            horas_estagiadas=request.data.get('horas_estagiadas'),
+            data_envio=request.data.get('data_envio')
+        )
+
+        serializer = RelatorioSemestralSerializer(relatorio)
+
+        return Response(serializer.data, status=201)

@@ -102,26 +102,14 @@ def validar_matricula(x):
 # --- VALIDADOR DE CEP ---
 
 def validar_cep(x):
-    """
-    Valida a existência do CEP consultando
-    o serviço dos Correios.
-
-    Também trata possíveis indisponibilidades
-    da API externa.
-    """
 
     cep = x.replace('-', '')
 
-    try:
-        get_address_from_cep(cep)
+    if len(cep) != 8:
+        raise ValidationError('CEP inválido')
 
-    except (ConnectionError, Timeout):
-        raise ValidationError(
-            'Serviço de validação de CEP indisponível. Tente novamente mais tarde.'
-        )
-
-    except Exception as erro:
-        raise ValidationError('CEP inválido') from erro
+    if not cep.isdigit():
+        raise ValidationError('CEP inválido')
 
 
 # --- VALIDADOR DE PERÍODO ---
