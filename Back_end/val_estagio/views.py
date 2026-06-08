@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework import viewsets, generics
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -173,6 +173,10 @@ class TceViewSet(viewsets.ModelViewSet):
     )
     serializer_class = TceSerializer
 
+    filterset_fields = [
+        'status',
+    ]
+
 
     def get_permissions(self):
         if self.action in ['aprovar_tce', 'reprovar_tce']:
@@ -313,9 +317,9 @@ class EstagioViewSet(viewsets.ModelViewSet):
     ]
 
     def get_permissions(self):
-        if self.action == 'adicionar_relatorio':           # ALTERADO — era [IsCoordenador() | IsSecretaria()]
+        if self.action == 'adicionar_relatorio':
             return [IsAluno()]
-        if self.action in ['list', 'retrieve']:            # NOVO — leitura separada do restante
+        if self.action in ['list', 'retrieve']:
             return [IsSecretaria() | IsAluno()]
         return [IsSecretaria()]
 
