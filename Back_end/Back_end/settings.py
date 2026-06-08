@@ -64,8 +64,20 @@ CORS_ALLOW_HEADERS = ['content-type', 'authorization']
 
 ROOT_URLCONF = 'Back_end.urls' # Aponta para o arquivo de rotas principal
 
-# Configuração de templates (HTML)
-TEMPLATES = [...] 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 WSGI_APPLICATION = 'Back_end.wsgi.application'
 
@@ -113,7 +125,6 @@ REST_FRAMEWORK = {
 }
 
 # Validação de senhas para garantir que o usuário vai criar senhas fortes
-AUTH_PASSWORD_VALIDATORS = [...]
 
 # Internacionalização
 LANGUAGE_CODE = 'pt-br' # Idioma do sistema
