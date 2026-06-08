@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',   # Gerenciamento de sessões
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'val_estagio',               # Seu app personalizado
     'rest_framework',            # Django REST Framework (API)
     'corsheaders',               # Permite requisições de outros domínios (CORS)
@@ -74,12 +75,34 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+REST_FRAMEWORK = {
+    # Autenticação e Permissões
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    
+    # Paginação
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,  # Define 20 itens por página
+    
+    # Documentação Automática (drf-spectacular)
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    
+    # Filtros
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+}
+
 # Configurações do CORS 
 CORS_ALLOW_ORIGINS = ['http://localhost:3000']
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ['content-type', 'authorization']
 
-ROOT_URLCONF = 'Back_end.urls' # Aponta para o arquivo de rotas principal
+ROOT_URLCONF = 'Back_end.urls'
 
 # Configuração de templates (HTML)
 TEMPLATES = [
@@ -95,7 +118,7 @@ TEMPLATES = [
             ],
         },
     },
-] 
+]
 
 WSGI_APPLICATION = 'Back_end.wsgi.application'
 
@@ -110,27 +133,9 @@ DATABASES = {
 # Define que você está usando um modelo de usuário customizado em vez do padrão do Django
 AUTH_USER_MODEL = 'val_estagio.Usuario'
 
-# Configuração do Django REST Framework
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20, # Define 20 itens por página nas suas APIs
+# Password validation
+# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema', # Para gerar documentação automática
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend'
-    ]
-
-}
-
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'API de Validação de Estágios',
-    'DESCRIPTION': 'Documentação da API do sistema de validação de estágios',
-    'VERSION': '1.0.0',
-}
-
-# Validação de senhas para garantir que o usuário vai criar senhas fortes
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -146,9 +151,24 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# Internationalization
+# https://docs.djangoproject.com/en/6.0/topics/i18n/
+
+LANGUAGE_CODE = 'pt-br'
+
+TIME_ZONE = 'UTC'
+
+# Configuração do Django REST Framework
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'API de Validação de Estágios',
+    'DESCRIPTION': 'Documentação da API do sistema de validação de estágios',
+    'VERSION': '1.0.0',
+}
+
 # Internacionalização
-LANGUAGE_CODE = 'pt-br' # Idioma do sistema
-TIME_ZONE = 'UTC'       # Fuso horário
 USE_I18N = True
 USE_TZ = True           # Usa fuso horário timezone-aware
 
