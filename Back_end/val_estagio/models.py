@@ -84,7 +84,7 @@ class Curso(models.Model):
 
 # --- Classe Empresa ---
 class Empresa(models.Model):
-
+    id = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=255, verbose_name="Nome da Empresa")
     telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
     cep = models.CharField(max_length=9, verbose_name="CEP", validators=[validar_cep])
@@ -94,7 +94,7 @@ class Empresa(models.Model):
     comp = models.CharField(max_length=100, null=True, blank=True, verbose_name="Complemento")
     num = models.CharField(max_length=20, verbose_name="Número")
     bairro = models.CharField(max_length=100, verbose_name="Bairro")
-    cnpj =  EncryptedCharField(max_length=18, primary_key=True, validators=[validar_cnpj], verbose_name="CNPJ")
+    cnpj =  EncryptedCharField(max_length=18, unique=True, validators=[validar_cnpj], verbose_name="CNPJ")
 
     def __str__(self):
         return f"{self.nome} - CNPJ: {self.cnpj} | {self.cidade}/{self.uf}"
@@ -130,7 +130,7 @@ class Estagio(models.Model):
     dtfim = models.DateField(null=True, blank=True, verbose_name="Data de Término")
     cargahorariasemanal = models.IntegerField(verbose_name="Carga Horária Semanal")
     tce = models.ForeignKey(Tce, on_delete=models.PROTECT, db_column='apolice_seguro', verbose_name="TCE")
-    empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, db_column='cnpj', verbose_name="Empresa")
+    empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, verbose_name="Empresa")
 
     def adicionar_relatorio(self, coordenador, semestre, horas_estagiadas, data_envio):
 
