@@ -24,14 +24,15 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     - Excluir usuário
     """
 
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             return [IsAuthenticated()]
         return [IsSecretaria()]
-    
 
-    queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
+
 # --- VIEWSET DE ALUNOS ---
 
 class AlunoViewSet(viewsets.ModelViewSet):
