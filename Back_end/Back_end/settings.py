@@ -74,8 +74,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = ['content-type', 'authorization']
 
 REST_FRAMEWORK = {
     # Autenticação e Permissões
@@ -99,14 +97,12 @@ REST_FRAMEWORK = {
     ],
 }
 
-ROOT_URLCONF = 'Back_end.urls'
-
 # Configurações do CORS 
 CORS_ALLOW_ORIGINS = ['http://localhost:3000']
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ['content-type', 'authorization']
 
-ROOT_URLCONF = 'Back_end.urls' # Aponta para o arquivo de rotas principal
+ROOT_URLCONF = 'Back_end.urls'
 
 # Configuração de templates (HTML)
 TEMPLATES = [
@@ -172,25 +168,7 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
 }
 
-# Validação de senhas para garantir que o usuário vai criar senhas fortes
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
 # Internacionalização
-LANGUAGE_CODE = 'pt-br' # Idioma do sistema
-TIME_ZONE = 'UTC'       # Fuso horário
 USE_I18N = True
 USE_TZ = True           # Usa fuso horário timezone-aware
 
