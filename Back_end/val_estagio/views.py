@@ -175,6 +175,8 @@ class TceViewSet(viewsets.ModelViewSet):
 
     filterset_fields = [
         'status',
+        'aluno',
+        'secretaria'
     ]
 
 
