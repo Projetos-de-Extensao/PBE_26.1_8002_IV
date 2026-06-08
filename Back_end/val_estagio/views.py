@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAluno, IsSecretaria, IsCoordenador
 from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
 from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
@@ -22,6 +23,12 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     - Atualizar usuário
     - Excluir usuário
     """
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticated()]
+        return [IsSecretaria()]
+    
 
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
@@ -43,11 +50,20 @@ class AlunoViewSet(viewsets.ModelViewSet):
     )
     serializer_class = AlunoSerializer
 
-    filterset_fields = {
+    filterset_fields = [
         'procurando_estagio',
         'curso',
         'periodo'
-    }
+    ]
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [IsSecretaria() | IsCoordenador()]
+        if self.action == 'retrieve':
+            return [IsSecretaria() | IsCoordenador() | IsAluno()]
+        if self.action in ['update', 'partial_update']:
+            return [IsSecretaria() | IsAluno()]
+        return [IsSecretaria()]
 
 # --- VIEWSET DE SECRETARIAS ---
 
@@ -64,9 +80,12 @@ class SecretariaViewSet(viewsets.ModelViewSet):
     )
     serializer_class = SecretariaSerializer
 
-    filterset_fields = {
+    filterset_fields = [
         'matricula_funcionario'
-    }
+    ]
+
+    def get_permissions(self):
+        return [IsSecretaria()]
 
 
 # --- VIEWSET DE COORDENADORES ---
@@ -84,9 +103,15 @@ class CoordenadorViewSet(viewsets.ModelViewSet):
     )
     serializer_class = CoordenadorSerializer
 
-    filterset_fields = {
+    filterset_fields = [
         'area'
-    }
+    ]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsSecretaria() | IsCoordenador()]
+        return [IsSecretaria()]
+
 
 
 # --- VIEWSET DE CURSOS ---
@@ -100,6 +125,11 @@ class CursoViewSet(viewsets.ModelViewSet):
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
 
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticated()]
+        return [IsSecretaria()]
+
 
 # --- VIEWSET DE EMPRESAS ---
 
@@ -112,11 +142,15 @@ class EmpresaViewSet(viewsets.ModelViewSet):
     queryset = Empresa.objects.all()
     serializer_class = EmpresaSerializer
 
-    filterset_fields = {
+    filterset_fields = [
         'cidade',
         'uf'
-    }
+    ]
 
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticated()]
+        return [IsSecretaria()]
 
 # --- VIEWSET DE TCE ---
 
@@ -143,11 +177,11 @@ class TceViewSet(viewsets.ModelViewSet):
         if self.action in ['aprovar', 'reprovar']:
             return [IsSecretaria()] 
         return [IsSecretaria() | IsAluno()]
-    filterset_fields = {
+    filterset_fields = [
         'status',
         'aluno',
         'secretaria'
-    }
+    ]
 
     # --- APROVAR TCE ---
 
@@ -172,27 +206,29 @@ class TceViewSet(viewsets.ModelViewSet):
 
         return Response({'detail': 'TCE aprovado com sucesso.'}, status=200)
 
-    # --- REPROVAR TCE ---
+    def get_permissions(self):
+        if self.action in ['aprovar_tce', 'reprovar_tce']:
+            return [IsSecretaria()]
+        if self.action in ['list', 'retrieve']:
+            return [IsSecretaria() | IsAluno()]
+        if self.action == 'create':
+            return [IsAluno() | IsSecretaria()]
+        return [IsSecretaria()]
+
+    @action(detail=True, methods=['post'], url_path='aprovar')
+    def aprovar_tce(self, request, pk=None):
+        tce = self.get_object()
+        if tce.status == StatusDocumento.APROVADO:
+            return Response({'detail': 'TCE já está aprovado.'}, status=400)
+        tce.se_aprovar()
+        return Response({'detail': 'TCE aprovado com sucesso.'}, status=200)
 
     @action(detail=True, methods=['post'], url_path='reprovar')
     def reprovar_tce(self, request, pk=None):
-        """
-        Reprova um TCE específico.
-
-        Regras:
-        - Não permite reprovar um TCE já reprovado.
-        - Executa a regra de negócio se_reprovar().
-        """
-
         tce = self.get_object()
-
         if tce.status == StatusDocumento.REPROVADO:
             return Response({'detail': 'TCE já está reprovado.'}, status=400)
-
         tce.se_reprovar()
-
-        serializer = self.get_serializer(tce)
-
         return Response({'detail': 'TCE reprovado com sucesso.'}, status=200)
 
 
@@ -222,12 +258,21 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
             return [IsCoordenador()]
         return [IsCoordenador() | IsAluno()]
     
-    filterset_fields = (
+    filterset_fields = [
         'status',
         'semestre',
         'estagio',
         'coordenador'
-    )
+    ]
+
+    def get_permissions(self):
+        if self.action in ['aprovar_relatorio', 'reprovar_relatorio']:
+            return [IsCoordenador()]
+        if self.action in ['list', 'retrieve']:
+            return [IsCoordenador() | IsAluno()]
+        if self.action == 'create':
+            return [IsAluno()]
+        return [IsSecretaria()] 
 
     # --- APROVAR RELATÓRIO ---
 
@@ -292,10 +337,17 @@ class EstagioViewSet(viewsets.ModelViewSet):
     )
     serializer_class = EstagioSerializer
 
-    filterset_fields = (
+    filterset_fields = [
         'empresa',
         'tce'
-    )
+    ]
+
+    def get_permissions(self):
+        if self.action == 'adicionar_relatorio':           # ALTERADO — era [IsCoordenador() | IsSecretaria()]
+            return [IsAluno()]
+        if self.action in ['list', 'retrieve']:            # NOVO — leitura separada do restante
+            return [IsSecretaria() | IsAluno()]
+        return [IsSecretaria()]
 
     @action(
     detail=True,
