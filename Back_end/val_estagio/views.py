@@ -81,7 +81,7 @@ class SecretariaViewSet(viewsets.ModelViewSet):
     serializer_class = SecretariaSerializer
 
     filterset_fields = [
-        'matricula_funcionario'
+        'usuario'
     ]
 
     def get_permissions(self):
@@ -173,38 +173,6 @@ class TceViewSet(viewsets.ModelViewSet):
     )
     serializer_class = TceSerializer
 
-    def get_permissions(self):
-        if self.action in ['aprovar', 'reprovar']:
-            return [IsSecretaria()] 
-        return [IsSecretaria() | IsAluno()]
-    filterset_fields = [
-        'status',
-        'aluno',
-        'secretaria'
-    ]
-
-    # --- APROVAR TCE ---
-
-    @action(detail=True, methods=['post'], url_path='aprovar')
-    def aprovar_tce(self, request, pk=None):
-        """
-        Aprova um TCE específico.
-
-        Regras:
-        - Não permite aprovar um TCE já aprovado.
-        - Executa a regra de negócio se_aprovar().
-        """
-
-        tce = self.get_object()
-
-        if tce.status == StatusDocumento.APROVADO:
-            return Response({'detail': 'TCE já está aprovado.'}, status=400)
-
-        tce.se_aprovar()
-
-        serializer = self.get_serializer(tce)
-
-        return Response({'detail': 'TCE aprovado com sucesso.'}, status=200)
 
     def get_permissions(self):
         if self.action in ['aprovar_tce', 'reprovar_tce']:
@@ -214,9 +182,16 @@ class TceViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return [IsAluno() | IsSecretaria()]
         return [IsSecretaria()]
-
+    # --- APROVAR TCE ---
     @action(detail=True, methods=['post'], url_path='aprovar')
     def aprovar_tce(self, request, pk=None):
+        """
+        Aprova um TCE específico.
+
+        Regras:
+        - Não permite aprovar um TCE já aprovado.
+        - Executa a regra de negócio se_aprovar().
+        """
         tce = self.get_object()
         if tce.status == StatusDocumento.APROVADO:
             return Response({'detail': 'TCE já está aprovado.'}, status=400)
@@ -252,11 +227,6 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
         'estagio'
     )
     serializer_class = RelatorioSemestralSerializer
-
-    def get_permissions(self):
-        if self.action in ['aprovar', 'reprovar']:
-            return [IsCoordenador()]
-        return [IsCoordenador() | IsAluno()]
     
     filterset_fields = [
         'status',
