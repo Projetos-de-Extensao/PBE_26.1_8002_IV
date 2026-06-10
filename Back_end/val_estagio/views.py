@@ -36,26 +36,34 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 # --- VIEWSET DE ALUNOS ---
 
 class AlunoViewSet(viewsets.ModelViewSet):
-    """
-    Disponibiliza operações CRUD para alunos.
-
-    Utiliza select_related para otimizar
-    consultas envolvendo:
-    - Usuário vinculado
-    - Curso vinculado
-    """
-
-    queryset = Aluno.objects.select_related(
-        'usuario',
-        'curso'
-    )
+    queryset = Aluno.objects.select_related('usuario', 'curso')
     serializer_class = AlunoSerializer
 
-    filterset_fields = [
-        'procurando_estagio',
-        'curso',
-        'periodo'
-    ]
+    filterset_fields = ['procurando_estagio', 'curso', 'periodo']
+
+    def get_serializer_class(self):
+        """
+        Secretaria recebe o serializer completo (com CPF, telefone etc.).
+        Coordenador e Aluno recebem apenas dados não-sensíveis.
+        """
+        if hasattr(self.request.user, 'secretaria'):
+            return AlunoSerializer
+        return AlunoSerializerPublico
+
+    def get_queryset(self):
+        """
+        Aluno só enxerga a si mesmo.
+        Secretaria e Coordenador enxergam todos.
+        """
+        qs = super().get_queryset()
+        user = self.request.user
+        if (
+            hasattr(user, 'aluno') and
+            not hasattr(user, 'secretaria') and
+            not hasattr(user, 'coordenador')
+        ):
+            return qs.filter(usuario=user)
+        return qs
 
     def get_permissions(self):
         if self.action == 'list':
@@ -65,20 +73,6 @@ class AlunoViewSet(viewsets.ModelViewSet):
         if self.action in ['update', 'partial_update']:
             return [IsSecretaria() | IsAluno()]
         return [IsSecretaria()]
-
-    def get_serializer_class(self):
-    if hasattr(self.request.user, 'secretaria'):
-        return AlunoSerializer  # versão completa com CPF
-    return AlunoSerializerPublico
-
-
-    def get_queryset(self):
-    qs = super().get_queryset()
-    if hasattr(self.request.user, 'aluno') and \
-       not hasattr(self.request.user, 'secretaria') and \
-       not hasattr(self.request.user, 'coordenador'):
-        return qs.filter(usuario=self.request.user)
-    return qs
 
 # --- VIEWSET DE SECRETARIAS ---
 

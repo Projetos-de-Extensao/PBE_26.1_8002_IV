@@ -63,6 +63,24 @@ class AlunoSerializer(serializers.ModelSerializer):
             'curso_id'
         )
 
+class AlunoSerializerPublico(serializers.ModelSerializer):
+    """
+    Versão restrita do AlunoSerializer.
+    Usada quando o solicitante NÃO é Secretaria — omite dados sensíveis como CPF e telefone.
+    """
+    matricula = serializers.CharField(source='usuario.matricula', read_only=True)
+    curso = CursoSerializer(read_only=True)
+
+    class Meta:
+        model = Aluno
+        fields = (
+            'usuario',
+            'matricula',
+            'periodo',
+            'curso',
+            'procurando_estagio',
+            'horas_estagio',
+        )
 
 # --- SERIALIZADOR DE SECRETARIA ---
 
