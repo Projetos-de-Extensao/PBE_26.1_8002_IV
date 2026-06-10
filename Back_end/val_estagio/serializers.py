@@ -187,7 +187,7 @@ class RelatorioSemestralSerializer(serializers.ModelSerializer):
             'status'
         )
 
-        read_only_fields = ['idrelatorio', 'status']
+        read_only_fields = ['idrelatorio', 'status',]
 
 
 # --- SERIALIZADOR DE ESTÁGIO ----
