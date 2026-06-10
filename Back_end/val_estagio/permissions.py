@@ -28,3 +28,24 @@ class IsCoordenador(BasePermission):
             request.user.is_authenticated and
             hasattr(request.user, 'coordenador')
         )
+
+class IsSecretariaOuCoordenador(BasePermission):
+    def has_permission(self, request, view):
+        return IsSecretaria().has_permission(request, view) or \
+               IsCoordenador().has_permission(request, view)
+
+class IsSecretariaOuAluno(BasePermission):
+    def has_permission(self, request, view):
+        return IsSecretaria().has_permission(request, view) or \
+               IsAluno().has_permission(request, view)
+
+class IsSecretariaOuCoordenadorOuAluno(BasePermission):
+    def has_permission(self, request, view):
+        return IsSecretaria().has_permission(request, view) or \
+               IsCoordenador().has_permission(request, view) or \
+               IsAluno().has_permission(request, view)
+
+class IsCoordenadorOuAluno(BasePermission):
+    def has_permission(self, request, view):
+        return IsCoordenador().has_permission(request, view) or \
+               IsAluno().has_permission(request, view)
