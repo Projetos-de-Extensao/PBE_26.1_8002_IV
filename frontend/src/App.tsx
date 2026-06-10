@@ -6,6 +6,8 @@ import MainLayout from "./layouts/MainLayout";
 
 import DashboardAluno from "./pages/alunos/DashboardAluno";
 import MeusTces from "./pages/alunos/MeusTces";
+import MeuEstagio from "./pages/alunos/MeuEstagio";
+import RelatoriosAluno from "./pages/alunos/RelatoriosAluno";
 
 import DashboardSecretaria from "./pages/DashboardSecretaria";
 
@@ -51,6 +53,22 @@ export default function App() {
                     element={
                         <ProtectedRoute>
                             <MeusTces />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/aluno/estagio"
+                    element={
+                        <ProtectedRoute>
+                            <MeuEstagio />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/aluno/relatorios"
+                    element={
+                        <ProtectedRoute>
+                            <RelatoriosAluno />
                         </ProtectedRoute>
                     }
                 />
