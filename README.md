@@ -200,12 +200,6 @@ python manage.py runserver
 http://127.0.0.1:8000/api/docs/
 ```
 
-### Redoc
-
-```text
-http://127.0.0.1:8000/api/redoc/
-```
-
 ### Schema OpenAPI
 
 ```text
@@ -229,23 +223,6 @@ GET /api/tces/?aluno=202500000001
 GET /api/relatorios/?status=aprovado
 GET /api/relatorios/?semestre=26.1
 ```
-
----
-
-## Testes
-
-Para executar os testes automatizados:
-
-```bash
-python manage.py test
-```
-
-Os testes cobrem:
-
-- Criação de TCE
-- Fluxo de aprovação de TCE
-- Reprovação de relatório
-- Atualização de horas de estágio do aluno
 
 ---
 
