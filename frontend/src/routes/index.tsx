@@ -8,6 +8,8 @@ import Alunos from "../pages/alunos/Alunos";
 import NovoAluno from "../pages/alunos/NovoAluno";
 import type { JSX } from "react/jsx-runtime";
 
+import DashboardSecretaria from "../pages/DashboardSecretaria";
+
 function ProtectedRoute({ children }: { children: JSX.Element }) {
     const token = localStorage.getItem("token");
 
@@ -33,6 +35,7 @@ export function AppRoutes() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/alunos" element={<Alunos />} />
                 <Route path="/alunos/novo" element={<NovoAluno />} />
+                <Route path="/secretaria" element={<DashboardSecretaria />} />
             </Route>
         </Routes>
     );

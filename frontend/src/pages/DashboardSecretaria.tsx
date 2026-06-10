@@ -20,20 +20,9 @@ interface TcePendente {
 export default function DashboardSecretaria() {
     const [loading, setLoading] = useState(true);
     
-    // Dados para os cards superiores
-    const [resumo, setResumo] = useState<ResumoSecretaria>({
-        alunosAtivos: 148, // Valores mockados do HTML para não ficar em branco
-        tcesPendentes: 3,
-        estagiosAtivos: 62,
-        empresas: 27
-    });
+    const [resumo, setResumo] = useState<ResumoSecretaria | null>(null);
 
-    // Lista de TCEs Pendentes
-    const [tces, setTces] = useState<TcePendente[]>([
-        { id: 45, aluno_nome: 'João Silva', empresa_nome: 'TechCorp Ltda', status: 'pendente' },
-        { id: 44, aluno_nome: 'Ana Costa', empresa_nome: 'StartupXP', status: 'pendente' },
-        { id: 43, aluno_nome: 'Carlos Melo', empresa_nome: 'Banco Digital', status: 'pendente' }
-    ]);
+    const [tces, setTces] = useState<TcePendente[]>([]);
 
     // Busca os dados REAIS da sua API Django (val_estagio/views.py)
     useEffect(() => {
