@@ -1,15 +1,33 @@
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FileText, Briefcase, ClipboardList, Users, Building, Building2, GraduationCap, LogOut } from "lucide-react";
+import { LayoutDashboard, FileText, Briefcase, ClipboardList, Users, Building, GraduationCap, LogOut } from "lucide-react";
 
 // Definição dos dados dos menus de acordo com o HTML original
 const roleMenuConfig = {
     aluno: {
-        title: "Engenharia de Software",
-        items: [
-            { path: "/aluno", label: "Painel", icon: LayoutDashboard },
-            { path: "/tces", label: "Meus TCEs", icon: FileText, badge: 1 },
-            { path: "/estagio", label: "Meu Estágio", icon: Briefcase },
-            { path: "/relatorios", label: "Relatórios", icon: ClipboardList, badge: 2 },
+    title: "Engenharia de Software",
+    items: [
+        {
+            path: "/aluno",
+            label: "Painel",
+            icon: LayoutDashboard
+        },
+        {
+            path: "/aluno/meus-tces",
+            label: "Meus TCEs",
+            icon: FileText,
+            badge: 1
+        },
+        {
+            path: "/aluno/estagio",
+            label: "Meu Estágio",
+            icon: Briefcase
+        },
+        {
+            path: "/aluno/relatorios",
+            label: "Relatórios",
+            icon: ClipboardList,
+            badge: 2
+        }
         ]
     },
     secretaria: {

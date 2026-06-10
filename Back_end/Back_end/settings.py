@@ -97,10 +97,10 @@ REST_FRAMEWORK = {
 }
 
 # Configurações do CORS 
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://localhost:5173']
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174']
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ['content-type', 'authorization']
-
+CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'Back_end.urls'
 
 # Configuração de templates (HTML)

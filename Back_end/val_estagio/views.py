@@ -4,6 +4,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from .permissions import (
     IsAluno, IsSecretaria, IsCoordenador,
     IsSecretariaOuCoordenador, IsSecretariaOuAluno,
@@ -372,21 +374,51 @@ class EstagioViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=201)
 
 class CustomAuthToken(ObtainAuthToken):
+
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        
-        # Descobre quem é o usuário com base na mesma lógica das suas permissions.py
-        role = 'aluno' # Padrão
-        if hasattr(user, 'secretaria'):
-            role = 'secretaria'
-        elif hasattr(user, 'coordenador'):
-            role = 'coordenador'
-            
+
+        print("===== LOGIN REQUEST =====")
+        print(request.data)
+
+        matricula = request.data.get("username")
+        password = request.data.get("password")
+
+        print("MATRICULA:", matricula)
+        print("PASSWORD:", password)
+
+        try:
+            usuario = Usuario.objects.get(matricula=matricula)
+
+            print("USUARIO ENCONTRADO:", usuario.username)
+
+            user = authenticate(
+                username=usuario.username,
+                password=password
+            )
+
+            print("AUTH RESULT:", user)
+
+        except Usuario.DoesNotExist:
+            print("USUARIO NÃO ENCONTRADO")
+            user = None
+
+        if not user:
+            return Response(
+                {"error": "Credenciais inválidas"},
+                status=400
+            )
+
+        token, _ = Token.objects.get_or_create(user=user)
+
+        role = "aluno"
+
+        if hasattr(user, "secretaria"):
+            role = "secretaria"
+        elif hasattr(user, "coordenador"):
+            role = "coordenador"
+
         return Response({
-            'token': token.key,
-            'role': role, # Agora o frontend consegue ler isso perfeitamente!
-            'nome': user.first_name # Pode mandar o nome também para atualizar o layout
+            "token": token.key,
+            "role": role,
+            "nome": user.first_name
         })

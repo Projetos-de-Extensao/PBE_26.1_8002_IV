@@ -1,16 +1,23 @@
 import { Navigate } from "react-router-dom";
 
 export default function RoleRedirect() {
-    // Pega a role que salvamos no localStorage durante o login
+    const token = localStorage.getItem("token");
     const role = localStorage.getItem("userRole");
 
-    // Redireciona para a rota correta
+    // Se não estiver autenticado, vai para o login
+    if (!token) {
+        return <Navigate to="/login" replace />;
+    }
+
+    // Redireciona conforme a role salva
     if (role === "secretaria") {
         return <Navigate to="/secretaria" replace />;
-    } else if (role === "coordenador") {
+    }
+
+    if (role === "coordenador") {
         return <Navigate to="/coordenador" replace />;
     }
-    
-    // Se for aluno ou se não tiver role definida, vai pro aluno
+
+    // Aluno é o padrão
     return <Navigate to="/aluno" replace />;
 }
