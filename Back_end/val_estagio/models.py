@@ -49,7 +49,7 @@ class Aluno(models.Model): # OneToOne vincula o perfil de Aluno ao Usuario
     def ganhar_horas_estagio(self, horas_estagiadas):
         if(horas_estagiadas > 0 and self.horas_estagio < 350):
             self.horas_estagio = min(self.horas_estagio + horas_estagiadas, 350)
-        self.save()
+            self.save()
 
     def __str__(self):
         return f"{self.usuario.username} - Matrícula: {self.usuario.matricula} | Curso: {self.curso.nome}"

@@ -1,9 +1,13 @@
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import render
 from django.http import HttpResponse
+import django_filters
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from urllib3 import request
 from .permissions import (
     IsAluno, IsSecretaria, IsCoordenador,
     IsSecretariaOuCoordenador, IsSecretariaOuAluno,
@@ -47,6 +51,16 @@ class AlunoViewSet(viewsets.ModelViewSet):
     serializer_class = AlunoSerializer
 
     filterset_fields = ['procurando_estagio', 'curso', 'periodo']
+    filter_backends = [
+    django_filters.rest_framework.DjangoFilterBackend,
+    filters.SearchFilter
+    ]
+
+    search_fields = [
+    'usuario__matricula',
+    'usuario__first_name',
+    'usuario__last_name'
+    ]
 
     def get_serializer_class(self):
         """
@@ -404,34 +418,25 @@ class EstagioViewSet(viewsets.ModelViewSet):
     )
 
     @action(
-        detail=True,
-        methods=['post'],
-        url_path='adicionar_relatorio'
+    detail=True,
+    methods=['post'],
+    url_path='adicionar_relatorio'
     )
     def adicionar_relatorio(self, request, pk=None):
 
         estagio = self.get_object()
 
-        coordenador_pk = request.data.get('coordenador')
-        
-        
-        if not coordenador_pk:
-            raise ValidationError({'coordenador': 'Este campo é obrigatório.'})
-            
-        
-        try:
-            coordenador = Coordenador.objects.get(pk=coordenador_pk)
-        except (Coordenador.DoesNotExist, ValueError):
-            raise ValidationError({'coordenador': 'Coordenador não encontrado ou ID inválido.'})
-
-       
-        relatorio = estagio.adicionar_relatorio(
-            coordenador=coordenador,
-            semestre=request.data.get('semestre'),
-            horas_estagiadas=request.data.get('horas_estagiadas'),
-            data_envio=request.data.get('data_envio')
+        serializer = RelatorioSemestralSerializer(
+        data=request.data
         )
 
-        serializer = RelatorioSemestralSerializer(relatorio)
+        serializer.is_valid(raise_exception=True)
 
-        return Response(serializer.data, status=201)
+        serializer.save(
+        estagio=estagio
+        )
+
+        return Response(
+        serializer.data,
+        status=201
+        )

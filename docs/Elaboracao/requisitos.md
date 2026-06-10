@@ -14,7 +14,6 @@
 | Id | Requisito | Prioridade|
 |----|-----------|-----------|
 |RF01|O aluno deve ser capaz de se logar|Alto|
-|RF02|O aluno deve ser capaz de abrir um chamado|Alto|
 |RF03|O aluno deve ser capaz de enviar a documentação|Alto|
 |RF04|O aluno deve ser capaz de acompanhar o status do seu chamado|Médio|
 |RF05|O aluno deve editar seus dados cadastrais|Médio|
