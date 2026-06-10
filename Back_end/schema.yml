@@ -1,0 +1,2893 @@
+openapi: 3.0.3
+info:
+  title: API de Validação de Estágios
+  version: 1.0.0
+  description: Documentação da API do sistema de validação de estágios
+paths:
+  /api/alunos/:
+    get:
+      operationId: alunos_list
+      parameters:
+      - in: query
+        name: curso
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: periodo
+        schema:
+          type: integer
+      - in: query
+        name: procurando_estagio
+        schema:
+          type: boolean
+      tags:
+      - alunos
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAlunoSerializerPublicoList'
+          description: ''
+    post:
+      operationId: alunos_create
+      tags:
+      - alunos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlunoSerializerPublico'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AlunoSerializerPublico'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AlunoSerializerPublico'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlunoSerializerPublico'
+          description: ''
+  /api/alunos/{usuario}/:
+    get:
+      operationId: alunos_retrieve
+      parameters:
+      - in: path
+        name: usuario
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this aluno.
+        required: true
+      tags:
+      - alunos
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlunoSerializerPublico'
+          description: ''
+    put:
+      operationId: alunos_update
+      parameters:
+      - in: path
+        name: usuario
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this aluno.
+        required: true
+      tags:
+      - alunos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlunoSerializerPublico'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AlunoSerializerPublico'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AlunoSerializerPublico'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlunoSerializerPublico'
+          description: ''
+    patch:
+      operationId: alunos_partial_update
+      parameters:
+      - in: path
+        name: usuario
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this aluno.
+        required: true
+      tags:
+      - alunos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAlunoSerializerPublico'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAlunoSerializerPublico'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAlunoSerializerPublico'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlunoSerializerPublico'
+          description: ''
+    delete:
+      operationId: alunos_destroy
+      parameters:
+      - in: path
+        name: usuario
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this aluno.
+        required: true
+      tags:
+      - alunos
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/auth/login/:
+    post:
+      operationId: auth_login_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+  /api/coordenadores/:
+    get:
+      operationId: coordenadores_list
+      description: |-
+        Disponibiliza operações CRUD para coordenadores.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      parameters:
+      - in: query
+        name: area
+        schema:
+          type: string
+          title: Área
+          enum:
+          - direito
+          - engenharia
+          - financas
+          - negocios
+          - tecnologia
+        description: |-
+          * `negocios` - Negócios
+          * `tecnologia` - Tecnologia
+          * `financas` - Finanças
+          * `direito` - Direito
+          * `engenharia` - Engenharia
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - coordenadores
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCoordenadorList'
+          description: ''
+    post:
+      operationId: coordenadores_create
+      description: |-
+        Disponibiliza operações CRUD para coordenadores.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      tags:
+      - coordenadores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coordenador'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Coordenador'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Coordenador'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coordenador'
+          description: ''
+  /api/coordenadores/{id}/:
+    get:
+      operationId: coordenadores_retrieve
+      description: |-
+        Disponibiliza operações CRUD para coordenadores.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Coordenador.
+        required: true
+      tags:
+      - coordenadores
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coordenador'
+          description: ''
+    put:
+      operationId: coordenadores_update
+      description: |-
+        Disponibiliza operações CRUD para coordenadores.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Coordenador.
+        required: true
+      tags:
+      - coordenadores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coordenador'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Coordenador'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Coordenador'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coordenador'
+          description: ''
+    patch:
+      operationId: coordenadores_partial_update
+      description: |-
+        Disponibiliza operações CRUD para coordenadores.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Coordenador.
+        required: true
+      tags:
+      - coordenadores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCoordenador'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCoordenador'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCoordenador'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coordenador'
+          description: ''
+    delete:
+      operationId: coordenadores_destroy
+      description: |-
+        Disponibiliza operações CRUD para coordenadores.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Coordenador.
+        required: true
+      tags:
+      - coordenadores
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/cursos/:
+    get:
+      operationId: cursos_list
+      description: |-
+        Disponibiliza operações CRUD completas
+        para cursos cadastrados no sistema.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - cursos
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCursoList'
+          description: ''
+    post:
+      operationId: cursos_create
+      description: |-
+        Disponibiliza operações CRUD completas
+        para cursos cadastrados no sistema.
+      tags:
+      - cursos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Curso'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Curso'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Curso'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curso'
+          description: ''
+  /api/cursos/{id}/:
+    get:
+      operationId: cursos_retrieve
+      description: |-
+        Disponibiliza operações CRUD completas
+        para cursos cadastrados no sistema.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this curso.
+        required: true
+      tags:
+      - cursos
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curso'
+          description: ''
+    put:
+      operationId: cursos_update
+      description: |-
+        Disponibiliza operações CRUD completas
+        para cursos cadastrados no sistema.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this curso.
+        required: true
+      tags:
+      - cursos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Curso'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Curso'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Curso'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curso'
+          description: ''
+    patch:
+      operationId: cursos_partial_update
+      description: |-
+        Disponibiliza operações CRUD completas
+        para cursos cadastrados no sistema.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this curso.
+        required: true
+      tags:
+      - cursos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCurso'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCurso'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCurso'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curso'
+          description: ''
+    delete:
+      operationId: cursos_destroy
+      description: |-
+        Disponibiliza operações CRUD completas
+        para cursos cadastrados no sistema.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this curso.
+        required: true
+      tags:
+      - cursos
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/empresas/:
+    get:
+      operationId: empresas_list
+      description: |-
+        Disponibiliza operações CRUD completas
+        para empresas concedentes de estágio.
+      parameters:
+      - in: query
+        name: cidade
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: uf
+        schema:
+          type: string
+      tags:
+      - empresas
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEmpresaList'
+          description: ''
+    post:
+      operationId: empresas_create
+      description: |-
+        Disponibiliza operações CRUD completas
+        para empresas concedentes de estágio.
+      tags:
+      - empresas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Empresa'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Empresa'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Empresa'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Empresa'
+          description: ''
+  /api/empresas/{id}/:
+    get:
+      operationId: empresas_retrieve
+      description: |-
+        Disponibiliza operações CRUD completas
+        para empresas concedentes de estágio.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this empresa.
+        required: true
+      tags:
+      - empresas
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Empresa'
+          description: ''
+    put:
+      operationId: empresas_update
+      description: |-
+        Disponibiliza operações CRUD completas
+        para empresas concedentes de estágio.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this empresa.
+        required: true
+      tags:
+      - empresas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Empresa'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Empresa'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Empresa'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Empresa'
+          description: ''
+    patch:
+      operationId: empresas_partial_update
+      description: |-
+        Disponibiliza operações CRUD completas
+        para empresas concedentes de estágio.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this empresa.
+        required: true
+      tags:
+      - empresas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEmpresa'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEmpresa'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEmpresa'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Empresa'
+          description: ''
+    delete:
+      operationId: empresas_destroy
+      description: |-
+        Disponibiliza operações CRUD completas
+        para empresas concedentes de estágio.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this empresa.
+        required: true
+      tags:
+      - empresas
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/estagios/:
+    get:
+      operationId: estagios_list
+      description: |-
+        Disponibiliza operações CRUD para estágios.
+
+        Utiliza select_related para otimizar
+        consultas envolvendo a empresa vinculada.
+      parameters:
+      - in: query
+        name: empresa
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: tce
+        schema:
+          type: string
+          title: Apólice de Seguro
+      tags:
+      - estagios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEstagioList'
+          description: ''
+    post:
+      operationId: estagios_create
+      description: |-
+        Disponibiliza operações CRUD para estágios.
+
+        Utiliza select_related para otimizar
+        consultas envolvendo a empresa vinculada.
+      tags:
+      - estagios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estagio'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Estagio'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Estagio'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estagio'
+          description: ''
+  /api/estagios/{idestagio}/:
+    get:
+      operationId: estagios_retrieve
+      description: |-
+        Disponibiliza operações CRUD para estágios.
+
+        Utiliza select_related para otimizar
+        consultas envolvendo a empresa vinculada.
+      parameters:
+      - in: path
+        name: idestagio
+        schema:
+          type: integer
+        description: A unique integer value identifying this estagio.
+        required: true
+      tags:
+      - estagios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estagio'
+          description: ''
+    put:
+      operationId: estagios_update
+      description: |-
+        Disponibiliza operações CRUD para estágios.
+
+        Utiliza select_related para otimizar
+        consultas envolvendo a empresa vinculada.
+      parameters:
+      - in: path
+        name: idestagio
+        schema:
+          type: integer
+        description: A unique integer value identifying this estagio.
+        required: true
+      tags:
+      - estagios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estagio'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Estagio'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Estagio'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estagio'
+          description: ''
+    patch:
+      operationId: estagios_partial_update
+      description: |-
+        Disponibiliza operações CRUD para estágios.
+
+        Utiliza select_related para otimizar
+        consultas envolvendo a empresa vinculada.
+      parameters:
+      - in: path
+        name: idestagio
+        schema:
+          type: integer
+        description: A unique integer value identifying this estagio.
+        required: true
+      tags:
+      - estagios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEstagio'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEstagio'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEstagio'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estagio'
+          description: ''
+    delete:
+      operationId: estagios_destroy
+      description: |-
+        Disponibiliza operações CRUD para estágios.
+
+        Utiliza select_related para otimizar
+        consultas envolvendo a empresa vinculada.
+      parameters:
+      - in: path
+        name: idestagio
+        schema:
+          type: integer
+        description: A unique integer value identifying this estagio.
+        required: true
+      tags:
+      - estagios
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/estagios/{idestagio}/adicionar_relatorio/:
+    post:
+      operationId: estagios_adicionar_relatorio_create
+      description: |-
+        Disponibiliza operações CRUD para estágios.
+
+        Utiliza select_related para otimizar
+        consultas envolvendo a empresa vinculada.
+      parameters:
+      - in: path
+        name: idestagio
+        schema:
+          type: integer
+        description: A unique integer value identifying this estagio.
+        required: true
+      tags:
+      - estagios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estagio'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Estagio'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Estagio'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estagio'
+          description: ''
+  /api/relatorios/:
+    get:
+      operationId: relatorios_list
+      description: |-
+        Disponibiliza operações CRUD para
+        relatórios semestrais de estágio.
+
+        Também disponibiliza ações para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: query
+        name: coordenador
+        schema:
+          type: integer
+      - in: query
+        name: estagio
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: semestre
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          title: Status do Relatório
+          enum:
+          - aprovado
+          - pendente
+          - reprovado
+        description: |-
+          * `pendente` - Pendente
+          * `aprovado` - Aprovado
+          * `reprovado` - Reprovado
+      tags:
+      - relatorios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRelatorioSemestralList'
+          description: ''
+    post:
+      operationId: relatorios_create
+      description: |-
+        Disponibiliza operações CRUD para
+        relatórios semestrais de estágio.
+
+        Também disponibiliza ações para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      tags:
+      - relatorios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioSemestral'
+          description: ''
+  /api/relatorios/{idrelatorio}/:
+    get:
+      operationId: relatorios_retrieve
+      description: |-
+        Disponibiliza operações CRUD para
+        relatórios semestrais de estágio.
+
+        Também disponibiliza ações para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: path
+        name: idrelatorio
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Semestral.
+        required: true
+      tags:
+      - relatorios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioSemestral'
+          description: ''
+    put:
+      operationId: relatorios_update
+      description: |-
+        Disponibiliza operações CRUD para
+        relatórios semestrais de estágio.
+
+        Também disponibiliza ações para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: path
+        name: idrelatorio
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Semestral.
+        required: true
+      tags:
+      - relatorios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioSemestral'
+          description: ''
+    patch:
+      operationId: relatorios_partial_update
+      description: |-
+        Disponibiliza operações CRUD para
+        relatórios semestrais de estágio.
+
+        Também disponibiliza ações para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: path
+        name: idrelatorio
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Semestral.
+        required: true
+      tags:
+      - relatorios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRelatorioSemestral'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRelatorioSemestral'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRelatorioSemestral'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioSemestral'
+          description: ''
+    delete:
+      operationId: relatorios_destroy
+      description: |-
+        Disponibiliza operações CRUD para
+        relatórios semestrais de estágio.
+
+        Também disponibiliza ações para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: path
+        name: idrelatorio
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Semestral.
+        required: true
+      tags:
+      - relatorios
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/relatorios/{idrelatorio}/aprovar/:
+    post:
+      operationId: relatorios_aprovar_create
+      description: |-
+        Aprova um relatório semestral.
+
+        Regras:
+        - Não permite aprovar um relatório já aprovado.
+        - Executa a regra de negócio se_aprovar().
+      parameters:
+      - in: path
+        name: idrelatorio
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Semestral.
+        required: true
+      tags:
+      - relatorios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioSemestral'
+          description: ''
+  /api/relatorios/{idrelatorio}/reprovar/:
+    post:
+      operationId: relatorios_reprovar_create
+      description: |-
+        Reprova um relatório semestral.
+
+        Regras:
+        - Não permite reprovar um relatório já reprovado.
+        - Executa a regra de negócio se_reprovar().
+      parameters:
+      - in: path
+        name: idrelatorio
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Semestral.
+        required: true
+      tags:
+      - relatorios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelatorioSemestral'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioSemestral'
+          description: ''
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - ht
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/secretarias/:
+    get:
+      operationId: secretarias_list
+      description: |-
+        Disponibiliza operações CRUD para secretarias.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: usuario
+        schema:
+          type: string
+          title: Matrícula
+      tags:
+      - secretarias
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSecretariaList'
+          description: ''
+    post:
+      operationId: secretarias_create
+      description: |-
+        Disponibiliza operações CRUD para secretarias.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      tags:
+      - secretarias
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Secretaria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Secretaria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Secretaria'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Secretaria'
+          description: ''
+  /api/secretarias/{usuario}/:
+    get:
+      operationId: secretarias_retrieve
+      description: |-
+        Disponibiliza operações CRUD para secretarias.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      parameters:
+      - in: path
+        name: usuario
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this secretaria.
+        required: true
+      tags:
+      - secretarias
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Secretaria'
+          description: ''
+    put:
+      operationId: secretarias_update
+      description: |-
+        Disponibiliza operações CRUD para secretarias.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      parameters:
+      - in: path
+        name: usuario
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this secretaria.
+        required: true
+      tags:
+      - secretarias
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Secretaria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Secretaria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Secretaria'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Secretaria'
+          description: ''
+    patch:
+      operationId: secretarias_partial_update
+      description: |-
+        Disponibiliza operações CRUD para secretarias.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      parameters:
+      - in: path
+        name: usuario
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this secretaria.
+        required: true
+      tags:
+      - secretarias
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSecretaria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSecretaria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSecretaria'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Secretaria'
+          description: ''
+    delete:
+      operationId: secretarias_destroy
+      description: |-
+        Disponibiliza operações CRUD para secretarias.
+
+        Realiza carregamento otimizado do usuário
+        relacionado através do select_related.
+      parameters:
+      - in: path
+        name: usuario
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this secretaria.
+        required: true
+      tags:
+      - secretarias
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/tces/:
+    get:
+      operationId: tces_list
+      description: |-
+        Disponibiliza operações CRUD para TCE
+        (Termo de Compromisso de Estágio).
+
+        Também disponibiliza ações específicas para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: query
+        name: aluno
+        schema:
+          type: string
+          title: Matrícula
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: secretaria
+        schema:
+          type: string
+          title: Matrícula
+      - in: query
+        name: status
+        schema:
+          type: string
+          title: Status do TCE
+          enum:
+          - aprovado
+          - pendente
+          - reprovado
+        description: |-
+          * `pendente` - Pendente
+          * `aprovado` - Aprovado
+          * `reprovado` - Reprovado
+      tags:
+      - tces
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTceList'
+          description: ''
+    post:
+      operationId: tces_create
+      description: |-
+        Disponibiliza operações CRUD para TCE
+        (Termo de Compromisso de Estágio).
+
+        Também disponibiliza ações específicas para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      tags:
+      - tces
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tce'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tce'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tce'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tce'
+          description: ''
+  /api/tces/{apoliceseguro}/:
+    get:
+      operationId: tces_retrieve
+      description: |-
+        Disponibiliza operações CRUD para TCE
+        (Termo de Compromisso de Estágio).
+
+        Também disponibiliza ações específicas para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: path
+        name: apoliceseguro
+        schema:
+          type: string
+          title: Apólice de Seguro
+        description: A unique value identifying this tce.
+        required: true
+      tags:
+      - tces
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tce'
+          description: ''
+    put:
+      operationId: tces_update
+      description: |-
+        Disponibiliza operações CRUD para TCE
+        (Termo de Compromisso de Estágio).
+
+        Também disponibiliza ações específicas para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: path
+        name: apoliceseguro
+        schema:
+          type: string
+          title: Apólice de Seguro
+        description: A unique value identifying this tce.
+        required: true
+      tags:
+      - tces
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tce'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tce'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tce'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tce'
+          description: ''
+    patch:
+      operationId: tces_partial_update
+      description: |-
+        Disponibiliza operações CRUD para TCE
+        (Termo de Compromisso de Estágio).
+
+        Também disponibiliza ações específicas para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: path
+        name: apoliceseguro
+        schema:
+          type: string
+          title: Apólice de Seguro
+        description: A unique value identifying this tce.
+        required: true
+      tags:
+      - tces
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTce'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTce'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTce'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tce'
+          description: ''
+    delete:
+      operationId: tces_destroy
+      description: |-
+        Disponibiliza operações CRUD para TCE
+        (Termo de Compromisso de Estágio).
+
+        Também disponibiliza ações específicas para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: path
+        name: apoliceseguro
+        schema:
+          type: string
+          title: Apólice de Seguro
+        description: A unique value identifying this tce.
+        required: true
+      tags:
+      - tces
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/tces/{apoliceseguro}/aprovar/:
+    post:
+      operationId: tces_aprovar_create
+      description: |-
+        Aprova um TCE específico.
+
+        Regras:
+        - Não permite aprovar um TCE já aprovado.
+        - Executa a regra de negócio se_aprovar().
+      parameters:
+      - in: path
+        name: apoliceseguro
+        schema:
+          type: string
+          title: Apólice de Seguro
+        description: A unique value identifying this tce.
+        required: true
+      tags:
+      - tces
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tce'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tce'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tce'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tce'
+          description: ''
+  /api/tces/{apoliceseguro}/reprovar/:
+    post:
+      operationId: tces_reprovar_create
+      description: |-
+        Disponibiliza operações CRUD para TCE
+        (Termo de Compromisso de Estágio).
+
+        Também disponibiliza ações específicas para:
+        - Aprovação
+        - Reprovação
+
+        Utiliza select_related para otimizar
+        consultas dos relacionamentos.
+      parameters:
+      - in: path
+        name: apoliceseguro
+        schema:
+          type: string
+          title: Apólice de Seguro
+        description: A unique value identifying this tce.
+        required: true
+      tags:
+      - tces
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tce'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tce'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tce'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tce'
+          description: ''
+  /api/usuarios/:
+    get:
+      operationId: usuarios_list
+      description: |-
+        Disponibiliza operações CRUD completas
+        para usuários do sistema.
+
+        Endpoints gerados automaticamente:
+        - Listar usuários
+        - Consultar usuário
+        - Cadastrar usuário
+        - Atualizar usuário
+        - Excluir usuário
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - usuarios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUsuarioList'
+          description: ''
+    post:
+      operationId: usuarios_create
+      description: |-
+        Disponibiliza operações CRUD completas
+        para usuários do sistema.
+
+        Endpoints gerados automaticamente:
+        - Listar usuários
+        - Consultar usuário
+        - Cadastrar usuário
+        - Atualizar usuário
+        - Excluir usuário
+      tags:
+      - usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+  /api/usuarios/{matricula}/:
+    get:
+      operationId: usuarios_retrieve
+      description: |-
+        Disponibiliza operações CRUD completas
+        para usuários do sistema.
+
+        Endpoints gerados automaticamente:
+        - Listar usuários
+        - Consultar usuário
+        - Cadastrar usuário
+        - Atualizar usuário
+        - Excluir usuário
+      parameters:
+      - in: path
+        name: matricula
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this usuário.
+        required: true
+      tags:
+      - usuarios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+    put:
+      operationId: usuarios_update
+      description: |-
+        Disponibiliza operações CRUD completas
+        para usuários do sistema.
+
+        Endpoints gerados automaticamente:
+        - Listar usuários
+        - Consultar usuário
+        - Cadastrar usuário
+        - Atualizar usuário
+        - Excluir usuário
+      parameters:
+      - in: path
+        name: matricula
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this usuário.
+        required: true
+      tags:
+      - usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+    patch:
+      operationId: usuarios_partial_update
+      description: |-
+        Disponibiliza operações CRUD completas
+        para usuários do sistema.
+
+        Endpoints gerados automaticamente:
+        - Listar usuários
+        - Consultar usuário
+        - Cadastrar usuário
+        - Atualizar usuário
+        - Excluir usuário
+      parameters:
+      - in: path
+        name: matricula
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this usuário.
+        required: true
+      tags:
+      - usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUsuario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUsuario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUsuario'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+    delete:
+      operationId: usuarios_destroy
+      description: |-
+        Disponibiliza operações CRUD completas
+        para usuários do sistema.
+
+        Endpoints gerados automaticamente:
+        - Listar usuários
+        - Consultar usuário
+        - Cadastrar usuário
+        - Atualizar usuário
+        - Excluir usuário
+      parameters:
+      - in: path
+        name: matricula
+        schema:
+          type: string
+          title: Matrícula
+        description: A unique value identifying this usuário.
+        required: true
+      tags:
+      - usuarios
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AlunoSerializerPublico:
+      type: object
+      description: |-
+        Versão restrita do AlunoSerializer.
+        Usada quando o solicitante NÃO é Secretaria — omite dados sensíveis como CPF e telefone.
+      properties:
+        usuario:
+          type: string
+          title: Matrícula
+        matricula:
+          type: string
+          readOnly: true
+        periodo:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: Período
+        curso:
+          allOf:
+          - $ref: '#/components/schemas/Curso'
+          readOnly: true
+        procurando_estagio:
+          type: boolean
+          title: Procurando Estágio
+      required:
+      - curso
+      - matricula
+      - periodo
+      - usuario
+    AreaEnum:
+      enum:
+      - negocios
+      - tecnologia
+      - financas
+      - direito
+      - engenharia
+      type: string
+      description: |-
+        * `negocios` - Negócios
+        * `tecnologia` - Tecnologia
+        * `financas` - Finanças
+        * `direito` - Direito
+        * `engenharia` - Engenharia
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          title: Nome do usuário
+        password:
+          type: string
+          writeOnly: true
+          title: Senha
+        token:
+          type: string
+          readOnly: true
+      required:
+      - password
+      - token
+      - username
+    Coordenador:
+      type: object
+      description: Serializador responsável por representar os dados do coordenador.
+      properties:
+        usuario:
+          type: string
+          title: Usuário
+        area:
+          allOf:
+          - $ref: '#/components/schemas/AreaEnum'
+          title: Área
+      required:
+      - area
+      - usuario
+    Curso:
+      type: object
+      description: |-
+        Serializador da entidade Curso.
+        O identificador é somente leitura para evitar alterações indevidas.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          allOf:
+          - $ref: '#/components/schemas/NomeEnum'
+          title: Nome do Curso
+      required:
+      - id
+      - nome
+    Empresa:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          title: Nome da Empresa
+          maxLength: 255
+        telefone:
+          type: string
+          maxLength: 128
+        cnpj:
+          type: string
+          maxLength: 18
+        cep:
+          type: string
+          maxLength: 9
+        uf:
+          type: string
+          maxLength: 2
+        cidade:
+          type: string
+          maxLength: 100
+        log:
+          type: string
+          title: Logradouro
+          maxLength: 255
+        num:
+          type: string
+          title: Número
+          maxLength: 20
+        comp:
+          type: string
+          nullable: true
+          title: Complemento
+          maxLength: 100
+        bairro:
+          type: string
+          maxLength: 100
+      required:
+      - bairro
+      - cep
+      - cidade
+      - cnpj
+      - id
+      - log
+      - nome
+      - num
+      - telefone
+      - uf
+    Estagio:
+      type: object
+      properties:
+        idestagio:
+          type: integer
+          readOnly: true
+        tce:
+          type: string
+          title: Apólice de Seguro
+        empresa_id:
+          type: integer
+        empresa_nome:
+          type: string
+          readOnly: true
+        dtinicio:
+          type: string
+          format: date
+          title: Data de Início
+        dtfim:
+          type: string
+          format: date
+          nullable: true
+          title: Data de Término
+        cargahorariasemanal:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          title: Carga Horária Semanal
+      required:
+      - cargahorariasemanal
+      - dtinicio
+      - empresa_id
+      - empresa_nome
+      - idestagio
+      - tce
+    NomeEnum:
+      enum:
+      - administração
+      - analise e desenvolvimento de sistemas
+      - arquitetura e urbanismo
+      - ciencia de dados e inteligencia artificial
+      - ciencias contabeis
+      - direito
+      - ciencias economicas
+      - comunicacao social - publicidade e propaganda
+      - engenharia civil
+      - engenharia de producao
+      - engenharia da computacao
+      - engenharia de software
+      - relacoes internacionais
+      type: string
+      description: |-
+        * `administração` - Administração
+        * `analise e desenvolvimento de sistemas` - Análise e Desenvolvimento de Sistemas
+        * `arquitetura e urbanismo` - Arquitetura e Urbanismo
+        * `ciencia de dados e inteligencia artificial` - Ciência de Dados e Inteligência Artificial
+        * `ciencias contabeis` - Ciências Contábeis
+        * `direito` - Direito
+        * `ciencias economicas` - Ciências Econômicas
+        * `comunicacao social - publicidade e propaganda` - Comunicação Social - Publicidade e Propaganda
+        * `engenharia civil` - Engenharia Civil
+        * `engenharia de producao` - Engenharia de Produção
+        * `engenharia da computacao` - Engenharia da Computação
+        * `engenharia de software` - Engenharia de Software
+        * `relacoes internacionais` - Relações Internacionais
+    PaginatedAlunoSerializerPublicoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlunoSerializerPublico'
+    PaginatedCoordenadorList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coordenador'
+    PaginatedCursoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Curso'
+    PaginatedEmpresaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Empresa'
+    PaginatedEstagioList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Estagio'
+    PaginatedRelatorioSemestralList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelatorioSemestral'
+    PaginatedSecretariaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Secretaria'
+    PaginatedTceList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tce'
+    PaginatedUsuarioList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Usuario'
+    PatchedAlunoSerializerPublico:
+      type: object
+      description: |-
+        Versão restrita do AlunoSerializer.
+        Usada quando o solicitante NÃO é Secretaria — omite dados sensíveis como CPF e telefone.
+      properties:
+        usuario:
+          type: string
+          title: Matrícula
+        matricula:
+          type: string
+          readOnly: true
+        periodo:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: Período
+        curso:
+          allOf:
+          - $ref: '#/components/schemas/Curso'
+          readOnly: true
+        procurando_estagio:
+          type: boolean
+          title: Procurando Estágio
+    PatchedCoordenador:
+      type: object
+      description: Serializador responsável por representar os dados do coordenador.
+      properties:
+        usuario:
+          type: string
+          title: Usuário
+        area:
+          allOf:
+          - $ref: '#/components/schemas/AreaEnum'
+          title: Área
+    PatchedCurso:
+      type: object
+      description: |-
+        Serializador da entidade Curso.
+        O identificador é somente leitura para evitar alterações indevidas.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          allOf:
+          - $ref: '#/components/schemas/NomeEnum'
+          title: Nome do Curso
+    PatchedEmpresa:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          title: Nome da Empresa
+          maxLength: 255
+        telefone:
+          type: string
+          maxLength: 128
+        cnpj:
+          type: string
+          maxLength: 18
+        cep:
+          type: string
+          maxLength: 9
+        uf:
+          type: string
+          maxLength: 2
+        cidade:
+          type: string
+          maxLength: 100
+        log:
+          type: string
+          title: Logradouro
+          maxLength: 255
+        num:
+          type: string
+          title: Número
+          maxLength: 20
+        comp:
+          type: string
+          nullable: true
+          title: Complemento
+          maxLength: 100
+        bairro:
+          type: string
+          maxLength: 100
+    PatchedEstagio:
+      type: object
+      properties:
+        idestagio:
+          type: integer
+          readOnly: true
+        tce:
+          type: string
+          title: Apólice de Seguro
+        empresa_id:
+          type: integer
+        empresa_nome:
+          type: string
+          readOnly: true
+        dtinicio:
+          type: string
+          format: date
+          title: Data de Início
+        dtfim:
+          type: string
+          format: date
+          nullable: true
+          title: Data de Término
+        cargahorariasemanal:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          title: Carga Horária Semanal
+    PatchedRelatorioSemestral:
+      type: object
+      properties:
+        idrelatorio:
+          type: integer
+          readOnly: true
+        semestre:
+          type: string
+          maxLength: 4
+        data_envio:
+          type: string
+          format: date
+          title: Data de Envio
+        estagio:
+          type: integer
+          title: Estágio
+        horas_estagiadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        coordenador_id:
+          type: integer
+        coordenador_nome:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+          title: Status do Relatório
+    PatchedSecretaria:
+      type: object
+      properties:
+        usuario:
+          type: string
+          title: Matrícula
+        matricula_funcionario:
+          type: string
+          readOnly: true
+    PatchedTce:
+      type: object
+      properties:
+        bolsa:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        apoliceseguro:
+          type: string
+          title: Apólice de Seguro
+          maxLength: 50
+        secretaria:
+          type: string
+          title: Matrícula
+        aluno_id:
+          type: string
+          title: Matrícula
+        aluno_nome:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+          title: Status do TCE
+    PatchedUsuario:
+      type: object
+      description: |-
+        Serializador responsável por representar os dados básicos do usuário.
+        Utilizado para expor informações da classe Usuario na API.
+      properties:
+        username:
+          type: string
+          title: Usuário
+          description: Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_
+            apenas.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Endereço de email
+          maxLength: 254
+        first_name:
+          type: string
+          title: Primeiro nome
+          maxLength: 150
+        last_name:
+          type: string
+          title: Último nome
+          maxLength: 150
+        unidade:
+          $ref: '#/components/schemas/UnidadeEnum'
+        matricula:
+          type: string
+          title: Matrícula
+          maxLength: 12
+    RelatorioSemestral:
+      type: object
+      properties:
+        idrelatorio:
+          type: integer
+          readOnly: true
+        semestre:
+          type: string
+          maxLength: 4
+        data_envio:
+          type: string
+          format: date
+          title: Data de Envio
+        estagio:
+          type: integer
+          title: Estágio
+        horas_estagiadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        coordenador_id:
+          type: integer
+        coordenador_nome:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+          title: Status do Relatório
+      required:
+      - coordenador_id
+      - coordenador_nome
+      - data_envio
+      - estagio
+      - horas_estagiadas
+      - idrelatorio
+      - semestre
+      - status
+    Secretaria:
+      type: object
+      properties:
+        usuario:
+          type: string
+          title: Matrícula
+        matricula_funcionario:
+          type: string
+          readOnly: true
+      required:
+      - matricula_funcionario
+      - usuario
+    StatusEnum:
+      enum:
+      - pendente
+      - aprovado
+      - reprovado
+      type: string
+      description: |-
+        * `pendente` - Pendente
+        * `aprovado` - Aprovado
+        * `reprovado` - Reprovado
+    Tce:
+      type: object
+      properties:
+        bolsa:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        apoliceseguro:
+          type: string
+          title: Apólice de Seguro
+          maxLength: 50
+        secretaria:
+          type: string
+          title: Matrícula
+        aluno_id:
+          type: string
+          title: Matrícula
+        aluno_nome:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+          title: Status do TCE
+      required:
+      - aluno_id
+      - aluno_nome
+      - apoliceseguro
+      - secretaria
+      - status
+    UnidadeEnum:
+      enum:
+      - barra
+      - botafogo
+      type: string
+      description: |-
+        * `barra` - Barra
+        * `botafogo` - Botafogo
+    Usuario:
+      type: object
+      description: |-
+        Serializador responsável por representar os dados básicos do usuário.
+        Utilizado para expor informações da classe Usuario na API.
+      properties:
+        username:
+          type: string
+          title: Usuário
+          description: Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_
+            apenas.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Endereço de email
+          maxLength: 254
+        first_name:
+          type: string
+          title: Primeiro nome
+          maxLength: 150
+        last_name:
+          type: string
+          title: Último nome
+          maxLength: 150
+        unidade:
+          $ref: '#/components/schemas/UnidadeEnum'
+        matricula:
+          type: string
+          title: Matrícula
+          maxLength: 12
+      required:
+      - matricula
+      - unidade
+      - username
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
