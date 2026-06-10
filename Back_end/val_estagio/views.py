@@ -245,7 +245,8 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
 
     queryset = RelatorioSemestral.objects.select_related(
         'coordenador__usuario',
-        'estagio'
+        'estagio__tce__aluno__usuario',
+        'estagio__empresa'
     )
     serializer_class = RelatorioSemestralSerializer
     

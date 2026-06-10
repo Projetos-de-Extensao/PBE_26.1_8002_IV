@@ -32,8 +32,7 @@ SECRET_KEY = config(
 )
 
 FIELD_ENCRYPTION_KEY = config(
-    'FIELD_ENCRYPTION_KEY',
-    default='f5i67XFO7QwR-0t5bzeDxdTHSizHm1Utgjz3jjeI8H8='
+    'FIELD_ENCRYPTION_KEY'
 )
 
 DEBUG = config_bool(
