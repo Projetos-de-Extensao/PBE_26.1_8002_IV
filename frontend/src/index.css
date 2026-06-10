@@ -1,111 +1,39 @@
+@import "tailwindcss";
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --brand: #1B3A5C;
+  --brand-light: #2F7FBF;
+  --sidebar-w: 220px;
+  
+  /* Cores de fundo e texto simuladas do seu protótipo */
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f8fafc;
+  --color-background-tertiary: #f1f5f9;
+  --color-border-secondary: #e2e8f0;
+  --color-border-tertiary: #e2e8f0;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #64748b;
+  
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+/* Classes customizadas do seu protótipo que mantivemos para agilidade */
+.role-badge { display: inline-block; font-size: 9px; font-weight: 500; padding: 2px 6px; border-radius: 10px; margin-top: 3px; }
+.role-aluno { background: rgba(39,174,96,0.25); color: #27AE60; }
+.role-secretaria { background: rgba(47,127,191,0.25); color: #2F7FBF; }
+.role-coordenador { background: rgba(245,166,35,0.25); color: #F5A623; }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
+.status-pill { font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 10px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
+.status-pendente { background: #FFF3DC; color: #7B4A00; }
+.status-aprovado { background: #EAF3DE; color: #27500A; }
+.status-reprovado { background: #FCEBEB; color: #791F1F; }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
+.stat-dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-pendente { background: #F5A623; }
+.dot-aprovado { background: #27AE60; }
+.dot-reprovado { background: #E74C3C; }
 
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-}
+.doc-icon { width: 32px; height: 32px; border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.doc-icon-tce { background: #E8F4FD; color: #185FA5; }
+.doc-icon-rel { background: #EAF3DE; color: #3B6D11; }
