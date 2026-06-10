@@ -1,0 +1,339 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+:root {
+  --brand: #1B3A5C;
+  --brand-light: #2F7FBF;
+  --sidebar-w: 220px;
+}
+.app { display: flex; min-height: 600px; background: var(--color-background-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+
+.sidebar { width: var(--sidebar-w); background: #1B3A5C; display: flex; flex-direction: column; padding: 0; flex-shrink: 0; }
+.sidebar-logo { padding: 20px 18px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.sidebar-logo-title { font-size: 14px; font-weight: 500; color: #fff; letter-spacing: 0.02em; }
+.sidebar-logo-sub { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+.sidebar-user { padding: 14px 18px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.user-avatar { width: 32px; height: 32px; border-radius: 50%; background: #2F7FBF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #fff; flex-shrink: 0; }
+.user-info { overflow: hidden; }
+.user-name { font-size: 12px; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-role { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+.role-badge { display: inline-block; font-size: 9px; font-weight: 500; padding: 2px 6px; border-radius: 10px; margin-top: 3px; }
+.role-aluno { background: rgba(39,174,96,0.25); color: #6BDFAA; }
+.role-secretaria { background: rgba(47,127,191,0.25); color: #90C8EF; }
+.role-coordenador { background: rgba(245,166,35,0.25); color: #F7C96D; }
+
+.nav { padding: 10px 0; flex: 1; }
+.nav-label { font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 18px 4px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 18px; font-size: 13px; color: rgba(255,255,255,0.65); cursor: pointer; transition: background 0.15s; border-left: 3px solid transparent; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+.nav-item.active { background: rgba(47,127,191,0.25); color: #fff; border-left-color: #2F7FBF; }
+.nav-item i { font-size: 16px; width: 18px; }
+.nav-badge { margin-left: auto; background: #F5A623; color: #7B4A00; font-size: 9px; font-weight: 500; padding: 2px 6px; border-radius: 10px; }
+
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+.page-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+.page-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--border-radius-md); font-size: 12px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); transition: background 0.15s; }
+.btn:hover { background: var(--color-background-secondary); }
+.btn-primary { background: #1B3A5C; color: #fff; border-color: #1B3A5C; }
+.btn-primary:hover { background: #2F7FBF; border-color: #2F7FBF; }
+
+.content { padding: 20px 24px; overflow-y: auto; flex: 1; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 14px 16px; }
+.stat-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.stat-label i { font-size: 14px; }
+.stat-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+.stat-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 3px; }
+.stat-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+.dot-pendente { background: #F5A623; }
+.dot-aprovado { background: #27AE60; }
+.dot-reprovado { background: #E74C3C; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 16px 18px; }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); display: flex; align-items: center; gap: 8px; }
+.card-title i { font-size: 16px; color: var(--color-text-secondary); }
+.card-link { font-size: 11px; color: #2F7FBF; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+
+.doc-list { display: flex; flex-direction: column; gap: 8px; }
+.doc-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+.doc-icon { width: 32px; height: 32px; border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.doc-icon-tce { background: #E8F4FD; color: #185FA5; }
+.doc-icon-rel { background: #EAF3DE; color: #3B6D11; }
+.doc-info { flex: 1; min-width: 0; }
+.doc-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-meta { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+.status-pill { font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 10px; white-space: nowrap; }
+.status-pendente { background: #FFF3DC; color: #7B4A00; }
+.status-aprovado { background: #EAF3DE; color: #27500A; }
+.status-reprovado { background: #FCEBEB; color: #791F1F; }
+.status-pendente-pulse { animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+
+.empty-state { text-align: center; padding: 24px; color: var(--color-text-secondary); font-size: 12px; }
+.empty-state i { font-size: 28px; display: block; margin-bottom: 8px; opacity: 0.4; }
+
+.estagio-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px 14px; background: var(--color-background-secondary); margin-bottom: 8px; }
+.estagio-empresa { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.estagio-meta { font-size: 11px; color: var(--color-text-secondary); margin-top: 3px; display: flex; gap: 12px; }
+.estagio-meta span { display: flex; align-items: center; gap: 4px; }
+.estagio-meta i { font-size: 13px; }
+.progress-bar-wrap { margin-top: 8px; }
+.progress-label { font-size: 10px; color: var(--color-text-secondary); display: flex; justify-content: space-between; margin-bottom: 4px; }
+.progress-bar { height: 4px; background: var(--color-border-tertiary); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: #27AE60; border-radius: 2px; transition: width 0.5s; }
+
+.role-switch { display: flex; gap: 6px; margin-bottom: 16px; }
+.role-btn { padding: 5px 12px; font-size: 11px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
+.role-btn.active { background: #1B3A5C; color: #fff; border-color: #1B3A5C; }
+
+.section-header { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; margin-top: 18px; }
+.section-header:first-child { margin-top: 0; }
+</style>
+
+<h2 class="sr-only">Val Estágio — painel de gestão de estágios universitários</h2>
+
+<div style="margin-bottom: 10px;">
+  <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 6px;">Visualizar como:</div>
+  <div class="role-switch" id="roleSwitch">
+    <button class="role-btn active" onclick="switchRole('aluno')"><i class="ti ti-user-student" aria-hidden="true"></i> Aluno</button>
+    <button class="role-btn" onclick="switchRole('secretaria')"><i class="ti ti-building" aria-hidden="true"></i> Secretaria</button>
+    <button class="role-btn" onclick="switchRole('coordenador')"><i class="ti ti-school" aria-hidden="true"></i> Coordenador</button>
+  </div>
+</div>
+
+<div class="app" id="appRoot"></div>
+
+<script>
+const roles = {
+  aluno: {
+    name: 'João Silva',
+    matricula: '202400012345',
+    role: 'Aluno',
+    curso: 'Engenharia de Software',
+    roleClass: 'role-aluno',
+    navItems: [
+      { icon: 'ti-layout-dashboard', label: 'Painel', active: true },
+      { icon: 'ti-file-description', label: 'Meus TCEs', badge: 1 },
+      { icon: 'ti-briefcase', label: 'Meu Estágio' },
+      { icon: 'ti-report', label: 'Relatórios', badge: 2 },
+    ],
+    stats: [
+      { label: 'Estágio', icon: 'ti-briefcase', value: 'Ativo', sub: 'TechCorp Ltda', color: '#27AE60' },
+      { label: 'Horas acumuladas', icon: 'ti-clock', value: '210', sub: 'de 350 horas' },
+      { label: 'TCE', icon: 'ti-file-description', value: 'Aprovado', sub: 'Apólice #2024-001', color: '#27AE60' },
+      { label: 'Relatórios', icon: 'ti-report', value: '2', sub: '1 pendente de análise' },
+    ],
+    docs: [
+      { type: 'tce', name: 'TCE #2024-001', meta: 'TechCorp Ltda · Secretaria Maria Lima', status: 'aprovado' },
+    ],
+    relatorios: [
+      { name: 'Relatório 24.1', meta: 'Enviado em 15/07/2024 · 120h', status: 'aprovado' },
+      { name: 'Relatório 24.2', meta: 'Enviado em 10/12/2024 · 90h', status: 'pendente' },
+    ],
+    estagio: { empresa: 'TechCorp Ltda', inicio: '01/03/2024', carga: '20h/semana', horas: 210, max: 350 },
+  },
+  secretaria: {
+    name: 'Maria Lima',
+    matricula: '202100056789',
+    role: 'Secretaria',
+    curso: null,
+    roleClass: 'role-secretaria',
+    navItems: [
+      { icon: 'ti-layout-dashboard', label: 'Painel', active: true },
+      { icon: 'ti-users', label: 'Alunos' },
+      { icon: 'ti-file-description', label: 'TCEs', badge: 3 },
+      { icon: 'ti-building-store', label: 'Empresas' },
+    ],
+    stats: [
+      { label: 'Alunos ativos', icon: 'ti-users', value: '148' },
+      { label: 'TCEs pendentes', icon: 'ti-file-description', value: '3', sub: 'aguardando aprovação', color: '#F5A623' },
+      { label: 'Estágios ativos', icon: 'ti-briefcase', value: '62' },
+      { label: 'Empresas cadastradas', icon: 'ti-building-store', value: '27' },
+    ],
+    docs: [
+      { type: 'tce', name: 'TCE #2024-045', meta: 'João Silva · TechCorp Ltda', status: 'pendente' },
+      { type: 'tce', name: 'TCE #2024-044', meta: 'Ana Costa · StartupXP', status: 'pendente' },
+      { type: 'tce', name: 'TCE #2024-043', meta: 'Carlos Melo · Banco Digital', status: 'pendente' },
+    ],
+    relatorios: [],
+    estagio: null,
+  },
+  coordenador: {
+    name: 'Prof. Ribeiro',
+    matricula: '201800034567',
+    role: 'Coordenador',
+    curso: 'Engenharia de Software',
+    roleClass: 'role-coordenador',
+    navItems: [
+      { icon: 'ti-layout-dashboard', label: 'Painel', active: true },
+      { icon: 'ti-report', label: 'Relatórios', badge: 4 },
+      { icon: 'ti-users', label: 'Alunos' },
+      { icon: 'ti-school', label: 'Coordenadores' },
+    ],
+    stats: [
+      { label: 'Relatórios pendentes', icon: 'ti-report', value: '4', sub: 'aguardando análise', color: '#F5A623' },
+      { label: 'Aprovados este semestre', icon: 'ti-check', value: '18', color: '#27AE60' },
+      { label: 'Reprovados', icon: 'ti-x', value: '2', color: '#E74C3C' },
+      { label: 'Área', icon: 'ti-cpu', value: 'Tecnologia' },
+    ],
+    docs: [],
+    relatorios: [
+      { name: 'Relatório 24.2 — João Silva', meta: 'TechCorp Ltda · 90h estagiadas', status: 'pendente' },
+      { name: 'Relatório 24.2 — Ana Costa', meta: 'StartupXP · 80h estagiadas', status: 'pendente' },
+      { name: 'Relatório 24.1 — Marcos T.', meta: 'TechCorp Ltda · 120h estagiadas', status: 'pendente' },
+      { name: 'Relatório 24.2 — Carla N.', meta: 'BigData Inc · 110h estagiadas', status: 'pendente' },
+    ],
+    estagio: null,
+  }
+};
+
+let currentRole = 'aluno';
+
+function switchRole(role) {
+  currentRole = role;
+  document.querySelectorAll('.role-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['aluno','secretaria','coordenador'][i] === role);
+  });
+  render();
+}
+
+function statusPill(status) {
+  const isPendente = status === 'pendente';
+  return `<span class="status-pill status-${status}${isPendente ? ' status-pendente-pulse' : ''}">
+    <span class="stat-dot dot-${status}" style="display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:3px;vertical-align:2px"></span>
+    ${status.charAt(0).toUpperCase() + status.slice(1)}
+  </span>`;
+}
+
+function render() {
+  const d = roles[currentRole];
+  const root = document.getElementById('appRoot');
+
+  const navHTML = d.navItems.map(item => `
+    <div class="nav-item ${item.active ? 'active' : ''}">
+      <i class="ti ${item.icon}" aria-hidden="true"></i>
+      ${item.label}
+      ${item.badge ? `<span class="nav-badge">${item.badge}</span>` : ''}
+    </div>
+  `).join('');
+
+  const statsHTML = d.stats.map(s => `
+    <div class="stat-card">
+      <div class="stat-label"><i class="ti ${s.icon}" aria-hidden="true"></i> ${s.label}</div>
+      <div class="stat-value" style="${s.color ? `color:${s.color}` : ''}">${s.value}</div>
+      ${s.sub ? `<div class="stat-sub">${s.sub}</div>` : ''}
+    </div>
+  `).join('');
+
+  const docsHTML = d.docs.length > 0 ? d.docs.map(doc => `
+    <div class="doc-item">
+      <div class="doc-icon ${doc.type === 'tce' ? 'doc-icon-tce' : 'doc-icon-rel'}">
+        <i class="ti ${doc.type === 'tce' ? 'ti-file-description' : 'ti-report'}" aria-hidden="true"></i>
+      </div>
+      <div class="doc-info">
+        <div class="doc-name">${doc.name}</div>
+        <div class="doc-meta">${doc.meta}</div>
+      </div>
+      ${statusPill(doc.status)}
+    </div>
+  `).join('') : `<div class="empty-state"><i class="ti ti-inbox" aria-hidden="true"></i>Nenhum documento pendente</div>`;
+
+  const relatoriosHTML = d.relatorios.length > 0 ? d.relatorios.map(r => `
+    <div class="doc-item">
+      <div class="doc-icon doc-icon-rel"><i class="ti ti-report" aria-hidden="true"></i></div>
+      <div class="doc-info">
+        <div class="doc-name">${r.name}</div>
+        <div class="doc-meta">${r.meta}</div>
+      </div>
+      ${statusPill(r.status)}
+    </div>
+  `).join('') : `<div class="empty-state"><i class="ti ti-inbox" aria-hidden="true"></i>Nenhum relatório</div>`;
+
+  const estagioHTML = d.estagio ? `
+    <div class="estagio-card">
+      <div class="estagio-empresa">${d.estagio.empresa}</div>
+      <div class="estagio-meta">
+        <span><i class="ti ti-calendar" aria-hidden="true"></i> Início: ${d.estagio.inicio}</span>
+        <span><i class="ti ti-clock" aria-hidden="true"></i> ${d.estagio.carga}</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-label">
+          <span>Horas acumuladas</span>
+          <span>${d.estagio.horas} / ${d.estagio.max}h</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(d.estagio.horas/d.estagio.max*100)}%"></div></div>
+      </div>
+    </div>
+  ` : `<div class="empty-state"><i class="ti ti-briefcase" aria-hidden="true"></i>Nenhum estágio ativo</div>`;
+
+  const docCardTitle = currentRole === 'aluno' ? 'Meus TCEs' : currentRole === 'secretaria' ? 'TCEs pendentes de aprovação' : 'Documentos';
+  const relCardTitle = currentRole === 'coordenador' ? 'Relatórios para análise' : 'Relatórios semestrais';
+
+  root.innerHTML = `
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-title">Val Estágio</div>
+        <div class="sidebar-logo-sub">Sistema de gestão acadêmica</div>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-avatar">${d.name.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+        <div class="user-info">
+          <div class="user-name">${d.name}</div>
+          <div class="user-role">${d.matricula}</div>
+          <span class="role-badge ${d.roleClass}">${d.role}</span>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Navegação principal">
+        <div class="nav-label">Menu</div>
+        ${navHTML}
+      </nav>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div>
+          <div class="page-title">Painel de controle</div>
+          <div class="page-sub">${d.role === 'Aluno' ? d.curso : d.role + ' · Unidade Barra'}</div>
+        </div>
+        <div class="topbar-actions">
+          ${currentRole === 'secretaria' ? `<button class="btn btn-primary" onclick="sendPrompt('Como criar um novo TCE para um aluno?')"><i class="ti ti-plus" aria-hidden="true"></i> Novo TCE ↗</button>` : ''}
+          ${currentRole === 'aluno' ? `<button class="btn" onclick="sendPrompt('Quais são meus relatórios pendentes?')">Ver relatórios ↗</button>` : ''}
+          ${currentRole === 'coordenador' ? `<button class="btn btn-primary" onclick="sendPrompt('Como aprovar um relatório semestral via API?')"><i class="ti ti-check" aria-hidden="true"></i> Aprovar relatório ↗</button>` : ''}
+        </div>
+      </div>
+      <div class="content">
+        <div class="stats-grid">${statsHTML}</div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-file-description" aria-hidden="true"></i> ${docCardTitle}</div>
+              <span class="card-link" onclick="sendPrompt('Me explica o endpoint de aprovação de TCE')">Ver todos <i class="ti ti-arrow-right" style="font-size:11px" aria-hidden="true"></i></span>
+            </div>
+            <div class="doc-list">${docsHTML}</div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-report" aria-hidden="true"></i> ${relCardTitle}</div>
+              <span class="card-link" onclick="sendPrompt('Como funciona o fluxo de aprovação de relatórios?')">Ver todos <i class="ti ti-arrow-right" style="font-size:11px" aria-hidden="true"></i></span>
+            </div>
+            <div class="doc-list">${relatoriosHTML}</div>
+          </div>
+        </div>
+        ${currentRole === 'aluno' ? `
+          <div class="section-header">Meu estágio ativo</div>
+          ${estagioHTML}
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
+render();
+</script>
