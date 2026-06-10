@@ -79,7 +79,6 @@ class AlunoSerializerPublico(serializers.ModelSerializer):
             'periodo',
             'curso',
             'procurando_estagio',
-            'horas_estagio',
         )
 
 # --- SERIALIZADOR DE SECRETARIA ---
