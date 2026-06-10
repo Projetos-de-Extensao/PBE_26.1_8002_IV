@@ -36,26 +36,34 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 # --- VIEWSET DE ALUNOS ---
 
 class AlunoViewSet(viewsets.ModelViewSet):
-    """
-    Disponibiliza operações CRUD para alunos.
-
-    Utiliza select_related para otimizar
-    consultas envolvendo:
-    - Usuário vinculado
-    - Curso vinculado
-    """
-
-    queryset = Aluno.objects.select_related(
-        'usuario',
-        'curso'
-    )
+    queryset = Aluno.objects.select_related('usuario', 'curso')
     serializer_class = AlunoSerializer
 
-    filterset_fields = [
-        'procurando_estagio',
-        'curso',
-        'periodo'
-    ]
+    filterset_fields = ['procurando_estagio', 'curso', 'periodo']
+
+    def get_serializer_class(self):
+        """
+        Secretaria recebe o serializer completo (com CPF, telefone etc.).
+        Coordenador e Aluno recebem apenas dados não-sensíveis.
+        """
+        if hasattr(self.request.user, 'secretaria'):
+            return AlunoSerializer
+        return AlunoSerializerPublico
+
+    def get_queryset(self):
+        """
+        Aluno só enxerga a si mesmo.
+        Secretaria e Coordenador enxergam todos.
+        """
+        qs = super().get_queryset()
+        user = self.request.user
+        if (
+            hasattr(user, 'aluno') and
+            not hasattr(user, 'secretaria') and
+            not hasattr(user, 'coordenador')
+        ):
+            return qs.filter(usuario=user)
+        return qs
 
     def get_permissions(self):
         if self.action == 'list':
@@ -335,9 +343,13 @@ class EstagioViewSet(viewsets.ModelViewSet):
 
         estagio = self.get_object()
 
-        coordenador = Coordenador.objects.get(
-            pk=request.data.get('coordenador')
-        )
+        coordenador_pk = request.data.get('coordenador')
+        if not coordenador_pk:
+            raise ValidationError({'coordenador': 'Este campo é obrigatório.'})
+        try:
+            coordenador = Coordenador.objects.get(pk=coordenador_pk)
+        except Coordenador.DoesNotExist:
+            raise ValidationError({'coordenador': 'Coordenador não encontrado.'})
 
         relatorio = estagio.adicionar_relatorio(
             coordenador=coordenador,
