@@ -1,29 +1,63 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { KeyRound, UserRound, Users } from "lucide-react";
+import { KeyRound, UserRound, Loader2 } from "lucide-react";
+import { login } from "../api/auth";
 
 export default function Login() {
     const navigate = useNavigate();
+    
     const [matricula, setMatricula] = useState("");
     const [senha, setSenha] = useState("");
-    const [role, setRole] = useState("aluno"); // Novo estado para o tipo de usuário
-    const [erro, setErro] = useState(false);
+    const [erro, setErro] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setErro("");
 
-        if (matricula.length > 0 && senha.length > 0) {
-            // Salva o token e a role escolhida
-            localStorage.setItem("token", "token-simulado-val-estagio");
-            localStorage.setItem("userRole", role); 
+        if (!matricula || !senha) {
+            setErro("Preencha matrícula e senha para continuar.");
+            return;
+        }
+
+        try {
+            setLoading(true);
             
-            // Direciona para o painel específico baseado na role
-            if (role === "aluno") navigate("/aluno");
-            else if (role === "secretaria") navigate("/secretaria");
-            else if (role === "coordenador") navigate("/coordenador");
+            // Faz a requisição para o Django
+            const responseData = await login(matricula, senha);
+
+            const token = responseData.token || responseData.access;
             
-        } else {
-            setErro(true);
+            // AGORA QUEM MANDA É A API: O backend precisa devolver o cargo na resposta do login
+            // Exemplo esperado do backend: { token: "123...", role: "secretaria" }
+            const role = responseData.role || responseData.tipo_usuario;
+
+            if (token) {
+                localStorage.setItem("token", token);
+                
+                // Salva a role verdadeira que veio do banco de dados
+                if (role) {
+                    localStorage.setItem("userRole", role);
+                } else {
+                    // Fallback de segurança se a API ainda não estiver a enviar a role
+                    console.warn("A API não devolveu a role. Entrando como aluno por padrão.");
+                    localStorage.setItem("userRole", "aluno");
+                }
+                
+                // Direciona para o painel correto com base na resposta do backend
+                if (role === "secretaria") navigate("/secretaria");
+                else if (role === "coordenador") navigate("/coordenador");
+                else navigate("/aluno"); // Padrão
+
+            } else {
+                setErro("Formato de token não reconhecido pela API.");
+            }
+
+        } catch (error: any) {
+            console.error("Erro na requisição de login:", error);
+            setErro("Credenciais inválidas. Verifique os seus dados e tente novamente.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -41,31 +75,11 @@ export default function Login() {
                     </h2>
 
                     <form onSubmit={handleLogin} className="flex flex-col gap-5">
-                        {/* CAMPO: TIPO DE USUÁRIO (Apenas para prototipagem) */}
+                        
+                        {/* CAMPO DE MATRÍCULA */}
                         <div>
                             <label className="block text-xs font-medium text-[var(--color-text-secondary)] mb-1.5 uppercase tracking-wider">
-                                Entrar como
-                            </label>
-                            <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--color-text-secondary)]">
-                                    <Users size={18} />
-                                </div>
-                                <select
-                                    value={role}
-                                    onChange={(e) => setRole(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-background-tertiary)] border border-[var(--color-border-tertiary)] rounded-lg text-[14px] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[#2F7FBF] transition-all appearance-none"
-                                >
-                                    <option value="aluno">Aluno</option>
-                                    <option value="secretaria">Secretaria</option>
-                                    <option value="coordenador">Coordenador</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        {/* CAMPO: MATRÍCULA */}
-                        <div>
-                            <label className="block text-xs font-medium text-[var(--color-text-secondary)] mb-1.5 uppercase tracking-wider">
-                                Matrícula ou E-mail
+                                Matrícula (Username)
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--color-text-secondary)]">
@@ -74,14 +88,15 @@ export default function Login() {
                                 <input
                                     type="text"
                                     value={matricula}
-                                    onChange={(e) => { setMatricula(e.target.value); setErro(false); }}
-                                    className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-background-tertiary)] border border-[var(--color-border-tertiary)] rounded-lg text-[14px] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[#2F7FBF] transition-all"
+                                    onChange={(e) => { setMatricula(e.target.value); setErro(""); }}
+                                    disabled={loading}
+                                    className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-background-tertiary)] border border-[var(--color-border-tertiary)] rounded-lg text-[14px] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[#2F7FBF] transition-all disabled:opacity-50"
                                     placeholder="Ex: 202400012345"
                                 />
                             </div>
                         </div>
 
-                        {/* CAMPO: SENHA */}
+                        {/* CAMPO DE SENHA */}
                         <div>
                             <label className="block text-xs font-medium text-[var(--color-text-secondary)] mb-1.5 uppercase tracking-wider">
                                 Senha
@@ -93,21 +108,26 @@ export default function Login() {
                                 <input
                                     type="password"
                                     value={senha}
-                                    onChange={(e) => { setSenha(e.target.value); setErro(false); }}
-                                    className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-background-tertiary)] border border-[var(--color-border-tertiary)] rounded-lg text-[14px] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[#2F7FBF] transition-all"
+                                    onChange={(e) => { setSenha(e.target.value); setErro(""); }}
+                                    disabled={loading}
+                                    className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-background-tertiary)] border border-[var(--color-border-tertiary)] rounded-lg text-[14px] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[#2F7FBF] transition-all disabled:opacity-50"
                                     placeholder="••••••••"
                                 />
                             </div>
                         </div>
 
                         {erro && (
-                            <div className="text-xs text-[#E74C3C] text-center font-medium bg-[#FCEBEB] py-2 rounded-md">
-                                Preencha matrícula e senha para continuar.
+                            <div className="text-xs text-[#E74C3C] text-center font-medium bg-[#FCEBEB] py-2.5 rounded-md border border-[#E74C3C]/20">
+                                {erro}
                             </div>
                         )}
 
-                        <button type="submit" className="w-full mt-2 bg-[#1B3A5C] hover:bg-[#2F7FBF] text-white font-medium py-2.5 rounded-lg transition-colors flex justify-center items-center gap-2 text-sm">
-                            Entrar no sistema
+                        <button 
+                            type="submit" 
+                            disabled={loading}
+                            className="w-full mt-2 bg-[#1B3A5C] hover:bg-[#2F7FBF] text-white font-medium py-2.5 rounded-lg transition-colors flex justify-center items-center gap-2 text-sm disabled:bg-[#1B3A5C]/70 disabled:cursor-not-allowed"
+                        >
+                            {loading ? <><Loader2 size={18} className="animate-spin" /> Autenticando...</> : "Entrar no sistema"}
                         </button>
                     </form>
                 </div>

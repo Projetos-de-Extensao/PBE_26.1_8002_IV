@@ -1,22 +1,23 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import MainLayout from "./layouts/MainLayout";
-import DashboardAluno from "./pages/Dashboard"; // Aquele Dashboard que fizemos antes
+import DashboardAluno from "./pages/Dashboard";
 import RoleRedirect from "./components/RoleRedirect";
 
-// Exemplo de dashboards vazios (você vai criar eles depois)
+// Exemplo de dashboards vazios
 const DashboardSecretaria = () => <div className="p-4">Painel da Secretaria</div>;
 const DashboardCoordenador = () => <div className="p-4">Painel do Coordenador</div>;
 
-export default function AppRoutes() {
+export default function App() {
     return (
         <Routes>
+            {/* Rota de Login */}
             <Route path="/login" element={<Login />} />
             
-            {/* O MainLayout já tem a sua lógica de rotas protegidas por volta dele */}
+            {/* Rotas protegidas dentro do Layout Principal */}
             <Route element={<MainLayout />}>
                 
-                {/* Rota raiz: Verifica quem é o usuário e redireciona */}
+                {/* Rota raiz: Verifica quem é o utilizador e redireciona */}
                 <Route path="/" element={<RoleRedirect />} />
                 
                 {/* Dashboards Específicos */}

@@ -9,6 +9,8 @@ from .permissions import (
     IsSecretariaOuCoordenador, IsSecretariaOuAluno,
     IsSecretariaOuCoordenadorOuAluno, IsCoordenadorOuAluno
 )
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
 from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, AlunoSerializerPublico, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
 from .choices import StatusDocumento
@@ -345,7 +347,7 @@ class EstagioViewSet(viewsets.ModelViewSet):
     detail=True,
     methods=['post'],
     url_path='adicionar_relatorio'
-)
+    )
     def adicionar_relatorio(self, request, pk=None):
 
         estagio = self.get_object()
@@ -368,3 +370,23 @@ class EstagioViewSet(viewsets.ModelViewSet):
         serializer = RelatorioSemestralSerializer(relatorio)
 
         return Response(serializer.data, status=201)
+
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        
+        # Descobre quem é o usuário com base na mesma lógica das suas permissions.py
+        role = 'aluno' # Padrão
+        if hasattr(user, 'secretaria'):
+            role = 'secretaria'
+        elif hasattr(user, 'coordenador'):
+            role = 'coordenador'
+            
+        return Response({
+            'token': token.key,
+            'role': role, # Agora o frontend consegue ler isso perfeitamente!
+            'nome': user.first_name # Pode mandar o nome também para atualizar o layout
+        })
