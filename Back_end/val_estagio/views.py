@@ -13,6 +13,8 @@ from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce
 from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, AlunoSerializerPublico, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
 from .choices import StatusDocumento
 from drf_spectacular.utils import extend_schema
+from rest_framework.exceptions import ValidationError
+
 
 # --- VIEWSET DE USUÁRIOS ---
 
@@ -388,7 +390,7 @@ class EstagioViewSet(viewsets.ModelViewSet):
                 'type': 'object',
                 'properties': {
                     'coordenador': {'type': 'integer', 'description': 'ID do coordenador responsável (Obrigatório)'},
-                    'semestre': {'type': 'integer', 'description': 'Semestre de referência do relatório'},
+                    'semestre': {'type': 'string', 'description': 'Semestre de referência do relatório'},
                     'horas_estagiadas': {'type': 'integer', 'description': 'Total de horas estagiadas no período'},
                     'data_envio': {'type': 'string', 'format': 'date', 'description': 'Data de envio no formato YYYY-MM-DD'}
                 },

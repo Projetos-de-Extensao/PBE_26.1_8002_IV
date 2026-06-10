@@ -37,7 +37,7 @@ FIELD_ENCRYPTION_KEY = config(
 
 DEBUG = config_bool(
     'DEBUG',
-    default=True
+    default=False
 )
 
 ALLOWED_HOSTS = config(
