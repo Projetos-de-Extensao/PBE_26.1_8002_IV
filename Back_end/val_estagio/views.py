@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAluno, IsSecretaria, IsCoordenador
 from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
-from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
+from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, AlunoSerializerPublico, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
 from .choices import StatusDocumento
 
 # --- VIEWSET DE USUÁRIOS ---
