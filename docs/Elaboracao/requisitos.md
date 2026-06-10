@@ -4,8 +4,8 @@
 
 - Estudantes: Pessoas que utilizam o software para dar entrada no processo
 - Secretaria: Responsável por validar e acompanhar os estágios dos alunos.
-- Orientador: *Pesquisar* 
-- Cordenador: *Pesquisar*
+- Cordenador: Aprovar/Reprovar relatório semestral/ Avaliar horas estagiadas enviadas pelo aluno
+
 
 ## Requisitos
 
