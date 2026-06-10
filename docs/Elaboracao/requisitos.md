@@ -31,3 +31,16 @@
 - **Manutenibilidade:** O código do sistema deve ser organizado e documentado para facilitar futuras manutenções.
 - **Escalabilidade:** O sistema deve suportar o aumento do número de usuários sem degradação significativa de desempenho.
 -**Usabilidade** O sistema deve ter uma arquitetura intuitiva para os usuários
+
+### Matriz de Rastreabilidade
+| Requisito                                                                 | ViewSet(s)                                                                                    | Serializer(s)                                   | Status       |
+| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------- | ------------ |
+| RF01 – O aluno deve ser capaz de se logar                                 |                                                                                               |                                                 | Parcial      |
+| RF03 – O aluno deve ser capaz de enviar a documentação                    | `TceViewSet.create`, `EstagioViewSet.adicionar_relatorio`, `RelatorioSemestralViewSet.create` | `TceSerializer`, `RelatorioSemestralSerializer` | Implementado |
+| RF04 – O aluno deve ser capaz de acompanhar o status do seu chamado       | `TceViewSet.retrieve/list`, `RelatorioSemestralViewSet.retrieve/list`                         | `TceSerializer`, `RelatorioSemestralSerializer` | Implementado |
+| RF05 – O aluno deve editar seus dados cadastrais                          | `AlunoViewSet.update`, `AlunoViewSet.partial_update`                                          | `AlunoSerializer`                               | Implementado |
+| RF06 – A secretaria deve aprovar ou reprovar o estágio                    | `TceViewSet.aprovar_tce`, `TceViewSet.reprovar_tce`                                           | `TceSerializer`                                 | Implementado |
+| RF07 – A secretaria deve ter acesso aos perfis dos alunos com informações | `AlunoViewSet.list`, `AlunoViewSet.retrieve`                                                  | `AlunoSerializer`                               | Implementado |
+| RF08 – A secretaria deve visualizar todos os chamados abertos             | `TceViewSet.list`, `RelatorioSemestralViewSet.list`, filtros por status                       | `TceSerializer`, `RelatorioSemestralSerializer` | Implementado |
+| RF09 – A secretaria deve atualizar o status dos chamados                  | `TceViewSet.aprovar_tce`, `TceViewSet.reprovar_tce`                                           | `TceSerializer`                                 | Implementado |
+| RF10 – A secretaria deve buscar alunos pelo nome ou matrícula             | `AlunoViewSet` (`search_fields`)                                                              | `AlunoSerializer`                               | Implementado |
