@@ -97,7 +97,7 @@ PBE_26.1_8002_IV/
 ### 1. Clonar o Repositório
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
+git clone <https://github.com/Projetos-de-Extensao/PBE_26.1_8002_IV.git>
 cd PBE_26.1_8002_IV
 ```
 
