@@ -66,6 +66,20 @@ class AlunoViewSet(viewsets.ModelViewSet):
             return [IsSecretaria() | IsAluno()]
         return [IsSecretaria()]
 
+    def get_serializer_class(self):
+    if hasattr(self.request.user, 'secretaria'):
+        return AlunoSerializer  # versão completa com CPF
+    return AlunoSerializerPublico
+
+
+    def get_queryset(self):
+    qs = super().get_queryset()
+    if hasattr(self.request.user, 'aluno') and \
+       not hasattr(self.request.user, 'secretaria') and \
+       not hasattr(self.request.user, 'coordenador'):
+        return qs.filter(usuario=self.request.user)
+    return qs
+
 # --- VIEWSET DE SECRETARIAS ---
 
 class SecretariaViewSet(viewsets.ModelViewSet):
