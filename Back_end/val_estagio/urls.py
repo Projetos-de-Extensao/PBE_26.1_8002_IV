@@ -3,7 +3,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.routers import DefaultRouter
 from .views import UsuarioViewSet, AlunoViewSet, SecretariaViewSet, CoordenadorViewSet, CursoViewSet, EmpresaViewSet, TceViewSet, RelatorioSemestralViewSet, EstagioViewSet
 
-"""
+
 class PublicApiRootRouter(DefaultRouter):
     APIRootView = type(
         'APIRootView',
@@ -13,9 +13,6 @@ class PublicApiRootRouter(DefaultRouter):
 
 
 router = PublicApiRootRouter()
-"""
-
-router = DefaultRouter()  # Roteador para as rotas da API
 router.register(r'usuarios', UsuarioViewSet)
 router.register(r'alunos', AlunoViewSet)
 router.register(r'secretarias', SecretariaViewSet)

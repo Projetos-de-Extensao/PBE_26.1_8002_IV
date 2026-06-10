@@ -68,11 +68,11 @@ class AlunoViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'list':
-            return [IsSecretaria() | IsCoordenador()]
+            return [(IsSecretaria | IsCoordenador)()]
         if self.action == 'retrieve':
-            return [IsSecretaria() | IsCoordenador() | IsAluno()]
+            return [(IsSecretaria | IsCoordenador | IsAluno)()]
         if self.action in ['update', 'partial_update']:
-            return [IsSecretaria() | IsAluno()]
+            return [(IsSecretaria | IsAluno)()]
         return [IsSecretaria()]
 
 # --- VIEWSET DE SECRETARIAS ---
@@ -119,7 +119,7 @@ class CoordenadorViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
-            return [IsSecretaria() | IsCoordenador()]
+            return [(IsSecretaria | IsCoordenador)()]
         return [IsSecretaria()]
 
 
@@ -194,9 +194,9 @@ class TceViewSet(viewsets.ModelViewSet):
         if self.action in ['aprovar_tce', 'reprovar_tce']:
             return [IsSecretaria()]
         if self.action in ['list', 'retrieve']:
-            return [IsSecretaria() | IsAluno()]
+            return [(IsSecretaria | IsAluno)()]
         if self.action == 'create':
-            return [IsAluno() | IsSecretaria()]
+            return [(IsAluno | IsSecretaria)()]
         return [IsSecretaria()]
     # --- APROVAR TCE ---
     @action(detail=True, methods=['post'], url_path='aprovar')
@@ -256,7 +256,7 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
         if self.action in ['aprovar_relatorio', 'reprovar_relatorio']:
             return [IsCoordenador()]
         if self.action in ['list', 'retrieve']:
-            return [IsCoordenador() | IsAluno()]
+            return [(IsCoordenador | IsAluno)()]
         if self.action == 'create':
             return [IsAluno()]
         return [IsSecretaria()] 
@@ -333,7 +333,7 @@ class EstagioViewSet(viewsets.ModelViewSet):
         if self.action == 'adicionar_relatorio':
             return [IsAluno()]
         if self.action in ['list', 'retrieve']:
-            return [IsSecretaria() | IsAluno()]
+            return [(IsSecretaria | IsAluno)()]
         return [IsSecretaria()]
 
     @action(
