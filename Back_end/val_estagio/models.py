@@ -1,5 +1,6 @@
 from django.db import models
 from encrypted_model_fields.fields import EncryptedCharField
+import hashlib
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo, validar_semestre
@@ -21,11 +22,27 @@ class Aluno(models.Model): # OneToOne vincula o perfil de Aluno ao Usuario
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula', verbose_name="Matrícula")
     telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
     cpf =  EncryptedCharField(max_length=14, validators=[validar_cpf], verbose_name="CPF")
+    cpf_hash = models.CharField(max_length=64,null=True,blank=True,editable=False)
     dt_nascimento = models.DateField(verbose_name="Data de Nascimento")
     procurando_estagio = models.BooleanField(default=False, verbose_name="Procurando Estágio")
     horas_estagio = models.IntegerField(default=0, verbose_name="Horas de Estágio")
     periodo = models.PositiveIntegerField(verbose_name="Período", validators=[validar_periodo])
     curso = models.ForeignKey('Curso', on_delete=models.PROTECT, db_column='id_curso', verbose_name="Curso")
+
+ # Gera o hash do CPF para garantir unicidade sem expor o valor real
+    def save(self, *args, **kwargs):
+
+        cpf_limpo = (
+            self.cpf
+            .replace('.', '')
+            .replace('-', '')
+        )
+
+        self.cpf_hash = hashlib.sha256(
+            cpf_limpo.encode('utf-8')
+        ).hexdigest()
+
+        super().save(*args, **kwargs)
     
 # Lógica de negócio: atualiza horas, limitando ao teto de 350
 
@@ -94,7 +111,23 @@ class Empresa(models.Model):
     comp = models.CharField(max_length=100, null=True, blank=True, verbose_name="Complemento")
     num = models.CharField(max_length=20, verbose_name="Número")
     bairro = models.CharField(max_length=100, verbose_name="Bairro")
-    cnpj =  EncryptedCharField(max_length=18, unique=True, validators=[validar_cnpj], verbose_name="CNPJ")
+    cnpj =  EncryptedCharField(max_length=18, validators=[validar_cnpj], verbose_name="CNPJ")
+    cnpj_hash = models.CharField(max_length=64,null=True,blank=True,editable=False)
+
+    def save(self, *args, **kwargs):
+
+        cnpj_limpo = (
+        self.cnpj
+        .replace('.', '')
+        .replace('/', '')
+        .replace('-', '')
+        )
+
+        self.cnpj_hash = hashlib.sha256(
+        cnpj_limpo.encode('utf-8')
+        ).hexdigest()
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.nome} - CNPJ: {self.cnpj} | {self.cidade}/{self.uf}"
@@ -131,6 +164,13 @@ class Estagio(models.Model):
     cargahorariasemanal = models.IntegerField(verbose_name="Carga Horária Semanal")
     tce = models.ForeignKey(Tce, on_delete=models.PROTECT, db_column='apolice_seguro', verbose_name="TCE")
     empresa = models.ForeignKey(Empresa, on_delete=models.PROTECT, verbose_name="Empresa")
+
+    # models.py — Estagio
+    def clean(self):
+        if self.dtfim and self.dtfim < self.dtinicio:
+            raise ValidationError(
+                {'dtfim': 'A data de término não pode ser anterior à data de início.'}
+            )
 
     def adicionar_relatorio(self, coordenador, semestre, horas_estagiadas, data_envio):
 

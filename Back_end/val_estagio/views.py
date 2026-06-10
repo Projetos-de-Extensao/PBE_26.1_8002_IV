@@ -9,6 +9,7 @@ from .permissions import IsAluno, IsSecretaria, IsCoordenador
 from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
 from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, AlunoSerializerPublico, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
 from .choices import StatusDocumento
+from drf_spectacular.utils import extend_schema
 
 # --- VIEWSET DE USUÁRIOS ---
 
@@ -199,6 +200,16 @@ class TceViewSet(viewsets.ModelViewSet):
             return [(IsAluno | IsSecretaria)()]
         return [IsSecretaria()]
     # --- APROVAR TCE ---
+
+    @extend_schema(
+        summary='Aprova um TCE específico',
+        description='Altera o status do TCE para Aprovado, desde que já não esteja neste status.',
+        responses={
+            200: {'type': 'object', 'properties': {'detail': {'type': 'string'}}},
+            400: {'type': 'object', 'properties': {'detail': {'type': 'string'}}},
+        }
+    )
+
     @action(detail=True, methods=['post'], url_path='aprovar')
     def aprovar_tce(self, request, pk=None):
         """
@@ -213,6 +224,16 @@ class TceViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'TCE já está aprovado.'}, status=400)
         tce.se_aprovar()
         return Response({'detail': 'TCE aprovado com sucesso.'}, status=200)
+
+
+    @extend_schema(
+        summary='Reprova um TCE específico',
+        description='Altera o status do TCE para Reprovado, desde que já não esteja neste status.',
+        responses={
+            200: {'type': 'object', 'properties': {'detail': {'type': 'string'}}},
+            400: {'type': 'object', 'properties': {'detail': {'type': 'string'}}},
+        }
+    )
 
     @action(detail=True, methods=['post'], url_path='reprovar')
     def reprovar_tce(self, request, pk=None):
@@ -263,6 +284,15 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
 
     # --- APROVAR RELATÓRIO ---
 
+    @extend_schema(
+        summary='Aprova um relatório semestral',
+        description='Aprova um relatório de estágio, desde que ele não esteja previamente aprovado.',
+        responses={
+            200: {'type': 'object', 'properties': {'detail': {'type': 'string'}}},
+            400: {'type': 'object', 'properties': {'detail': {'type': 'string'}}},
+        }
+    )
+
     @action(detail=True, methods=['post'], url_path='aprovar')
     def aprovar_relatorio(self, request, pk=None):
         """
@@ -285,6 +315,15 @@ class RelatorioSemestralViewSet(viewsets.ModelViewSet):
         return Response({'detail': 'Relatório aprovado com sucesso.'}, status=200)
 
     # --- REPROVAR RELATÓRIO ---
+
+    @extend_schema(
+        summary='Reprova um relatório semestral',
+        description='Reprova um relatório de estágio, desde que ele não esteja previamente reprovado.',
+        responses={
+            200: {'type': 'object', 'properties': {'detail': {'type': 'string'}}},
+            400: {'type': 'object', 'properties': {'detail': {'type': 'string'}}},
+        }
+    )
 
     @action(detail=True, methods=['post'], url_path='reprovar')
     def reprovar_relatorio(self, request, pk=None):
@@ -336,23 +375,49 @@ class EstagioViewSet(viewsets.ModelViewSet):
             return [(IsSecretaria | IsAluno)()]
         return [IsSecretaria()]
 
+    @extend_schema(
+        summary='Adiciona um relatório semestral a um estágio',
+        description='Cria um novo relatório semestral vinculado ao estágio informado pelo ID.',
+        request={
+            'application/json': {
+                'type': 'object',
+                'properties': {
+                    'coordenador': {'type': 'integer', 'description': 'ID do coordenador responsável (Obrigatório)'},
+                    'semestre': {'type': 'integer', 'description': 'Semestre de referência do relatório'},
+                    'horas_estagiadas': {'type': 'integer', 'description': 'Total de horas estagiadas no período'},
+                    'data_envio': {'type': 'string', 'format': 'date', 'description': 'Data de envio no formato YYYY-MM-DD'}
+                },
+                'required': ['coordenador']
+            }
+        },
+        responses={
+            201: RelatorioSemestralSerializer,
+            400: {'type': 'object', 'properties': {'coordenador': {'type': 'array', 'items': {'type': 'string'}}}},
+        }
+    )
+
     @action(
-    detail=True,
-    methods=['post'],
-    url_path='adicionar_relatorio'
-)
+        detail=True,
+        methods=['post'],
+        url_path='adicionar_relatorio'
+    )
     def adicionar_relatorio(self, request, pk=None):
 
         estagio = self.get_object()
 
         coordenador_pk = request.data.get('coordenador')
+        
+        
         if not coordenador_pk:
             raise ValidationError({'coordenador': 'Este campo é obrigatório.'})
+            
+        
         try:
             coordenador = Coordenador.objects.get(pk=coordenador_pk)
-        except Coordenador.DoesNotExist:
-            raise ValidationError({'coordenador': 'Coordenador não encontrado.'})
+        except (Coordenador.DoesNotExist, ValueError):
+            raise ValidationError({'coordenador': 'Coordenador não encontrado ou ID inválido.'})
 
+       
         relatorio = estagio.adicionar_relatorio(
             coordenador=coordenador,
             semestre=request.data.get('semestre'),

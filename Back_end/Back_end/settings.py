@@ -94,10 +94,23 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
+
+    'DEAFULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '50/hour',  # Limite para usuários anônimos
+        'user': '500/hour', # Limite para usuários autenticados
+    }
 }
 
 # Configurações do CORS 
-CORS_ALLOW_ORIGINS = ['http://localhost:3000']
+CORS_ALLOW_ORIGINS = config(
+    'CORS_ALLOW_ORIGINS',
+    default='http://localhost:3000',
+    cast=lambda v: [s.strip() for s in v.split(",")]
+)
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ['content-type', 'authorization']
 

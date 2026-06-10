@@ -220,3 +220,13 @@ class EstagioSerializer(serializers.ModelSerializer):
 
         # Identificador gerado automaticamente pelo banco
         read_only_fields = ['idestagio']
+
+    # serializers.py — EstagioSerializer
+    def validate(self, attrs):
+        dtfim = attrs.get('dtfim')
+        dtinicio = attrs.get('dtinicio')
+        if dtfim and dtinicio and dtfim < dtinicio:
+            raise serializers.ValidationError(
+                {'dtfim': 'A data de término não pode ser anterior à data de início.'}
+            )
+        return attrs
