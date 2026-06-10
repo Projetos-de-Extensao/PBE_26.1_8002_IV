@@ -335,9 +335,13 @@ class EstagioViewSet(viewsets.ModelViewSet):
 
         estagio = self.get_object()
 
-        coordenador = Coordenador.objects.get(
-            pk=request.data.get('coordenador')
-        )
+        coordenador_pk = request.data.get('coordenador')
+        if not coordenador_pk:
+            raise ValidationError({'coordenador': 'Este campo é obrigatório.'})
+        try:
+            coordenador = Coordenador.objects.get(pk=coordenador_pk)
+        except Coordenador.DoesNotExist:
+            raise ValidationError({'coordenador': 'Coordenador não encontrado.'})
 
         relatorio = estagio.adicionar_relatorio(
             coordenador=coordenador,
