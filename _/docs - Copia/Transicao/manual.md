@@ -105,44 +105,6 @@ Ao aprovar um relatório, as horas de estágio são adicionadas automaticamente 
 
 ---
 
-## Segurança
-
-O sistema possui mecanismos de segurança para proteção dos dados dos usuários:
-
-- Autenticação por Token.
-- Controle de permissões baseado em perfis.
-- Criptografia de dados sensíveis.
-- Hash SHA-256 para CPF e CNPJ.
-- Restrições de acesso entre perfis.
-- Testes automatizados para validação das regras de negócio.
-
----
-
-## Testes Automatizados
-
-O projeto possui 17 testes automatizados.
-
-### Regras de Negócio
-
-- Criação de TCE.
-- Aprovação e reprovação de TCE.
-- Aprovação e reprovação de relatórios.
-- Controle de horas de estágio.
-- Limite máximo de 350 horas.
-- Geração de hash para CPF.
-- Geração de hash para CNPJ.
-
-### Segurança da API
-
-- Usuário anônimo não acessa recursos protegidos.
-- Aluno não lista todos os alunos.
-- Aluno não acessa dados de outro aluno.
-- Secretaria possui acesso autorizado aos dados dos alunos.
-- Busca de alunos por matrícula (RF10).
-
-
----
-
 ## Documentação da API
 
 A documentação da API pode ser acessada através do Swagger/OpenAPI disponibilizado pelo sistema.

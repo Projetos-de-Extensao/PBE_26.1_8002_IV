@@ -11,17 +11,21 @@
 
 ### Funcionais
 
-| Id | Requisito | Prioridade|
-|----|-----------|-----------|
-|RF01|O aluno deve ser capaz de se logar|Alto|
-|RF03|O aluno deve ser capaz de enviar a documentação|Alto|
-|RF04|O aluno deve ser capaz de acompanhar o status do seu chamado|Médio|
-|RF05|O aluno deve editar seus dados cadastrais|Médio|
-|RF06|A secretaria deve aprovar ou reprovar o estágio|Alto|
-|RF07|A secretaria deve ter acesso aos perfis dos alunos com informações|Alto|
-|RF08|A secretaria deve visualizar todos os chamados abertos|Alto|
-|RF09|A secretaria deve atualizar o status dos chamados|Alto|
-|RF10|A secretaria deve buscar alunos pelo nome ou matrícula|Alto|
+## Requisitos Funcionais
+
+| Id   | Requisito                                                              | Prioridade |
+| ---- | ---------------------------------------------------------------------- | ---------- |
+| RF01 | O usuário deve ser capaz de se autenticar no sistema                   | Alto       |
+| RF02 | O aluno deve visualizar seus dados cadastrais                          | Alto       |
+| RF03 | A secretaria deve cadastrar e gerenciar empresas                       | Alto       |
+| RF04 | O aluno deve cadastrar Termos de Compromisso de Estágio (TCE)          | Alto       |
+| RF05 | A secretaria deve aprovar ou reprovar TCEs                             | Alto       |
+| RF06 | A secretaria deve cadastrar estágios vinculados a TCEs aprovados       | Alto       |
+| RF07 | O aluno deve enviar relatórios semestrais de estágio                   | Alto       |
+| RF08 | O coordenador deve aprovar ou reprovar relatórios semestrais           | Alto       |
+| RF09 | O sistema deve controlar automaticamente as horas de estágio do aluno  | Alto       |
+| RF10 | A secretaria e o coordenador devem buscar alunos por nome ou matrícula | Alto       |
+
 
 ### Não-Funcionais
 
@@ -33,14 +37,15 @@
 -**Usabilidade** O sistema deve ter uma arquitetura intuitiva para os usuários
 
 ### Matriz de Rastreabilidade
-| Requisito                                                                 | ViewSet(s)                                                                                    | Serializer(s)                                   | Status       |
-| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------- | ------------ |
-| RF01 – O aluno deve ser capaz de se logar                                 |                                                                                               |                                                 | Parcial      |
-| RF03 – O aluno deve ser capaz de enviar a documentação                    | `TceViewSet.create`, `EstagioViewSet.adicionar_relatorio`, `RelatorioSemestralViewSet.create` | `TceSerializer`, `RelatorioSemestralSerializer` | Implementado |
-| RF04 – O aluno deve ser capaz de acompanhar o status do seu chamado       | `TceViewSet.retrieve/list`, `RelatorioSemestralViewSet.retrieve/list`                         | `TceSerializer`, `RelatorioSemestralSerializer` | Implementado |
-| RF05 – O aluno deve editar seus dados cadastrais                          | `AlunoViewSet.update`, `AlunoViewSet.partial_update`                                          | `AlunoSerializer`                               | Implementado |
-| RF06 – A secretaria deve aprovar ou reprovar o estágio                    | `TceViewSet.aprovar_tce`, `TceViewSet.reprovar_tce`                                           | `TceSerializer`                                 | Implementado |
-| RF07 – A secretaria deve ter acesso aos perfis dos alunos com informações | `AlunoViewSet.list`, `AlunoViewSet.retrieve`                                                  | `AlunoSerializer`                               | Implementado |
-| RF08 – A secretaria deve visualizar todos os chamados abertos             | `TceViewSet.list`, `RelatorioSemestralViewSet.list`, filtros por status                       | `TceSerializer`, `RelatorioSemestralSerializer` | Implementado |
-| RF09 – A secretaria deve atualizar o status dos chamados                  | `TceViewSet.aprovar_tce`, `TceViewSet.reprovar_tce`                                           | `TceSerializer`                                 | Implementado |
-| RF10 – A secretaria deve buscar alunos pelo nome ou matrícula             | `AlunoViewSet` (`search_fields`)                                                              | `AlunoSerializer`                               | Implementado |
+| Requisito | Implementação | Status |
+|------------|------------|------------|
+| RF01 – Autenticação | CustomAuthToken | Implementado |
+| RF02 – Visualização de dados do aluno | AlunoViewSet | Implementado |
+| RF03 – Cadastro de TCE | TceViewSet.create | Implementado |
+| RF04 – Consulta de status | TceViewSet e RelatorioSemestralViewSet | Implementado |
+| RF05 – Edição de dados do aluno | AlunoViewSet.update | Implementado |
+| RF06 – Aprovação/Reprovação de TCE | aprovar_tce / reprovar_tce | Implementado |
+| RF07 – Consulta de alunos | AlunoViewSet.list / retrieve | Implementado |
+| RF08 – Aprovação/Reprovação de Relatórios | aprovar_relatorio / reprovar_relatorio | Implementado |
+| RF09 – Controle de horas | ganhar_horas_estagio() | Implementado |
+| RF10 – Busca de alunos | SearchFilter | Implementado |
