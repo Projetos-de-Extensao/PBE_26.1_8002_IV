@@ -7,11 +7,15 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from .permissions import (
     IsAluno, IsSecretaria, IsCoordenador,
     IsSecretariaOuCoordenador, IsSecretariaOuAluno,
     IsSecretariaOuCoordenadorOuAluno, IsCoordenadorOuAluno
 )
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 from .models import Usuario, Aluno, Secretaria, Coordenador, Curso, Empresa, Tce, RelatorioSemestral, Estagio
 from .serializers import EmpresaSerializer, UsuarioSerializer, AlunoSerializer, AlunoSerializerPublico, SecretariaSerializer, CoordenadorSerializer, CursoSerializer, TceSerializer, RelatorioSemestralSerializer, EstagioSerializer
 from .choices import StatusDocumento
@@ -431,6 +435,7 @@ class EstagioViewSet(viewsets.ModelViewSet):
 
         serializer.is_valid(raise_exception=True)
 
+<<<<<<< HEAD
         serializer.save(
         estagio=estagio
         )
@@ -439,3 +444,56 @@ class EstagioViewSet(viewsets.ModelViewSet):
         serializer.data,
         status=201
         )
+=======
+        return Response(serializer.data, status=201)
+
+class CustomAuthToken(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+
+        print("===== LOGIN REQUEST =====")
+        print(request.data)
+
+        matricula = request.data.get("username")
+        password = request.data.get("password")
+
+        print("MATRICULA:", matricula)
+        print("PASSWORD:", password)
+
+        try:
+            usuario = Usuario.objects.get(matricula=matricula)
+
+            print("USUARIO ENCONTRADO:", usuario.username)
+
+            user = authenticate(
+                username=usuario.username,
+                password=password
+            )
+
+            print("AUTH RESULT:", user)
+
+        except Usuario.DoesNotExist:
+            print("USUARIO NÃO ENCONTRADO")
+            user = None
+
+        if not user:
+            return Response(
+                {"error": "Credenciais inválidas"},
+                status=400
+            )
+
+        token, _ = Token.objects.get_or_create(user=user)
+
+        role = "aluno"
+
+        if hasattr(user, "secretaria"):
+            role = "secretaria"
+        elif hasattr(user, "coordenador"):
+            role = "coordenador"
+
+        return Response({
+            "token": token.key,
+            "role": role,
+            "nome": user.first_name
+        })
+>>>>>>> 485bced3ef32d98dfc47fec5f9a229b971626018
