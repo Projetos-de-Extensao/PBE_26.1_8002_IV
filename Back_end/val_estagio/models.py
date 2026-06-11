@@ -64,6 +64,8 @@ class Aluno(models.Model): # OneToOne vincula o perfil de Aluno ao Usuario
 class Secretaria(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula')
 
+    carteiraDeTrabalho = models.IntegerField(default=0, verbose_name="carteira de trabalho")
+
     def aprovar_tce(self, tce):
         tce.se_aprovar()
 

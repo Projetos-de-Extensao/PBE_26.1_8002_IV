@@ -95,14 +95,13 @@ class AlunoSerializerPublico(serializers.ModelSerializer):
 class SecretariaSerializer(serializers.ModelSerializer):
 
     # Exibe a matrícula do usuário associado à secretaria
-    matricula_funcionario = serializers.CharField(
-        source='usuario.matricula',
-        read_only=True
+    carteiraDeTrabalho = serializers.CharField(
+        read_only=True,
     )
 
     class Meta:
         model = Secretaria
-        fields = 'usuario', 'matricula_funcionario'
+        fields = ('usuario', 'carteiraDeTrabalho')
 
 
 # --- SERIALIZADOR DE COORDENADOR ---
