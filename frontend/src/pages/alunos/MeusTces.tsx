@@ -22,7 +22,7 @@ export default function MeusTces() {
     }
 
     function corStatus(status?: string) {
-        if (!status) return "text-gray-600";
+        if (!status) return "text-gray-600 bg-gray-100";
 
         switch (status.toLowerCase()) {
             case "aprovado":
@@ -66,14 +66,13 @@ export default function MeusTces() {
 
                     {tces.map((tce) => (
                         <div
-                            key={tce.apoliceseguro}
+                            key={tce.idtce}
                             className="bg-white rounded-lg shadow p-5 border"
                         >
-
                             <div className="flex justify-between items-center mb-4">
 
                                 <h2 className="font-bold text-lg">
-                                    TCE #{tce.apoliceseguro}
+                                    TCE #{tce.idtce}
                                 </h2>
 
                                 <span
@@ -81,7 +80,7 @@ export default function MeusTces() {
                                         tce.status
                                     )}`}
                                 >
-                                    {tce.status}
+                                    {tce.status || "pendente"}
                                 </span>
 
                             </div>
@@ -95,12 +94,12 @@ export default function MeusTces() {
 
                                 <p>
                                     <strong>Bolsa:</strong>{" "}
-                                    R$ {tce.bolsa}
+                                    R$ {Number(tce.bolsa).toFixed(2)}
                                 </p>
 
                                 <p>
                                     <strong>Aluno:</strong>{" "}
-                                    {tce.aluno_nome}
+                                    {tce.aluno_nome || "Não informado"}
                                 </p>
 
                                 <p>
@@ -108,8 +107,19 @@ export default function MeusTces() {
                                     {tce.aluno_id}
                                 </p>
 
-                            </div>
+                                <p>
+                                    <strong>Secretaria:</strong>{" "}
+                                    {tce.secretaria}
+                                </p>
 
+                                {tce.empresa_nome && (
+                                    <p>
+                                        <strong>Empresa:</strong>{" "}
+                                        {tce.empresa_nome}
+                                    </p>
+                                )}
+
+                            </div>
                         </div>
                     ))}
 

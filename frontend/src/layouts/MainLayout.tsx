@@ -34,9 +34,9 @@ const roleMenuConfig = {
         title: "Secretaria · Unidade Barra",
         items: [
             { path: "/secretaria", label: "Painel", icon: LayoutDashboard },
-            { path: "/alunos", label: "Alunos", icon: Users },
-            { path: "/tces", label: "TCEs", icon: FileText, badge: 3 },
-            { path: "/empresas", label: "Empresas", icon: Building },
+            { path: "/secretaria/alunos", label: "Alunos", icon: Users },
+            { path: "/secretaria/tces", label: "TCEs", icon: FileText, badge: 3 },
+            { path: "/secretaria/empresas", label: "Empresas", icon: Building },
         ]
     },
     coordenador: {

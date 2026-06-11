@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Login from "../pages/Login";
+import Login from "../pages/login/Login";
 import Dashboard from "../pages/alunos/DashboardAluno";
 import MainLayout from "../layouts/MainLayout";
 
@@ -8,7 +8,7 @@ import Alunos from "../pages/alunos/Alunos";
 import NovoAluno from "../pages/alunos/NovoAluno";
 import type { JSX } from "react/jsx-runtime";
 
-import DashboardSecretaria from "../pages/DashboardSecretaria";
+import DashboardSecretaria from "../pages/secretarias/DashboardSecretaria";
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
     const token = localStorage.getItem("token");

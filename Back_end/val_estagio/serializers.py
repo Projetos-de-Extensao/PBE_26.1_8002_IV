@@ -40,7 +40,15 @@ class AlunoSerializer(serializers.ModelSerializer):
     )
 
     # Exibe os dados completos do curso associado
-    curso = CursoSerializer(read_only=True)
+    curso_nome = serializers.CharField(
+    source='curso.nome',
+    read_only=True
+    )
+
+    usuario_nome = serializers.CharField(
+    source='usuario.username',
+    read_only=True
+    )
 
     # Exibe a matrícula proveniente do usuário vinculado
     matricula = serializers.CharField(
@@ -52,6 +60,7 @@ class AlunoSerializer(serializers.ModelSerializer):
         model = Aluno
         fields = (
             'usuario',
+            'usuario_nome',
             'matricula',
             'telefone',
             'cpf',
@@ -59,7 +68,7 @@ class AlunoSerializer(serializers.ModelSerializer):
             'procurando_estagio',
             'horas_estagio',
             'periodo',
-            'curso',
+            'curso_nome',
             'curso_id'
         )
 
@@ -147,14 +156,7 @@ class TceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tce
-        fields = (
-            'bolsa',
-            'apoliceseguro',
-            'secretaria',
-            'aluno_id',
-            'aluno_nome',
-            'status'
-        )
+        fields = "__all__"
 
         # O status é controlado pelas regras de negócio
         read_only_fields = ['status']

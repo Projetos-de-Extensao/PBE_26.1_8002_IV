@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 
-import Login from "./pages/Login";
+import Login from "./pages/login/Login";
 
 import MainLayout from "./layouts/MainLayout";
 
@@ -8,8 +8,11 @@ import DashboardAluno from "./pages/alunos/DashboardAluno";
 import MeusTces from "./pages/alunos/MeusTces";
 import MeuEstagio from "./pages/alunos/MeuEstagio";
 import RelatoriosAluno from "./pages/alunos/RelatoriosAluno";
+import Alunos from "./pages/alunos/Alunos";
 
-import DashboardSecretaria from "./pages/DashboardSecretaria";
+import DashboardSecretaria from "./pages/secretarias/DashboardSecretaria";
+import Empresas from "./pages/secretarias/Empresas";
+import TcesSecretaria from "./pages/secretarias/TcesSecretaria";
 
 import RoleRedirect from "./components/RoleRedirect";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -82,6 +85,30 @@ export default function App() {
                             <DashboardSecretaria />
                         </ProtectedRoute>
                     }
+                />
+                <Route
+                path="/secretaria/tces"
+                element={
+                    <ProtectedRoute>
+                         <TcesSecretaria />
+                    </ProtectedRoute>
+                }
+            />
+                <Route
+                path="/secretaria/alunos"
+                element={
+                <ProtectedRoute>
+                    <Alunos />
+                </ProtectedRoute>
+         }
+                />
+                <Route
+                path="/secretaria/empresas"
+                element={
+                <ProtectedRoute>
+                    <Empresas />
+                </ProtectedRoute>
+         }
                 />
 
                 {/* COORDENADOR */}

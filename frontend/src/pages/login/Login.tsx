@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { KeyRound, UserRound, Loader2 } from "lucide-react";
-import { login } from "../api/auth";
+import { login } from "../../api/auth";
 
 export default function Login() {
     const navigate = useNavigate();
