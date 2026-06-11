@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 from .validators import validar_cpf, validar_cnpj, validar_matricula, validar_cep, validar_periodo, validar_positivo, validar_semestre
 from .choices import StatusDocumento, UNIDADE_CHOICES, AREA_CHOICES, CURSOS_CHOICES
-
+from django.core.exceptions import ValidationError
 
 # --- USUÁRIOS E PERFIS (Herança e Relacionamentos) ---
 
@@ -21,8 +21,8 @@ class Aluno(models.Model): # OneToOne vincula o perfil de Aluno ao Usuario
     
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True, db_column='matricula', verbose_name="Matrícula")
     telefone = PhoneNumberField(region='BR', verbose_name="Telefone")
-    cpf =  EncryptedCharField(max_length=14, validators=[validar_cpf], verbose_name="CPF")
-    cpf_hash = models.CharField(max_length=64,null=True,blank=True,editable=False)
+    cpf =  EncryptedCharField(max_length=14, validators=[validar_cpf], verbose_name="CPF",unique=True)
+    cpf_hash = models.CharField(max_length=64,null=True,blank=True,editable=False,unique=True)
     dt_nascimento = models.DateField(verbose_name="Data de Nascimento")
     procurando_estagio = models.BooleanField(default=False, verbose_name="Procurando Estágio")
     horas_estagio = models.IntegerField(default=0, verbose_name="Horas de Estágio")
@@ -30,18 +30,23 @@ class Aluno(models.Model): # OneToOne vincula o perfil de Aluno ao Usuario
     curso = models.ForeignKey('Curso', on_delete=models.PROTECT, db_column='id_curso', verbose_name="Curso")
 
  # Gera o hash do CPF para garantir unicidade sem expor o valor real
+    
     def save(self, *args, **kwargs):
-
         cpf_limpo = (
             self.cpf
             .replace('.', '')
             .replace('-', '')
         )
-
+    
         self.cpf_hash = hashlib.sha256(
             cpf_limpo.encode('utf-8')
         ).hexdigest()
-
+    
+        if Aluno.objects.filter(cpf_hash=self.cpf_hash)\
+            .exclude(pk=self.pk)\
+            .exists():
+            raise ValidationError("Já existe um aluno cadastrado com este CPF.")
+    
         super().save(*args, **kwargs)
     
 # Lógica de negócio: atualiza horas, limitando ao teto de 350
@@ -111,22 +116,31 @@ class Empresa(models.Model):
     comp = models.CharField(max_length=100, null=True, blank=True, verbose_name="Complemento")
     num = models.CharField(max_length=20, verbose_name="Número")
     bairro = models.CharField(max_length=100, verbose_name="Bairro")
-    cnpj =  EncryptedCharField(max_length=18, validators=[validar_cnpj], verbose_name="CNPJ")
-    cnpj_hash = models.CharField(max_length=64,null=True,blank=True,editable=False)
+    cnpj =  EncryptedCharField(max_length=18, validators=[validar_cnpj], verbose_name="CNPJ",unique=True)
+    cnpj_hash = models.CharField(max_length=64,null=True,blank=True,editable=False,unique=True)
 
     def save(self, *args, **kwargs):
 
         cnpj_limpo = (
-        self.cnpj
-        .replace('.', '')
-        .replace('/', '')
-        .replace('-', '')
+            self.cnpj
+            .replace('.', '')
+            .replace('/', '')
+            .replace('-', '')
         )
-
+    
         self.cnpj_hash = hashlib.sha256(
-        cnpj_limpo.encode('utf-8')
+            cnpj_limpo.encode('utf-8')
         ).hexdigest()
-
+    
+        if Empresa.objects.filter(
+            cnpj_hash=self.cnpj_hash
+        ).exclude(
+            pk=self.pk
+        ).exists():
+            raise ValidationError(
+                "Já existe uma empresa cadastrada com este CNPJ."
+            )
+    
         super().save(*args, **kwargs)
 
     def __str__(self):
