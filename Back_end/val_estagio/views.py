@@ -435,16 +435,6 @@ class EstagioViewSet(viewsets.ModelViewSet):
 
         serializer.is_valid(raise_exception=True)
 
-<<<<<<< HEAD
-        serializer.save(
-        estagio=estagio
-        )
-
-        return Response(
-        serializer.data,
-        status=201
-        )
-=======
         return Response(serializer.data, status=201)
 
 class CustomAuthToken(ObtainAuthToken):
@@ -496,4 +486,3 @@ class CustomAuthToken(ObtainAuthToken):
             "role": role,
             "nome": user.first_name
         })
->>>>>>> 485bced3ef32d98dfc47fec5f9a229b971626018

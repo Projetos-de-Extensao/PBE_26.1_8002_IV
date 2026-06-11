@@ -106,15 +106,11 @@ REST_FRAMEWORK = {
 }
 
 # Configurações do CORS 
-<<<<<<< HEAD
 CORS_ALLOW_ORIGINS = config(
     'CORS_ALLOW_ORIGINS',
     default='http://localhost:3000',
     cast=lambda v: [s.strip() for s in v.split(",")]
 )
-=======
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174']
->>>>>>> 485bced3ef32d98dfc47fec5f9a229b971626018
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ['content-type', 'authorization']
 CORS_ALLOW_ALL_ORIGINS = True

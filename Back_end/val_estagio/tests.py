@@ -3,20 +3,31 @@ from datetime import date
 from django.test import TestCase
 
 from .models import (
-    Usuario,
-    Curso,
-    Aluno,
-    Secretaria,
-    Coordenador,
-    Empresa,
-    Tce,
-    Estagio,
-    RelatorioSemestral,
+Usuario,
+Curso,
+Aluno,
+Secretaria,
+Coordenador,
+Empresa,
+Tce,
+Estagio,
+RelatorioSemestral,
 )
 from .choices import StatusDocumento
+"""
+Testes unitários das principais regras de negócio do sistema.
 
+Cobertura:
+- Criação de TCE
+- Aprovação e reprovação de TCE
+- Aprovação e reprovação de relatórios
+- Controle de horas de estágio
+- Limite máximo de horas
+- Geração de hashes para dados sensíveis
+"""
 
 class FluxoEstagioTests(TestCase):
+    
 
     def setUp(self):
 
@@ -95,9 +106,9 @@ class FluxoEstagioTests(TestCase):
             empresa=self.empresa
         )
 
-    # ------------------------------------------------------------------
-    # Criação de TCE
-    # ------------------------------------------------------------------
+    # ==================================================
+    # TCE
+    # ==================================================
 
     def test_criacao_tce(self):
 
@@ -107,10 +118,6 @@ class FluxoEstagioTests(TestCase):
             tce.status,
             StatusDocumento.PENDENTE
         )
-
-    # ------------------------------------------------------------------
-    # Aprovação de TCE
-    # ------------------------------------------------------------------
 
     def test_aprovacao_tce(self):
 
@@ -124,9 +131,21 @@ class FluxoEstagioTests(TestCase):
             StatusDocumento.APROVADO
         )
 
-    # ------------------------------------------------------------------
-    # Aprovação de Relatório
-    # ------------------------------------------------------------------
+    def test_reprovacao_tce(self):
+
+        tce = self.criar_tce()
+
+        tce.se_reprovar()
+        tce.refresh_from_db()
+
+        self.assertEqual(
+            tce.status,
+            StatusDocumento.REPROVADO
+        )
+
+    # ==================================================
+    # RELATÓRIOS
+    # ==================================================
 
     def test_aprovacao_relatorio(self):
 
@@ -155,10 +174,6 @@ class FluxoEstagioTests(TestCase):
             100
         )
 
-    # ------------------------------------------------------------------
-    # Reprovação de Relatório
-    # ------------------------------------------------------------------
-
     def test_reprovacao_relatorio(self):
 
         estagio = self.criar_estagio()
@@ -180,9 +195,52 @@ class FluxoEstagioTests(TestCase):
             StatusDocumento.REPROVADO
         )
 
-    # ------------------------------------------------------------------
-    # Atualização de horas
-    # ------------------------------------------------------------------
+    def test_reprovacao_relatorio_nao_altera_horas(self):
+
+        estagio = self.criar_estagio()
+
+        relatorio = RelatorioSemestral.objects.create(
+            semestre="2027",
+            data_envio=date.today(),
+            horas_estagiadas=100,
+            coordenador=self.coordenador,
+            estagio=estagio
+        )
+
+        relatorio.se_reprovar()
+
+        self.aluno.refresh_from_db()
+
+        self.assertEqual(
+            self.aluno.horas_estagio,
+            0
+        )
+
+    def test_relatorio_aprovado_nao_soma_horas_duas_vezes(self):
+
+        estagio = self.criar_estagio()
+
+        relatorio = RelatorioSemestral.objects.create(
+            semestre="2028",
+            data_envio=date.today(),
+            horas_estagiadas=100,
+            coordenador=self.coordenador,
+            estagio=estagio
+        )
+
+        relatorio.se_aprovar()
+        relatorio.se_aprovar()
+
+        self.aluno.refresh_from_db()
+
+        self.assertEqual(
+            self.aluno.horas_estagio,
+            100
+        )
+
+    # ==================================================
+    # HORAS DE ESTÁGIO
+    # ==================================================
 
     def test_ganhar_horas_estagio(self):
 
@@ -195,9 +253,16 @@ class FluxoEstagioTests(TestCase):
             50
         )
 
-    # ------------------------------------------------------------------
-    # Limite de 350 horas
-    # ------------------------------------------------------------------
+    def test_ganhar_horas_negativas_nao_altera(self):
+
+        self.aluno.ganhar_horas_estagio(-10)
+
+        self.aluno.refresh_from_db()
+
+        self.assertEqual(
+            self.aluno.horas_estagio,
+            0
+        )
 
     def test_limite_maximo_350_horas(self):
 
@@ -208,4 +273,30 @@ class FluxoEstagioTests(TestCase):
         self.assertEqual(
             self.aluno.horas_estagio,
             350
+        )
+
+    # ==================================================
+    # HASHES
+    # ==================================================
+
+    def test_aluno_gera_hash_cpf(self):
+
+        self.assertIsNotNone(
+            self.aluno.cpf_hash
+        )
+
+        self.assertEqual(
+            len(self.aluno.cpf_hash),
+            64
+        )
+
+    def test_empresa_gera_hash_cnpj(self):
+
+        self.assertIsNotNone(
+            self.empresa.cnpj_hash
+        )
+
+        self.assertEqual(
+            len(self.empresa.cnpj_hash),
+            64
         )
